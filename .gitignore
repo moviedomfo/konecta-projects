@@ -11,3 +11,5 @@ reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSec
 reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.1/CentralizedSecurity.webApi.AssemblyInfo.cs
 reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/CentralizedSecurity.webApi.csproj.nuget.g.targets
 reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/CentralizedSecurity.webApi.csproj.nuget.g.props
+obj/
+bin/
