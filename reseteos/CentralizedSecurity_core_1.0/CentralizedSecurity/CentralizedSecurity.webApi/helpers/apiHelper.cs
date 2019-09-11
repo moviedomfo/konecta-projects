@@ -13,12 +13,12 @@ namespace CentralizedSecurity.webApi.helpers
 {
     public class apiHelper
     {
-        public static HttpClientHandler proxy { get; set; }
+       
 
 
-        public static serverSettings serverSettings = null;
-        public static List<ConnectionString> connectionStrings;
-        public static string serviceName = "konecta_wapi";
+        
+        
+       
         static apiHelper()
         {
 
@@ -26,57 +26,7 @@ namespace CentralizedSecurity.webApi.helpers
 
         }
 
-        /// <summary>
-        /// sobrecarga para cargar apiConfig desde una ruta espesifica
-        /// </summary>
-        /// <param name="path"></param>
-        internal static void InitializeConfig(string path)
-        {
-            try
-            {
-                var appS = apiAppSettings.CreateNew(path);
-
-                serverSettings = new serverSettings();
-                serverSettings.apiConfig = appS.wapiConfig;
-                serverSettings.cnnStrings = get_cnnStrings(appS.ConnectionStrings);
-                apiHelper.connectionStrings = appS.ConnectionStrings;
-                if (!System.IO.Directory.Exists(serverSettings.apiConfig.logsFolder))
-                    System.IO.Directory.CreateDirectory(serverSettings.apiConfig.logsFolder);
-
-                setProxy();
-            }
-            catch (Exception ex)
-            {
-                //Log_FileSystem(ex);
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        /// sobrecarga para cargar apiconfig desde otro lugar
-        /// </summary>
-        /// <param name="config"></param>
-        public static void InitializeConfig(apiAppSettings config)
-        {
-            try
-            {
-                serverSettings = new serverSettings();
-                serverSettings.apiConfig = config.wapiConfig;
-                serverSettings.cnnStrings = get_cnnStrings(config.ConnectionStrings);
-
-
-                apiHelper.connectionStrings = config.ConnectionStrings;
-                if (!System.IO.Directory.Exists(serverSettings.apiConfig.logsFolder))
-                    System.IO.Directory.CreateDirectory(serverSettings.apiConfig.logsFolder); 
-
-                setProxy();
-            }
-            catch (Exception ex)
-            {
-                //Log_FileSystem(ex);
-                throw ex;
-            }
-        }
+      
 
 
         public static string getMessageException(Exception ex)
@@ -95,13 +45,13 @@ namespace CentralizedSecurity.webApi.helpers
                 {
                     var e = ex.InnerException as System.Net.Sockets.SocketException;
                     if (e.ErrorCode == 10060)
-                        msg = apiHelper.serverSettings.apiConfig.apiDomain + " no es accesible " + Environment.NewLine + msg;
+                        msg = apiAppSettings.serverSettings.apiConfig.apiDomain + " no es accesible " + Environment.NewLine + msg;
                 }
                 //if (ex.InnerException.GetType() == typeof(WebExcepcion))
                 //{
                 //    var e = ex.InnerException as System.Net.Sockets.SocketException;
                 //    if (e.ErrorCode == 10060)
-                //        msg = "WAPI wapiHelper.apiConfig.apiDomain no es accesible " + Environment.NewLine + msg;
+                //        msg = "WAPI wapiAppSettings.apiConfig.apiDomain no es accesible " + Environment.NewLine + msg;
                 //}
             }
 
@@ -115,18 +65,18 @@ namespace CentralizedSecurity.webApi.helpers
         public static HttpClientHandler getProxy_HttpClientHandler()
         {
             HttpClientHandler httpClientHandler = null;
-            if (serverSettings.apiConfig.proxyEnabled)
+            if (apiAppSettings.apiConfig.proxyEnabled)
             {
                 var proxy = new WebProxy()
                 {
-                    Address = new Uri(string.Format("http://{0}:{1}", apiHelper.serverSettings.apiConfig.proxyName, apiHelper.serverSettings.apiConfig.proxyPort)),
+                    Address = new Uri(string.Format("http://{0}:{1}", apiAppSettings.serverSettings.apiConfig.proxyName, apiAppSettings.serverSettings.apiConfig.proxyPort)),
                     //BypassOnLocal = false,
                     UseDefaultCredentials = true
 
                     // *** These creds are given to the proxy server, not the web server ***
                     //Credentials = new NetworkCredential(
-                    //    userName: wapiHelper.apiConfig.proxyUser,
-                    //    password: wapiHelper.apiConfig.proxyPassword)
+                    //    userName: wapiAppSettings.apiConfig.proxyUser,
+                    //    password: wapiAppSettings.apiConfig.proxyPassword)
                 };
 
 
@@ -144,60 +94,9 @@ namespace CentralizedSecurity.webApi.helpers
             return httpClientHandler;
         }
 
-        public static void setProxy()
-        {
-            if (serverSettings.apiConfig.proxyEnabled)
-            {
-                var proxyURI = new Uri(string.Format("http://{0}:{1}", apiHelper.serverSettings.apiConfig.proxyName, apiHelper.serverSettings.apiConfig.proxyPort));
-                proxy = new HttpClientHandler
-                {
-                    Proxy = new WebProxy(proxyURI, false),
-                    UseProxy = true,
-                    Credentials = new NetworkCredential(apiHelper.serverSettings.apiConfig.proxyUser, apiHelper.serverSettings.apiConfig.proxyPassword,
-                    apiHelper.serverSettings.apiConfig.proxyDomain)
-                };
-            }
-        }
+      
 
-        /// <summary>
-        /// update and set current apiConfig
-        /// </summary>
-        /// <param name="config"></param>
-        public static void updateConfig(apiConfig config)
-        {
-            try
-            {
-                //TODO : ver updateConfig
-                var settingName = "";//System.Configuration.ConfigurationManager.AppSettings.Get("wapiConfig");
-                if (!String.IsNullOrEmpty(settingName))
-                {
-                    //if (System.IO.File.Exists(settingName) == false)
-                    //{
-                    //    throw new Fwk.Exceptions.TechnicalException("No existe el archivo de config " + settingName);
-                    //}
-
-
-                    var apiConfigString = Newtonsoft.Json.JsonConvert.SerializeObject(config, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
-
-                    FileFunctions.SaveTextFile(settingName, apiConfigString, false);
-                    apiHelper.serverSettings.apiConfig = config;
-
-                    //apiConfig.logsFolder = @"c:\wapi_logs";
-                    if (!System.IO.Directory.Exists(config.logsFolder))
-                        System.IO.Directory.CreateDirectory(config.logsFolder);
-
-                    setProxy();
-                }
-
-
-
-            }
-            catch (Exception ex)
-            {
-                //Log_FileSystem(ex);
-                throw ex;
-            }
-        }
+       
 
         #region Log_NonDatabase
 
@@ -249,7 +148,7 @@ namespace CentralizedSecurity.webApi.helpers
         //    ev.LogDate = System.DateTime.Now;
 
 
-        //            ev.AppId = wapiHelper.serviceName;
+        //            ev.AppId = wapiAppSettings.serviceName;
 
         //    try
         //    {
@@ -291,9 +190,9 @@ namespace CentralizedSecurity.webApi.helpers
         //    ev.Source = ex.Source;
         //    ev.User = Environment.UserName;
         //    ev.Machine = Environment.MachineName;
-        //    //if (wapiHelper.apiConfig != null)
-        //    //    if (wapiHelper.apiConfig.serviceConfig != null)
-        //            ev.AppId = wapiHelper.serviceName;
+        //    //if (wapiAppSettings.apiConfig != null)
+        //    //    if (wapiAppSettings.apiConfig.serviceConfig != null)
+        //            ev.AppId = wapiAppSettings.serviceName;
         //        //else
         //        //    ev.AppId = "konecta service : tu recibo web";
         //    ev.Message.Text = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex);
@@ -306,10 +205,10 @@ namespace CentralizedSecurity.webApi.helpers
 
         //    Event ev = new Event();
         //    ev.LogType = EventType.Information;
-        //    ev.Source = string.IsNullOrEmpty(source) ? wapiHelper.serviceName : source;
+        //    ev.Source = string.IsNullOrEmpty(source) ? wapiAppSettings.serviceName : source;
         //    ev.User = Environment.UserName;
         //    ev.Machine = Environment.MachineName;
-        //    ev.AppId = wapiHelper.serviceName;
+        //    ev.AppId = wapiAppSettings.serviceName;
         //    ev.Message.Text = msg;
         //    ev.LogDate = System.DateTime.Now;
         //    Log_FileSystem(ev);
@@ -323,59 +222,13 @@ namespace CentralizedSecurity.webApi.helpers
         //    ev.Source = ex.Source;
         //    ev.User = Environment.UserName;
         //    ev.Machine = Environment.MachineName;
-        //    ev.AppId = wapiHelper.serviceName;
+        //    ev.AppId = wapiAppSettings.serviceName;
         //    ev.Message.Text = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex);
         //    ev.LogDate = System.DateTime.Now;
 
         //    return ev;
         //}
 
-        public static cnnStrings get_cnnStrings(List<ConnectionString> connectionStrings)
-        {
-
-            cnnStrings list = new cnnStrings();
-
-
-            foreach (ConnectionString c in connectionStrings)
-            {
-                CnnString sqlBuilder = new CnnString(c.name, c.cnnString);
-
-                if (!string.IsNullOrEmpty(sqlBuilder.InitialCatalog))
-                {
-                    cnnString cnnString = new cnnString();
-                    cnnString.name = c.name;
-                    cnnString.serverName = sqlBuilder.DataSource;
-                    cnnString.databaseName = sqlBuilder.InitialCatalog;
-                    cnnString.userName = sqlBuilder.User;
-                    cnnString.windowsAutentification = sqlBuilder.WindowsAutentification;
-
-                    list.Add(cnnString);
-                }
-
-            }
-            return list;
-        }
-        
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cnnStringName"></param>
-        /// <returns></returns>
-        public static ConnectionString get_cnnString_byName(string cnnStringName)
-        {
-            var cn = connectionStrings.Where(c => c.name.Equals(cnnStringName));
-            if (cn != null)
-            {
-                return cn as ConnectionString;
-            }
-            else
-            {
-                return null;
-            }
-
-
-        }
         #endregion
 
 

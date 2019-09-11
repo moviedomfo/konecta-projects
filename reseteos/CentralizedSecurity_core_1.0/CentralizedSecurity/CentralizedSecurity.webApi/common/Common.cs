@@ -96,17 +96,17 @@ namespace CentralizedSecurity.webApi.common
         internal static SqlConnection GetCnn(string cnnName)
         {
             
-            if (apiHelper.get_cnnString_byName(cnnName) == null) {
+            if (apiAppSettings.get_cnnString_byName(cnnName) == null) {
                 throw new Fwk.Exceptions.TechnicalException("Falta cadena de conexion " + cnnName + " en el server");
             }
             System.Data.SqlClient.SqlConnection cnn = null;
             if (IsEncrypted())
             {
-                cnn = new System.Data.SqlClient.SqlConnection(ISymetriCypher.Dencrypt(apiHelper.get_cnnString_byName(cnnName).cnnString));
+                cnn = new System.Data.SqlClient.SqlConnection(ISymetriCypher.Dencrypt(apiAppSettings.get_cnnString_byName(cnnName).cnnString));
             }
             else
             {
-                cnn = new System.Data.SqlClient.SqlConnection(apiHelper.get_cnnString_byName(cnnName).cnnString);
+                cnn = new System.Data.SqlClient.SqlConnection(apiAppSettings.get_cnnString_byName(cnnName).cnnString);
             }
 
             return cnn;
@@ -118,11 +118,11 @@ namespace CentralizedSecurity.webApi.common
             var cnnString = string.Empty;
             if (IsEncrypted())
             {
-                cnnString = ISymetriCypher.Dencrypt(apiHelper.get_cnnString_byName(cnnName).cnnString);
+                cnnString = ISymetriCypher.Dencrypt(apiAppSettings.get_cnnString_byName(cnnName).cnnString);
             }
             else
             {
-                cnnString = apiHelper.get_cnnString_byName(cnnName).cnnString;
+                cnnString = apiAppSettings.get_cnnString_byName(cnnName).cnnString;
             }
 
             return  new SqlConnectionStringBuilder(cnnString);

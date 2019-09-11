@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CentralizedSecurity.webApi.helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,15 @@ namespace CentralizedSecurity.webApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+
+            //services.a(  // enable Configuration Services
+
+            var config = new serverSettings();
+            Configuration.Bind("serverSettings", config);      //  <--- This
+            services.AddSingleton(config);
+
+            apiAppSettings.serverSettings = config;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +53,17 @@ namespace CentralizedSecurity.webApi
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+
+            var configurationBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
+           var Configuration = configurationBuilder.Build();
+            //var apicongfig= Configuration.GetSection("apiCongfig");
+            
+            //var cnnStrings = Configuration["cnnStrings"];
         }
     }
 }

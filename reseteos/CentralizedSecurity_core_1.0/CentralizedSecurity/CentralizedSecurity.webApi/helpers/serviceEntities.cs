@@ -1,13 +1,203 @@
-﻿using Fwk.Exceptions;
+﻿using Fwk.DataBase;
+using Fwk.Exceptions;
 using Fwk.HelperFunctions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CentralizedSecurity.webApi.helpers
 {
+
+    /// <summary>
+    /// appsettings.json 
+    /// </summary>
+    public class apiAppSettings
+    {
+        public static HttpClientHandler proxy { get; set; }
+        public static apiConfig apiConfig { get;  }
+        public static serverSettings serverSettings  { get; set; }
+        public static List<ConnectionString> connectionStrings { get;  }
+
+
+        /// <summary>
+        /// sobrecarga para cargar apiConfig desde una ruta espesifica
+        /// </summary>
+        /// <param name="path"></param>
+        internal static void InitializeConfig(string path)
+        {
+            try
+            {
+                //var appS = apiAppSettings.CreateNew(path);
+
+                //serverSettings = new serverSettings();
+                //serverSettings.apiConfig = appS.wapiConfig;
+                //serverSettings.cnnStrings = get_cnnStrings(apiAppSettings.connectionStrings);
+                ////apiHelper.connectionStrings = appS.ConnectionStrings;
+                //if (!System.IO.Directory.Exists(serverSettings.apiConfig.logsFolder))
+                //    System.IO.Directory.CreateDirectory(serverSettings.apiConfig.logsFolder);
+
+                //setProxy();
+            }
+            catch (Exception ex)
+            {
+                //Log_FileSystem(ex);
+                throw ex;
+            }
+        }
+
+        #region no usados 
+        /// <summary>
+        /// Carga un appsettings.json y lo serializa en <see>wapiAppSettings</see>  
+        /// asp net core utiliza este archivo en lugar de un xml.config como en el caso de las aplicaciones .net
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        internal static apiAppSettings CreateNew(string path)
+        {
+
+            apiAppSettings settings = null;
+            if (string.IsNullOrEmpty(path))
+            {
+                //wapiConfigPath = System.Configuration.ConfigurationManager.AppSettings.Get("wapiConfig");
+
+                if (String.IsNullOrEmpty(path))
+                    throw new TechnicalException("No se encuentra configurada la ruta del archivo  el wapiConfig.json en web.config settings");
+
+            }
+
+            if (System.IO.File.Exists(path) == false)
+                throw new TechnicalException("No existe el archivo  " + path);
+
+
+            string apiConfigJson = FileFunctions.OpenTextFile(path);
+            settings = (apiAppSettings)SerializationFunctions.DeSerializeObjectFromJson(typeof(apiAppSettings), apiConfigJson);
+
+
+
+            return settings;
+        }
+
+
+        /// <summary>
+        /// update and set current apiConfig
+        /// </summary>
+        /// <param name="config"></param>
+        public static void updateConfig(apiConfig config)
+        {
+            try
+            {
+                //TODO : ver updateConfig
+                var settingName = "";//System.Configuration.ConfigurationManager.AppSettings.Get("wapiConfig");
+                if (!String.IsNullOrEmpty(settingName))
+                {
+                    //if (System.IO.File.Exists(settingName) == false)
+                    //{
+                    //    throw new Fwk.Exceptions.TechnicalException("No existe el archivo de config " + settingName);
+                    //}
+
+
+                    var apiConfigString = Newtonsoft.Json.JsonConvert.SerializeObject(config, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+
+                    FileFunctions.SaveTextFile(settingName, apiConfigString, false);
+                    serverSettings.apiConfig = config;
+
+                    //apiConfig.logsFolder = @"c:\wapi_logs";
+                    if (!System.IO.Directory.Exists(config.logsFolder))
+                        System.IO.Directory.CreateDirectory(config.logsFolder);
+
+                    setProxy();
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //Log_FileSystem(ex);
+                throw ex;
+            }
+        }
+
+            #endregion
+
+        public static cnnStrings get_cnnStrings(List<ConnectionString> connectionStrings)
+        {
+
+            cnnStrings list = new cnnStrings();
+
+
+            foreach (ConnectionString c in connectionStrings)
+            {
+                CnnString sqlBuilder = new CnnString(c.name, c.cnnString);
+
+                if (!string.IsNullOrEmpty(sqlBuilder.InitialCatalog))
+                {
+                    cnnString cnnString = new cnnString();
+                    cnnString.name = c.name;
+                    cnnString.serverName = sqlBuilder.DataSource;
+                    cnnString.databaseName = sqlBuilder.InitialCatalog;
+                    cnnString.userName = sqlBuilder.User;
+                    cnnString.windowsAutentification = sqlBuilder.WindowsAutentification;
+
+                    list.Add(cnnString);
+                }
+
+            }
+            return list;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cnnStringName"></param>
+        /// <returns></returns>
+        public static ConnectionString get_cnnString_byName(string cnnStringName)
+        {
+            var cn = connectionStrings.Where(c => c.name.Equals(cnnStringName));
+            if (cn != null)
+            {
+                return cn as ConnectionString;
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+
+        public static void setProxy()
+        {
+            if (serverSettings.apiConfig.proxyEnabled)
+            {
+                var proxyURI = new Uri(string.Format("http://{0}:{1}", serverSettings.apiConfig.proxyName, serverSettings.apiConfig.proxyPort));
+                proxy = new HttpClientHandler
+                {
+                    Proxy = new WebProxy(proxyURI, false),
+                    UseProxy = true,
+                    Credentials = new NetworkCredential(serverSettings.apiConfig.proxyUser, serverSettings.apiConfig.proxyPassword,
+                    serverSettings.apiConfig.proxyDomain)
+                };
+            }
+        }
+    }
+
+
+    public class serverSettings
+    {
+        public cnnStrings cnnStrings { get; set; }
+        public apiConfig apiConfig { get; set; }
+    }
+
+
+
     public class apiConfig
     {
 
@@ -74,60 +264,10 @@ namespace CentralizedSecurity.webApi.helpers
         public bool windowsAutentification { get; set; }
     }
 
-    public class serverSettings
-    {
-        public cnnStrings cnnStrings { get; set; }
-        public apiConfig apiConfig { get; set; }
-    }
+   
 
 
-
-
-    /// <summary>
-    /// appsettings.json 
-    /// </summary>
-    public class apiAppSettings
-    {
-
-        /// <summary>
-        /// Carga un appsettings.json y lo serializa en <see>wapiAppSettings</see>  
-        /// asp net core utiliza este archivo en lugar de un xml.config como en el caso de las aplicaciones .net
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static apiAppSettings CreateNew(string path)
-        {
-
-            apiAppSettings settings = null;
-            if (string.IsNullOrEmpty(path))
-            {
-                //wapiConfigPath = System.Configuration.ConfigurationManager.AppSettings.Get("wapiConfig");
-
-                if (String.IsNullOrEmpty(path))
-                    throw new TechnicalException("No se encuentra configurada la ruta del archivo  el wapiConfig.json en web.config settings");
-
-            }
-
-            if (System.IO.File.Exists(path) == false)
-                throw new TechnicalException("No existe el archivo  " + path);
-
-
-            string apiConfigJson = FileFunctions.OpenTextFile(path);
-            settings = (apiAppSettings)SerializationFunctions.DeSerializeObjectFromJson(typeof(apiAppSettings), apiConfigJson);
-
-
-
-            return settings;
-        }
-
-        public List<ConnectionString> ConnectionStrings { get; set; }
-
-       
-
-        public apiConfig wapiConfig { get; set; }
-
-
-    }
+   
 
     public class ConnectionString
     {

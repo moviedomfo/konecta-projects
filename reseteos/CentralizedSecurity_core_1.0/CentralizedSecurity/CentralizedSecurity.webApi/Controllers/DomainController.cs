@@ -168,10 +168,10 @@ namespace CentralizedSecurity.webApi.Controllers
             {
                 var list = ActiveDirectoryService.GetGroups(domain);
                 if (list == null)
-                    return apiHelper.fromErrorString(string.Format("No se grupos para el dominio {0}", domain), HttpStatusCode.NoContent);
+                    //return apiHelper.fromErrorString(string.Format("No se grupos para el dominio {0}", domain), HttpStatusCode.NoContent);
+                    return BadRequest(string.Format("No se grupos para el dominio {0}", domain));
                 else
-
-                    return apiHelper.fromObject<List<ActiveDirectoryGroup>>(list);
+                    return Ok(list);
             }
             catch (Exception ex)
             {
@@ -194,9 +194,10 @@ namespace CentralizedSecurity.webApi.Controllers
             {
                 var list = ActiveDirectoryService.GetAllDomainsUrl();
                 if (list == null)
-                    return apiHelper.fromErrorString("No se encontaron los DomainsUrl configurados en la BD", HttpStatusCode.NoContent);
+                    //return apiHelper.fromErrorString("No se encontaron los DomainsUrl configurados en la BD", HttpStatusCode.NoContent);
+                return BadRequest("No se encontaron los DomainsUrl configurados en la BD");
                 else
-                    return apiHelper.fromObject<List<DomainsUrl>>(list.ToList());
+                    return Ok(list.ToList());
             }
             catch (Exception ex)
             {
@@ -247,7 +248,9 @@ namespace CentralizedSecurity.webApi.Controllers
 
                 DAC.MeucciDAC.ReseteoWeb_Log(req.Emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId, req.ticket, Common.resetear, req.host);
                 DAC.MeucciDAC.ReseteoWeb_EnviosMails(req.Emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId, Common.resetear, req.host);
-                return apiHelper.fromObject<String>("El reseteo se realizó exitosamente. La contraseña provisoria es " + req.newPassword);
+                //return apiHelper.fromObject<String>("El reseteo se realizó exitosamente. La contraseña provisoria es " + req.newPassword);
+
+                return Ok("El reseteo se realizó exitosamente. La contraseña provisoria es " + req.newPassword);
             }
             catch (Exception ex)
             {
@@ -260,7 +263,7 @@ namespace CentralizedSecurity.webApi.Controllers
                     ex = t;
                 }
 
-                var msg = apiHelper.getMessageException(ex);
+                msg = apiHelper.getMessageException(ex);
                 return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
             }
         }
@@ -300,7 +303,8 @@ namespace CentralizedSecurity.webApi.Controllers
                 ActiveDirectoryService.User_Unlock(req.WindowsUser, fwk_domain_name);
                 DAC.MeucciDAC.ReseteoWeb_Log(req.emp_id, req.WindowsUser, req.dom_id, req.ResetUserId, req.ticket, Common.desbloquear, req.host);
                 DAC.MeucciDAC.ReseteoWeb_EnviosMails(req.emp_id, req.WindowsUser, req.dom_id, req.ResetUserId, Common.desbloquear, req.host);
-                return apiHelper.fromObject<string>("El desbloqueo se realizó correctamente");
+                return Ok("El desbloqueo se realizó correctamente");
+
             }
             catch (Exception ex)
             {
@@ -311,7 +315,7 @@ namespace CentralizedSecurity.webApi.Controllers
                         + " deberá comunicarce con segurridad informática ", ex);
                     ex = t;
                 }
-                var msg = apiHelper.getMessageException(ex);
+                 msg = apiHelper.getMessageException(ex);
                 return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
             }
         }
@@ -326,7 +330,7 @@ namespace CentralizedSecurity.webApi.Controllers
         [Route("ping")]
         public IActionResult ping()
         {
-            return apiHelper.fromObject<String>("El servicio funciona correctamente");
+            return Ok("El servicio funciona correctamente");
         }
 
 
