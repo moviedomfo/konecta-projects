@@ -1,0 +1,55 @@
+import { Component, OnInit } from '@angular/core';
+import { SerurityService } from 'src/app/service/serurity.service';
+import { CurrentLogin } from 'src/app/model/common.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { pipe } from 'rxjs';
+import { Router } from '@angular/router';
+
+
+
+@Component({
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
+})
+export class NavbarComponent implements OnInit {
+
+  constructor(private authService: SerurityService, private route: Router) { }
+  public app_name: string = 'Reseteos web';
+  public isLogged: boolean = false;
+  public userName:string;
+  registerForm: FormGroup;
+  ngOnInit() {
+
+    
+    this.chk_logingFront();
+
+    this.authService.logingChange_subject$.subscribe(pipe(
+      res=>{
+         this.isLogged= res as boolean;
+         this.chk_logingFront();
+      }
+    ));
+  }
+
+ 
+
+  chk_logingFront(){
+    var currentLoging: CurrentLogin = this.authService.getCurrenLoging();
+    if (currentLoging) {
+      //console.log('user logged');
+      this.isLogged = true;
+      this.userName= currentLoging.currentUser.UserName;
+    } else {
+      //console.log('NOT user logged');
+      this.isLogged = false;
+    }
+  }
+
+  onLogout() {
+    this.authService.signOut();
+    this.route.navigate(['/login']);
+  }
+
+
+}

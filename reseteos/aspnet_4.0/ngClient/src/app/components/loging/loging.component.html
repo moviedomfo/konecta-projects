@@ -1,0 +1,101 @@
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+      
+          <div class="card  col-sm-12 col-md-6 col-lg-6 col-lg-6" >
+              <div class="card-header">
+                <h3 class="text-">Ingresar</h3>
+                <!-- <div class="d-flex justify-content-end social_icon">
+                  <span><i class="fa fa-facebook-square"></i></span>
+                  <span><i class="fa fa-google-plus-square"></i></span>
+                  <span><i class="fa fa-twitter-square"></i></span>
+                </div> -->
+              </div>
+              <div class="card-body">
+                  <div class="spinner-container" *ngIf="loading" >
+                       <mat-spinner  [diameter]="30" [color]="Warn"></mat-spinner> 
+ 
+                    </div>
+                  <form #formLogin="ngForm"  (submit)="authenticate()"  novalidate>
+                  <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-user"></i></span>
+                    </div>
+                    <input type="text" name="username" class="form-control"   [(ngModel)]='currentUser.UserName' 
+                            [ngClass]="{ 'is-invalid': formLogin.submitted && username.invalid }" 
+                            placeholder="usuario de windows" required  #username='ngModel' >
+                      <div  *ngIf='formLogin.submitted && username.invalid' class="invalid-feedback">
+                          <div *ngIf="username.errors.required"> Username is required</div>
+                      </div > 
+                      
+                      
+                  </div>
+                  <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-key"></i></span>
+                    </div>
+                    <input type='password' name='password' class="form-control"   
+                    [ngClass]="{ 'is-invalid': formLogin.submitted && password.invalid }" 
+                    [(ngModel)]='currentUser.Password'  placeholder="password" required  #password='ngModel' >
+                    <div  *ngIf='password.invalid' class="invalid-feedback">
+                        <div *ngIf="password.errors.required"> Password is required</div>
+                    </div > 
+                  </div>
+                  <!-- <div class="row align-items-center remember">
+                    <input type="checkbox">Remember Me
+                  </div> -->
+                  <!-- <div class="form-group dominios">
+                        <div class="rounded border border-warning " >
+                            <mat-radio-group class = "tp-radio-group"  [(ngModel)] = "currentUser.DomainId" name="radioGroup" class="m-10">
+                                <mat-radio-button class = "tp-radio-button" name="option"   *ngFor = "let dom of domains" [value] = "dom.DomainId" class = "m-l-5" >
+                                   {{dom.Domain}}
+                                </mat-radio-button>
+                             </mat-radio-group>
+                        </div>
+                          
+                      </div> -->
+                      <div class="form-group dominios">
+                          <div class="rounded border border-warning " >
+                          <ul class="list-group">
+                                <li class="list-group-item"  *ngFor="let dom of domains"  >
+                                  <input type="radio" [(ngModel)]="currentUser.Domain" name="domain" value="{{dom.Domain}}" (click)='radioClick()'/> 
+                                  {{dom.Domain}}
+                                </li>
+                          </ul>
+                        </div>
+                      
+                      </div>
+                          
+                  <div class="form-group">
+                    <input type="submit" value="Login" class="btn float-right login_btn" 
+                    [disabled]='formLogin.invalid'>
+
+                    <!-- <button type="submit" class="btn float-right login_btn" 
+                    [disabled]='!password.valid || !username.valid'><i class="fa fa-sing-in"></i> Loging</button> -->
+                  </div>
+                </form>
+              </div>
+              <!-- <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                  Don't have an account?<a href="#">Sign Up</a>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <a href="#">Forgot your password?</a>
+                </div>
+              </div> -->
+            </div>
+      
+        
+    </div>
+</div>
+
+
+<!-- <fieldset ngModelGroup="securityCard" class=""> -->
+
+
+  <section id="login" class="mb-5 mt-5">
+  <div class="container">
+    <div class="row"></div>
+    <app-error-box-container [globalError]="globalError"></app-error-box-container>
+  </div>
+</section>
+

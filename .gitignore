@@ -1,15 +1,3 @@
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/bin/Debug/netcoreapp2.1/CentralizedSecurity.webApi.deps.json
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/bin/
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/CentralizedSecurity.webApi.csproj.nuget.dgspec.json
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/project.assets.json
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.2/CentralizedSecurity.webApi.csproj.FileListAbsolute.txt
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.2/CentralizedSecurity.webApi.RazorAssemblyInfo.cs
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.2/CentralizedSecurity.webApi.AssemblyInfo.cs
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.1/CentralizedSecurity.webApi.csproj.FileListAbsolute.txt
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.1/CentralizedSecurity.webApi.csproj.CopyComplete
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.1/CentralizedSecurity.webApi.RazorAssemblyInfo.cs
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/Debug/netcoreapp2.1/CentralizedSecurity.webApi.AssemblyInfo.cs
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/CentralizedSecurity.webApi.csproj.nuget.g.targets
-reseteos/konecta_CentralizedSecurity_core_1.0/CentralizedSecurity/CentralizedSecurity.webApi/obj/CentralizedSecurity.webApi.csproj.nuget.g.props
+packages/
 obj/
 bin/
