@@ -231,10 +231,10 @@ namespace CentralizedSecurity.webApi.helpers
             return apiConfig;
         }
 
-        public string apiDomain { get; set; }
-        public string password { get; set; }
-        public string api_user { get; set; }
-        public string api_password { get; set; }
+        public string api_secretKey { get; set; }
+        public string api_audienceToken { get; set; }
+        public string api_issuerToken { get; set; }
+        public string api_expireTime { get; set; }
 
 
         public string proxyPort { get; set; }

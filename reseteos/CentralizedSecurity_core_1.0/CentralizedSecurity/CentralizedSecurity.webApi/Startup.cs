@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CentralizedSecurity.webApi.common;
 using CentralizedSecurity.webApi.helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,7 @@ namespace CentralizedSecurity.webApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 
@@ -35,8 +37,13 @@ namespace CentralizedSecurity.webApi
             var config = new serverSettings();
             Configuration.Bind("serverSettings", config);      //  <--- This
             services.AddSingleton(config);
-
+            //https://weblog.west-wind.com/posts/2017/dec/12/easy-configuration-binding-in-aspnet-core-revisited
             apiAppSettings.serverSettings = config;
+
+
+            // configure DI for application services
+            services.AddScoped<IMeucciService, MeucciService>();
+            services.AddScoped<ILDAPService, LDAPService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,15 +62,10 @@ namespace CentralizedSecurity.webApi
             app.UseMvc();
 
 
-            var configurationBuilder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddEnvironmentVariables();
+           
 
-           var Configuration = configurationBuilder.Build();
-            //var apicongfig= Configuration.GetSection("apiCongfig");
-            
-            //var cnnStrings = Configuration["cnnStrings"];
+          
+          
         }
     }
 }

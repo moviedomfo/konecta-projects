@@ -6,23 +6,12 @@ using System.Web;
 using CentralizedSecurity.webApi.Models;
 using Fwk.Security.ActiveDirectory;
 
-namespace CentralizedSecurity.webApi.helpers
-{
-    public class LDAPService
-    {
-    }
-}
-
 
 namespace CentralizedSecurity.webApi.common
 {
     public class LDAPService : ILDAPService
     {
-        //public  List<DomainsBE> Domains {get;set;}
         public List<DomainUrlInfo> DomainsUrl { get; set; }
-
-
-
 
         LDAPService()
         {
@@ -31,11 +20,7 @@ namespace CentralizedSecurity.webApi.common
         }
 
 
-        public static LDAPService CreateInstance()
-        {
-            return new LDAPService();
-        }
-
+       
         /// <summary>
         /// Retorna DomainName que utiliza fwk DirectoryServices
         /// </summary>
@@ -48,10 +33,14 @@ namespace CentralizedSecurity.webApi.common
             p.SiteName.ToUpper().Equals(anotherDomainNameOrigin.ToUpper())
             ).FirstOrDefault();
             if (dom == null)
-                throw new Fwk.Exceptions.FunctionalException(string.Format("No en contramos el registro del dominio {0} en la base de datos .- DomainsUrl", anotherDomainNameOrigin));
+                throw new Fwk.Exceptions.FunctionalException(string.Format("No encontramos el registro del dominio {0} en la base de datos .- DomainsUrl", anotherDomainNameOrigin));
             return dom.DomainName;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string GetRandomPassword()
         {
 
@@ -62,9 +51,14 @@ namespace CentralizedSecurity.webApi.common
         }
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public interface ILDAPService
     {
+        /// <summary>
+        /// 
+        /// </summary>
         List<DomainUrlInfo> DomainsUrl { get; set; }
 
         string GetRandomPassword();

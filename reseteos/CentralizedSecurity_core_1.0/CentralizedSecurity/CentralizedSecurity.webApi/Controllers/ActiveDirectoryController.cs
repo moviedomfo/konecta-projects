@@ -16,9 +16,15 @@ namespace CentralizedSecurity.webApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DomainController : ControllerBase
+    public class ActiveDirectoryController : ControllerBase
     {
-        ILDAPService _LDAPService;
+        private ILDAPService _LDAPService;
+
+        public ActiveDirectoryController(ILDAPService _lDAPService)
+        {
+
+
+        }
 
         /// <summary>
         /// Api para autenticar usuario. No genera jwt solo actua contra active directory
@@ -30,7 +36,6 @@ namespace CentralizedSecurity.webApi.Controllers
         public IActionResult Authenticate(LoginRequest login)
         {
             if (login == null)
-                //throw new HttpResponseException(HttpStatusCode.BadRequest);
                 return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, "LoginRequest no puede ser nulo"));
             try
             {
@@ -172,32 +177,6 @@ namespace CentralizedSecurity.webApi.Controllers
                     return BadRequest(string.Format("No se grupos para el dominio {0}", domain));
                 else
                     return Ok(list);
-            }
-            catch (Exception ex)
-            {
-                var msg = apiHelper.getMessageException(ex);
-                return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
-            }
-        }
-
-
-        /// <summary>
-        /// Retorna informacion sobre dominios de la empresa de la BD de seguridad
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("retriveDomainsUrl")]
-        public IActionResult retriveDomainsUrl()
-        {
-
-            try
-            {
-                var list = ActiveDirectoryService.GetAllDomainsUrl();
-                if (list == null)
-                    //return apiHelper.fromErrorString("No se encontaron los DomainsUrl configurados en la BD", HttpStatusCode.NoContent);
-                return BadRequest("No se encontaron los DomainsUrl configurados en la BD");
-                else
-                    return Ok(list.ToList());
             }
             catch (Exception ex)
             {

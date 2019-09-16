@@ -13,21 +13,6 @@ namespace CentralizedSecurity.webApi.helpers
 {
     public class apiHelper
     {
-       
-
-
-        
-        
-       
-        static apiHelper()
-        {
-
-            //InitializeConfig();
-
-        }
-
-      
-
 
         public static string getMessageException(Exception ex)
         {
@@ -45,7 +30,7 @@ namespace CentralizedSecurity.webApi.helpers
                 {
                     var e = ex.InnerException as System.Net.Sockets.SocketException;
                     if (e.ErrorCode == 10060)
-                        msg = apiAppSettings.serverSettings.apiConfig.apiDomain + " no es accesible " + Environment.NewLine + msg;
+                        msg =   "La url no es accesible " + Environment.NewLine + msg;
                 }
                 //if (ex.InnerException.GetType() == typeof(WebExcepcion))
                 //{

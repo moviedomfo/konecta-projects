@@ -14,7 +14,23 @@ namespace CentralizedSecurity.webApi.Models
 
     }
 
+    public class LoginRequestAuth
+    {
+        public LoginRequestAuth()
+        {
+            includeDomainUserData = false;
+            includeGroups = false;
+        }
 
+
+        public string username { get; set; }
+        public string password { get; set; }
+        public string domain { get; set; }
+
+        public bool includeDomainUserData { get; set; }
+        public bool includeGroups { get; set; }
+
+    }
     public class userResetPasswordReq
     {
         public string WindowsUser { get; set; }
