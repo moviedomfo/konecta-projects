@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
+    [Route("api/[controller]")] ///api/oauth/
     public class AuthController : Controller
     {
 
@@ -26,7 +27,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <returns>Token tjw</returns>
-        [HttpPost("/api/oauth/[action]")]
+        [HttpPost("[action]")]
         public  IActionResult Authenticate(LoginRequest login)
          {
             if (login == null)
@@ -64,7 +65,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// <param name="login"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("/api/oauth/[action]")]
+        [HttpPost("[action]")]
         public IActionResult auth(LoginRequestAuth login)
         {
             ActiveDirectoryUser user = null;

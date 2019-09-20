@@ -11,15 +11,17 @@ namespace CentralizedSecurity.webApi.common
 {
     public class LDAPService : ILDAPService
     {
-        public List<DomainUrlInfo> DomainsUrl { get; set; }
-
-        LDAPService()
+        List<DomainUrlInfo> domainsUrl;
+        
+    
+        
+        public void set_DomainsUrl()
         {
-            //this.Domains = MeucciDAC.RetriveDominios();
-            this.DomainsUrl = Fwk.Security.ActiveDirectory.DirectoryServicesBase.DomainsUrl_Get_FromSp_all(Common.CnnStringNameAD);
+            if(this.domainsUrl == null)
+               this.domainsUrl = Fwk.Security.ActiveDirectory.DirectoryServicesBase.DomainsUrl_Get_FromSp_all(Common.CnnStringNameAD);
+
+             this.domainsUrl = new  List<DomainUrlInfo>();
         }
-
-
        
         /// <summary>
         /// Retorna DomainName que utiliza fwk DirectoryServices
@@ -28,7 +30,8 @@ namespace CentralizedSecurity.webApi.common
         /// <returns></returns>
         public string Get_correct_DomainName(string anotherDomainNameOrigin)
         {
-            var dom = this.DomainsUrl.Where(p =>
+            set_DomainsUrl();
+            var dom = this.domainsUrl.Where(p =>
             p.DomainName.ToUpper().Equals(anotherDomainNameOrigin.ToUpper()) ||
             p.SiteName.ToUpper().Equals(anotherDomainNameOrigin.ToUpper())
             ).FirstOrDefault();
@@ -49,6 +52,8 @@ namespace CentralizedSecurity.webApi.common
 
             return "Konecta+" + r;
         }
+
+       
     }
 
     /// <summary>
@@ -59,7 +64,7 @@ namespace CentralizedSecurity.webApi.common
         /// <summary>
         /// 
         /// </summary>
-        List<DomainUrlInfo> DomainsUrl { get; set; }
+        void set_DomainsUrl();
 
         string GetRandomPassword();
         /// <summary>

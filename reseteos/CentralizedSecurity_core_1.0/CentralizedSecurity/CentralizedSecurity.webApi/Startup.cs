@@ -48,28 +48,39 @@ namespace CentralizedSecurity.webApi
             services.AddScoped<IMeucciService, MeucciService>();
             services.AddScoped<ILDAPService, LDAPService>();
 
+            #region servicios  de swagger
 
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info() {
+                    Title ="API doc de Reseteos",
+                    Version = "5.0"
+                });
+
+
+            });
+            #endregion
 
             #region configure jwt authentication
             //  var appSettings = appSettingsSection.Get<serverSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.apiConfig.api_secretKey);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            //var key = Encoding.ASCII.GetBytes(appSettings.apiConfig.api_secretKey);
+            //services.AddAuthentication(x =>
+            //{
+            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //.AddJwtBearer(x =>
+            //{
+            //    x.RequireHttpsMetadata = false;
+            //    x.SaveToken = true;
+            //    x.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(key),
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false
+            //    };
+            //});
 
             #endregion
         }
@@ -95,12 +106,20 @@ namespace CentralizedSecurity.webApi
 
             app.UseAuthentication();
 
+       
+            #region servicios meidleware de swagger
+            app.UseSwagger();
+            
+            
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(config =>
+            {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "Doc. API Reseteos");
+            });
             app.UseMvc();
 
-
-
-
-
+            #endregion
 
         }
     }

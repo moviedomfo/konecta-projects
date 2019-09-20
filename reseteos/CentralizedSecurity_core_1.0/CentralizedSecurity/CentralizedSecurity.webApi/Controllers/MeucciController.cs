@@ -10,22 +10,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
-    public class MeucciController : Controller
+    [Route("api/[controller]")]
+    public class MeucciController : ControllerBase
     {
 
-        private ILDAPService _lDAPService;
+        private ILDAPService lDAPService;
         private IMeucciService meucciService;
-        public MeucciController(ILDAPService meucciService, ILDAPService _lDAPService)
+  
+        public MeucciController(IMeucciService meucciService, ILDAPService _lDAPService)
         {
 
-            
+
         }
+
+
         /// <summary>
         /// Api de autenticacion que genera el jwt.- Realiza validaciones contra meucci y el dominio
         /// </summary>
         /// <param name="login"></param>
         /// <returns>Token tjw</returns>
-        [HttpPost("/api/meucci/[action]")]
+        [HttpPost("[action]")]
         public IActionResult authenticate(LoginRequest login)
         {
             if (login == null)
@@ -64,7 +68,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// <param name="req"></param>
         /// <returns>Retorna todos los usuarios relacionados al dni de todos los dominios</returns>
 
-        [HttpPost("/api/meucci/[action]")]
+        [HttpPost("[action]")]
         public IActionResult retriveEmpleadosReseteos(retriveEmpleadosReseteosReq req)//string userName, string domain, string dni)
         {
             try
@@ -114,7 +118,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("/api/meucci/[action]")]
+        [HttpPost("[action]")]
         public IActionResult retriveDomains()//string userName, string domain, string dni)
         {
             try
@@ -139,7 +143,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpGet("/api/meucci/[action]")]
+        [HttpGet("[action]")]
         public IActionResult ping()
         {
             return Ok("El servicio funciona correctamente");
@@ -150,7 +154,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// Retorna informacion del servidor de reseteos web-api
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/api/meucci/[action]")]
+        [HttpGet("[action]")]
         public IActionResult GetServerInfo()
         {
             try

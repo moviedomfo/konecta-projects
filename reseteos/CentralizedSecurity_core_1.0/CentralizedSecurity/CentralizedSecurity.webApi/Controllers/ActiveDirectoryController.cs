@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/api/ldap")]
     [ApiController]
     public class ActiveDirectoryController : ControllerBase
     {
@@ -27,12 +27,26 @@ namespace CentralizedSecurity.webApi.Controllers
         }
 
         /// <summary>
+        /// Permite hacer un ping al servicio para determinar si esta activo, Método solo para test.
+        /// </summary>
+        /// <returns>Retorna un mensaje si esta activo</returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ping")]
+        public IActionResult ping()
+        {
+            return Ok("El servicio funciona correctamente");
+        }
+
+
+
+        /// <summary>
         /// Api para autenticar usuario. No genera jwt solo actua contra active directory
         /// </summary>
         /// <param name="login"></param>
         /// <returns>retorna <see cref="LoogonUserResult"/> </returns>
         [AllowAnonymous]
-        [HttpPost("/api/ldap/[action]")]
+        [HttpPost("[action]")]
         public IActionResult Authenticate(LoginRequest login)
         {
             if (login == null)
@@ -61,7 +75,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// <param name="userName">Nombre de usuario a buscar</param>
         /// <param name="domain">Dominio ej: allus.ar, alcomovistar</param>
         /// <returns></returns>
-        [HttpGet("/api/ldap/[action]")]
+        [HttpGet("[action]")]
         public IActionResult userExist(string userName, string domain)
         {
             try
@@ -300,18 +314,7 @@ namespace CentralizedSecurity.webApi.Controllers
         }
 
 
-        /// <summary>
-        /// Permite hacer un ping al servicio para determinar si esta activo, Método solo para test.
-        /// </summary>
-        /// <returns>Retorna un mensaje si esta activo</returns>
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("ping")]
-        public IActionResult ping()
-        {
-            return Ok("El servicio funciona correctamente");
-        }
-
+      
 
     }
 }
