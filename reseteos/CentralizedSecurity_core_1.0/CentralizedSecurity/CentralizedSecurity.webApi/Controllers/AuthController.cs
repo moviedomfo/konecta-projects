@@ -23,7 +23,7 @@ namespace CentralizedSecurity.webApi.Controllers
 
         }
         /// <summary>
-        /// Api de autenticacion que genera el jwt.- Realiza validaciones contra meucci y el dominio
+        /// Api de autenticacion que genera el jwt.- Realiza validaciones contra meucci y el dominio espesificado.
         /// </summary>
         /// <param name="login"></param>
         /// <returns>Token tjw</returns>
@@ -60,10 +60,10 @@ namespace CentralizedSecurity.webApi.Controllers
 
 
         /// <summary>
-        /// Api de autenticacion que genera el jwt.- Realiza validaciones el dominio espesificado. 
+        /// Api de autenticacion que genera el jwt.- Realiza validaciones solo contra el dominio espesificado. 
         /// </summary>
         /// <param name="login"></param>
-        /// <returns></returns>
+        /// <returns>jwt</returns>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public IActionResult auth(LoginRequestAuth login)

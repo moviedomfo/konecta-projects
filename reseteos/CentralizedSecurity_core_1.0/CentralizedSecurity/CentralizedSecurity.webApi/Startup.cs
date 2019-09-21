@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CentralizedSecurity.webApi.common;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace CentralizedSecurity.webApi
 {
@@ -27,6 +29,9 @@ namespace CentralizedSecurity.webApi
         }
 
         public IConfiguration Configuration { get; }
+
+    
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -50,15 +55,33 @@ namespace CentralizedSecurity.webApi
 
             #region servicios  de swagger
 
-            services.AddSwaggerGen(config =>
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
             {
-                config.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info() {
-                    Title ="API doc de Reseteos",
-                    Version = "5.0"
+                c.SwaggerDoc("v1", new Info {
+                    Title = "API doc de Reseteos",
+                    Version = "v1" });
+
+                // Set the comments path for the Swagger JSON and UI.
+                //For Linux or non-Windows operating systems, file names and paths can be case-sensitive. 
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
                 });
-
-
+                c.AddSecurityRequirement(security);
             });
+
             #endregion
 
             #region configure jwt authentication
@@ -106,16 +129,18 @@ namespace CentralizedSecurity.webApi
 
             app.UseAuthentication();
 
-       
+
             #region servicios meidleware de swagger
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-            
-            
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(config =>
+            ///https://localhost:44359/swagger/v1/swagger.json
+            app.UseSwaggerUI(c =>
             {
-                config.SwaggerEndpoint("/swagger/v1/swagger.json", "Doc. API Reseteos");
+                c.SwaggerEndpoint("/swagger/swagger/v1/swagger.json", "Doc. API Reseteos");
+                c.RoutePrefix = String.Empty; //To serve the Swagger UI at the app's root (http://localhost:<port>/) -->   https://localhost:44359/swagger
+               // c.DocExpansion("none");
             });
             app.UseMvc();
 

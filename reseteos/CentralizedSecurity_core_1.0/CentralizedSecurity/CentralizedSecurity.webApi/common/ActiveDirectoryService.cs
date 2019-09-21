@@ -36,6 +36,13 @@ namespace CentralizedSecurity.webApi.common
             performCustomWindowsContextImpersonalization = true;
         }
 
+        /// <summary>
+        /// authentica contra LDAP
+        /// </summary>
+        /// <param name="userName">Nombre de usuario de dominio</param>
+        /// <param name="password">password</param>
+        /// <param name="domain">Nombre de dominio</param>
+        /// <returns></returns>
         internal static LoogonUserResult User_Logon(string userName, string password, string domain)
         {
             LoogonUserResult loogonUserResult = new LoogonUserResult();
@@ -59,6 +66,8 @@ namespace CentralizedSecurity.webApi.common
 
 
         }
+
+
         internal static LoogonUserResult User_Logon2(string userName, string password, string domain)
         {
 
@@ -89,6 +98,7 @@ namespace CentralizedSecurity.webApi.common
             }
 
         }
+
         internal static List<ActiveDirectoryGroup> GetGroupsFromUser(string userName, string domain)
         {
 
@@ -251,6 +261,8 @@ namespace CentralizedSecurity.webApi.common
             ResetPassword(userName, domain, newPassword, true, false);
            
         }
+
+
         public static Boolean ResetPassword(string usernameToresset, string domain, string newPassword, Boolean UnlockAccount, Boolean NextLogon)
         {
 
@@ -282,7 +294,10 @@ namespace CentralizedSecurity.webApi.common
 
         
 
-
+        /// <summary>
+        /// Retorna todos los dominios configurados en la tabla DomainsURL
+        /// </summary>
+        /// <returns></returns>
         internal static Fwk.CentralizedSecurity.Contracts.DomainsUrl[] GetAllDomainsUrl()
         {
 
