@@ -19,7 +19,9 @@ namespace CentralizedSecurity.webApi.helpers
     }
     public class ApiErrorResponse : ApiResponse
     {
-        public ApiErrorResponse(HttpStatusCode statusCode, string message = null) : base((int)statusCode, message)
+        string errorId = null;
+        string errorType = null;
+        public ApiErrorResponse(HttpStatusCode statusCode, string message = null,string errorId=null) : base((int)statusCode, message)
         {
         }
         //public ApiErrorResponse(int statusCode, Exception ex) : base(statusCode)

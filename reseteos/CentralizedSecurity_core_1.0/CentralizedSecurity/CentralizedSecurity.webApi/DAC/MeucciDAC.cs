@@ -186,8 +186,19 @@ namespace CentralizedSecurity.webApi.DAC
                         item.Cuenta = reader["cue_nombre"].ToString();
                         item.Subarea = reader["sar_nombre"].ToString();
                         item.ApeNom = reader["emp_apenom"].ToString();
-                        if(reader["aus_id"]!= DBNull.Value)
+                        if (reader["aus_id"] != DBNull.Value)
                             item.Aus_Id = Convert.ToInt32(reader["aus_id"]);
+
+                        if (reader["Telefono"] != DBNull.Value)
+                            item.Telefono = reader["Telefono"].ToString();
+                        if (reader["Direccion"] != DBNull.Value)
+                            item.Direccion = reader["Direccion"].ToString();
+                        if (reader["Ciudad_Natal"] != DBNull.Value)
+                            item.CiudadNatal = reader["Ciudad_Natal"].ToString();
+
+                        if (reader["Fec_Nac"] != DBNull.Value)
+                            item.FechaNacimiento = reader["Fec_Nac"].ToString();
+
                     }
                     if (item != null)
                     {

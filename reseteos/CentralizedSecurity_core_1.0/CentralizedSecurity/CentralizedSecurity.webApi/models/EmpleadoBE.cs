@@ -30,7 +30,7 @@ namespace CentralizedSecurity.webApi.Models
     public class EmpleadoBE
     {
         public int Emp_id { get; set; }
-        public string ApeNom { get; set;}
+        public string ApeNom { get; set; }
         //public string Apellido { get; set; }
         //public string Nombre { get; set; }
         public string DNI { get; set; }
@@ -38,8 +38,8 @@ namespace CentralizedSecurity.webApi.Models
         public string Cargo { get; set; }
         public string Subarea { get; set; }
         //public string Dominio { get; set; }
-     
-        
+
+
         public int Legajo { get; set; }
 
         //public bool CAIS { get; set; }
@@ -47,8 +47,14 @@ namespace CentralizedSecurity.webApi.Models
         public int? Aus_Id { get; set; }
 
 
-        public List<WindosUserBE> WindosUserList{ get; set; }
-}
+        public List<WindosUserBE> WindosUserList { get; set; }
+
+        public string Telefono { get; internal set; }
+        public string Direccion { get; internal set; }
+        public string CiudadNatal { get; internal set; }
+        public string FechaNacimiento { get; internal set; }
+    }
+
 
 
     public class WindosUserBE

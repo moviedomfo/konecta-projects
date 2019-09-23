@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
+        [ApiController]
     public class MeucciController : ControllerBase
     {
 
@@ -22,7 +24,26 @@ namespace CentralizedSecurity.webApi.Controllers
 
 
         }
+        /// <summary>
+        /// Metodo solo para test.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IActionResult pingSecure()
+        {
+            return Ok("El ping secure funciona correctamente");
+        }
 
+        /// <summary>
+        /// Metodo solo para test.
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult ping()
+        {
+            return Ok("El servicio funciona correctamente");
+        }
 
         /// <summary>
         /// Api de autenticacion que genera el jwt.- Realiza validaciones contra meucci y el dominio
@@ -138,17 +159,7 @@ namespace CentralizedSecurity.webApi.Controllers
 
 
 
-        /// <summary>
-        /// Metodo solo para test.
-        /// </summary>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpGet("[action]")]
-        public IActionResult ping()
-        {
-            return Ok("El servicio funciona correctamente");
-        }
-
+     
 
         /// <summary>
         /// Retorna informacion del servidor de reseteos web-api

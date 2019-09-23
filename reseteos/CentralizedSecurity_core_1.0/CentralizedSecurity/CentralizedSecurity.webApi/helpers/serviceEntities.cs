@@ -19,9 +19,9 @@ namespace CentralizedSecurity.webApi.helpers
     public class apiAppSettings
     {
         public static HttpClientHandler proxy { get; set; }
-        public static apiConfig apiConfig { get;  }
+        
         public static serverSettings serverSettings  { get; set; }
-        public static List<ConnectionString> connectionStrings { get;  }
+        
 
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace CentralizedSecurity.webApi.helpers
         /// <returns></returns>
         public static ConnectionString get_cnnString_byName(string cnnStringName)
         {
-            var cn = connectionStrings.Where(c => c.name.Equals(cnnStringName));
+            var cn = serverSettings.connectionStrings.Where(c => c.name.Equals(cnnStringName)).FirstOrDefault();
             if (cn != null)
             {
                 return cn as ConnectionString;
@@ -192,7 +192,8 @@ namespace CentralizedSecurity.webApi.helpers
 
     public class serverSettings
     {
-        public cnnStrings cnnStrings { get; set; }
+        public ConnectionStrings connectionStrings { get; set; }
+        //public cnnStrings cnnStrings { get; set; }
         public apiConfig apiConfig { get; set; }
     }
 
@@ -235,8 +236,8 @@ namespace CentralizedSecurity.webApi.helpers
         public string api_audienceToken { get; set; }
         public string api_issuerToken { get; set; }
         public string api_expireTime { get; set; }
-
-
+        public string api_authServerBaseUrl { get; set; }
+        
         public string proxyPort { get; set; }
         public string proxyName { get; set; }
         public bool proxyEnabled { get; set; }
@@ -264,10 +265,13 @@ namespace CentralizedSecurity.webApi.helpers
         public bool windowsAutentification { get; set; }
     }
 
-   
 
 
-   
+
+    public class ConnectionStrings : List<ConnectionString>
+    {
+
+    }
 
     public class ConnectionString
     {

@@ -1,5 +1,6 @@
 ﻿
 using Fwk.DataBase;
+using Fwk.Exceptions;
 using Fwk.HelperFunctions;
 using Newtonsoft.Json;
 using System;
@@ -21,11 +22,17 @@ namespace CentralizedSecurity.webApi.helpers
             //        msg = ex.Message;
             //return msg = ex.Message;
 
+            if(ex.GetType() == typeof(TechnicalException))
+            {
+                var te = ex as TechnicalException;
 
+                msg = te.Message;
+                //return msg;
+            }
             if (ex.InnerException != null)
             {
 
-                msg = ex.InnerException.Message;
+                msg = msg + ex.InnerException.Message;
                 if (ex.InnerException.GetType() == typeof(System.Net.Sockets.SocketException))
                 {
                     var e = ex.InnerException as System.Net.Sockets.SocketException;
@@ -50,7 +57,7 @@ namespace CentralizedSecurity.webApi.helpers
         public static HttpClientHandler getProxy_HttpClientHandler()
         {
             HttpClientHandler httpClientHandler = null;
-            if (apiAppSettings.apiConfig.proxyEnabled)
+            if (apiAppSettings.serverSettings.apiConfig.proxyEnabled)
             {
                 var proxy = new WebProxy()
                 {

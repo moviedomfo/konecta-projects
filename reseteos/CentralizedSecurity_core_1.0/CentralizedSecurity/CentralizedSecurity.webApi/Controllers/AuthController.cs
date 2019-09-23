@@ -13,7 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
-    [Route("api/[controller]")] ///api/oauth/
+    [Route("/api/auth")]
+    //[Route("api/[controller]")] ///api/auth/
+    [ApiController]
     public class AuthController : Controller
     {
 
@@ -107,6 +109,80 @@ namespace CentralizedSecurity.webApi.Controllers
 
 
                     var jwt = TokenGenerator.GenerateTokenJwt_LDAP(login.username, user, userGroups);
+
+                    res.Token = jwt;
+                }
+
+                return Ok(res);
+
+            }
+            catch (Exception ex)
+            {
+                var msg = apiHelper.getMessageException(ex);
+                return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
+            }
+
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public IActionResult authTest(LoginRequestAuth login)
+        {
+            ActiveDirectoryUser user = null;
+            if (login == null)
+                return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, "Los parámetros del loging no son opcionales"));
+            try
+            {
+                //var res = ActiveDirectoryService.User_Logon(login.username, login.password, login.domain);
+                var res = new LoogonUserResult();
+                res.Autenticated = true;
+                if (res.Autenticated)
+                {
+                    if (login.includeDomainUserData)
+                    {
+                        try
+                        {
+                            //user = ActiveDirectoryService.User_Info(login.username, login.domain);
+                            user = new ActiveDirectoryUser();
+                            user.Company = "contoso";
+                            user.Country = "arg";
+                            user.FirstName = login.username;
+                            user.LoginName = login.username;
+                            user.EmailAddress = login.username + "@contoso.co";
+                        }
+                        catch (Exception ex)
+                        {
+                            res.ErrorMessage = "No fué posible obtener datos del usuario en el dominio. Razon =  " + ex.Message;
+                        }
+
+                    }
+
+
+                    List<ActiveDirectoryGroup> userGroups = null;
+                    if (login.includeGroups)
+                    {
+
+                        try
+                        {
+                            
+
+                            userGroups = new List<ActiveDirectoryGroup>();
+                            ActiveDirectoryGroup g = new ActiveDirectoryGroup();
+                            g.CN = "co";
+                            g.Description = "co";
+                            g.Name = "contoso";
+                            userGroups.Add(g);
+                        }
+                        catch (Exception ex)
+                        {
+                            res.ErrorMessage = "No fué posible obtener los grupos usuario en el dominio. Razon =  " + ex.Message;
+                        }
+                    }
+
+
+                    var jwt = TokenGenerator.GenerateTokenJwt_test(login.username, user, userGroups);
 
                     res.Token = jwt;
                 }

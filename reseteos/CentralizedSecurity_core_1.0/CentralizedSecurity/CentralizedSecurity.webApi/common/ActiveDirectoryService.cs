@@ -8,8 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
 using Microsoft.Win32.SafeHandles;
-
-
+using CentralizedSecurity.webApi.helpers;
 
 namespace CentralizedSecurity.webApi.common
 {
@@ -48,7 +47,13 @@ namespace CentralizedSecurity.webApi.common
             LoogonUserResult loogonUserResult = new LoogonUserResult();
             loogonUserResult.Autenticated = false;
 
-            LDAPHelper _ADWrapper = new LDAPHelper(domain, Common.CnnStringNameAD, true, false);
+            var cnn = apiAppSettings.get_cnnString_byName(Common.CnnStringNameAD);
+            if(cnn==null)
+            {
+                var te=  new TechnicalException("No esta coonfigurado elrepositorio de datos de dominios. Cadena de conexion no se encuentra");
+                te.ErrorId = "9000";
+            }
+            LDAPHelper _ADWrapper = new LDAPHelper(domain, cnn.cnnString, true, false);
             TechnicalException logError = null;
 
             loogonUserResult.LogResult = _ADWrapper.User_Logon(userName, password, out logError).ToString();
@@ -75,7 +80,14 @@ namespace CentralizedSecurity.webApi.common
             loogonUserResult.Autenticated = false;
             try
             {
-                LDAPHelper _ADWrapper = new LDAPHelper(domain, Common.CnnStringNameAD);
+                var cnn = apiAppSettings.get_cnnString_byName(Common.CnnStringNameAD);
+                if (cnn == null)
+                {
+                    var te = new TechnicalException("No esta coonfigurado elrepositorio de datos de dominios. Cadena de conexion no se encuentra");
+                    te.ErrorId = "9000";
+                }
+
+                LDAPHelper _ADWrapper = new LDAPHelper(domain, cnn.cnnString);
                 TechnicalException logError = null;
 
                 loogonUserResult.LogResult = _ADWrapper.User_Logon(userName, password, out logError).ToString();

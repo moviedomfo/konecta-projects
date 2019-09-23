@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
+    [Authorize]
     [Route("/api/ldap")]
     [ApiController]
     public class ActiveDirectoryController : ControllerBase
@@ -26,6 +27,77 @@ namespace CentralizedSecurity.webApi.Controllers
 
         }
 
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public IActionResult authTest(LoginRequestAuth login)
+        {
+            ActiveDirectoryUser user = null;
+            if (login == null)
+                return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, "Los parámetros del loging no son opcionales"));
+            try
+            {
+                //var res = ActiveDirectoryService.User_Logon(login.username, login.password, login.domain);
+                var res = new LoogonUserResult();
+                res.Autenticated = true;
+                if (res.Autenticated)
+                {
+                    if (login.includeDomainUserData)
+                    {
+                        try
+                        {
+                            //user = ActiveDirectoryService.User_Info(login.username, login.domain);
+                            user = new ActiveDirectoryUser();
+                            user.Company = "contoso";
+                            user.Country = "arg";
+                            user.FirstName = login.username;
+                            user.LoginName = login.username;
+                            user.EmailAddress = login.username + "@contoso.co";
+                        }
+                        catch (Exception ex)
+                        {
+                            res.ErrorMessage = "No fué posible obtener datos del usuario en el dominio. Razon =  " + ex.Message;
+                        }
+
+                    }
+
+
+                    List<ActiveDirectoryGroup> userGroups = null;
+                    if (login.includeGroups)
+                    {
+
+                        try
+                        {
+
+
+                            userGroups = new List<ActiveDirectoryGroup>();
+                            ActiveDirectoryGroup g = new ActiveDirectoryGroup();
+                            g.CN = "co";
+                            g.Description = "co";
+                            g.Name = "contoso";
+                            userGroups.Add(g);
+                        }
+                        catch (Exception ex)
+                        {
+                            res.ErrorMessage = "No fué posible obtener los grupos usuario en el dominio. Razon =  " + ex.Message;
+                        }
+                    }
+
+
+                    var jwt = TokenGenerator.GenerateTokenJwt_test(login.username, user, userGroups);
+
+                    res.Token = jwt;
+                }
+
+                return Ok(res);
+
+            }
+            catch (Exception ex)
+            {
+                var msg = apiHelper.getMessageException(ex);
+                return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
+            }
+
+        }
         /// <summary>
         /// Permite hacer un ping al servicio para determinar si esta activo, Método solo para test.
         /// </summary>
@@ -38,7 +110,12 @@ namespace CentralizedSecurity.webApi.Controllers
             return Ok("El servicio funciona correctamente");
         }
 
-
+        [HttpPost]
+        [Route("pingSecure")]
+        public IActionResult pingSecure()
+        {
+            return Ok("El servicio funciona correctamente");
+        }
 
         /// <summary>
         /// Api para autenticar usuario. No genera jwt solo actua contra active directory
@@ -249,13 +326,18 @@ namespace CentralizedSecurity.webApi.Controllers
             {
                 //Acceso denegado. (Excepción de HRESULT: 0x80070005 (E_ACCESSDENIED))
                 var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, false);
-                if (msg.Contains("E_ACCESSDENIED"))
+                if (msg.ToLower().Contains("impersonali") || msg.ToLower().Contains("acceso"))
                 {
-                    TechnicalException t = new TechnicalException("No es posible resetear " + req.WindowsUser + " en el dominio " + req.DomainName
-                        + " deberá comunicarce con segurridad informática ", ex);
+                    TechnicalException t = new TechnicalException("No es posible desbloquear " + req.WindowsUser + " en el dominio " + req.DomainName
+                        + " deberá comunicarse  con el CAIS");
                     ex = t;
                 }
-
+                if (msg.Contains("E_ACCESSDENIED"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible desbloquear " + req.WindowsUser + " en el dominio " + req.DomainName
+                        + " deberá comunicarse con el CAIS");
+                    ex = t;
+                }
                 msg = apiHelper.getMessageException(ex);
                 return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
             }
@@ -302,13 +384,19 @@ namespace CentralizedSecurity.webApi.Controllers
             catch (Exception ex)
             {
                 var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, false);
-                if (msg.Contains("E_ACCESSDENIED"))
+                if (msg.ToLower().Contains("impersonali") || msg.ToLower().Contains("acceso"))
                 {
-                    TechnicalException t = new TechnicalException("No es posible resetear " + req.WindowsUser + " en el dominio " + req.DomainName
-                        + " deberá comunicarce con segurridad informática ", ex);
+                    TechnicalException t = new TechnicalException("No es posible desbloquear " + req.WindowsUser + " en el dominio " + req.DomainName
+                        + " deberá comunicarse  con el CAIS");
                     ex = t;
                 }
-                 msg = apiHelper.getMessageException(ex);
+                if (msg.Contains("E_ACCESSDENIED"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible desbloquear " + req.WindowsUser + " en el dominio " + req.DomainName
+                        + " deberá comunicarse con el CAIS");
+                    ex = t;
+                }
+                msg = apiHelper.getMessageException(ex);
                 return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg));
             }
         }
