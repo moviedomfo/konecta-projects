@@ -19,12 +19,12 @@ namespace CentralizedSecurity.webApi.Controllers
     [ApiController]
     public class ActiveDirectoryController : ControllerBase
     {
-        private ILDAPService _LDAPService;
+        private readonly ILDAPService _LDAPService;
 
-        public ActiveDirectoryController(ILDAPService _lDAPService)
+        public ActiveDirectoryController(ILDAPService service)
         {
 
-
+            _LDAPService = service;
         }
 
         [AllowAnonymous]

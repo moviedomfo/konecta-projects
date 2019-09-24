@@ -53,7 +53,8 @@ namespace CentralizedSecurity.webApi.common
 
             try
             {
-                DomainUrlInfoList = Fwk.Security.ActiveDirectory.DirectoryServicesBase.DomainsUrl_Get_FromSp_all(Common.CnnStringNameAD);
+                var cnn = Common.GetCnn(Common.CnnStringNameAD);
+                DomainUrlInfoList = Fwk.Security.ActiveDirectory.DirectoryServicesBase.DomainsUrl_Get_FromSp_all(cnn.ConnectionString);
                 //Domains = new List<DomainsBE>();
                 //DomainsBE dbe =null;
                 //DomainUrlInfoList.ForEach(d =>

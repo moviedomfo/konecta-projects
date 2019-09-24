@@ -11,19 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace CentralizedSecurity.webApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-        [ApiController]
+    [Route("/api/meucci")]
+    [ApiController]
     public class MeucciController : ControllerBase
     {
 
-        private ILDAPService lDAPService;
-        private IMeucciService meucciService;
+        private readonly ILDAPService lDAPService;
+        private readonly IMeucciService meucciService;
   
-        public MeucciController(IMeucciService meucciService, ILDAPService _lDAPService)
+        public MeucciController(IMeucciService meucciService, ILDAPService lDAPService)
         {
-
-
-        }
+            this.meucciService = meucciService;
+            this.lDAPService = lDAPService;
+                    }
         /// <summary>
         /// Metodo solo para test.
         /// </summary>

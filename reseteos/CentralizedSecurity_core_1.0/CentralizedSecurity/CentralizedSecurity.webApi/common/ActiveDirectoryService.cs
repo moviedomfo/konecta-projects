@@ -313,9 +313,9 @@ namespace CentralizedSecurity.webApi.common
         internal static Fwk.CentralizedSecurity.Contracts.DomainsUrl[] GetAllDomainsUrl()
         {
 
-
+            var cnn = Common.GetCnn(Common.CnnStringNameAD);
             //List<DomainUrlInfo> auxlist = ADWrapper.DomainsUrl_GetList2(System.Configuration.ConfigurationManager.ConnectionStrings[Common.CnnStringNameAD].ConnectionString);
-            List<DomainUrlInfo> auxlist = ADWrapper.DomainsUrl_Get_FromSp_all(Common.CnnStringNameAD);
+            List<DomainUrlInfo> auxlist = ADWrapper.DomainsUrl_Get_FromSp_all(cnn.ConnectionString);
 
             if (auxlist.Count != 0)
             {

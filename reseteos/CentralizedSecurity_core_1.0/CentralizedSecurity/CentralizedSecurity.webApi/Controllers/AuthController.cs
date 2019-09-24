@@ -13,23 +13,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CentralizedSecurity.webApi.Controllers
 {
-    [Route("/api/auth")]
-    //[Route("api/[controller]")] ///api/auth/
+    [Route("/api/oauth")]
     [ApiController]
-    public class AuthController : Controller
+    public class OAuthController : Controller
     {
 
-        private IMeucciService meucciService;
-        AuthController(IMeucciService meucciService)
+        private readonly IMeucciService meucciService;
+        public OAuthController(IMeucciService service)
         {
-
+            meucciService = service;
         }
+        [HttpGet("ping")]
+        [AllowAnonymous]
+        public IActionResult ping()
+        {
+            return Ok("El servicio funciona correctamente /api/oauth");
+        }
+
         /// <summary>
         /// Api de autenticacion que genera el jwt.- Realiza validaciones contra meucci y el dominio espesificado.
         /// </summary>
         /// <param name="login"></param>
         /// <returns>Token tjw</returns>
-        [HttpPost("[action]")]
+        [HttpPost()]
+        [Route("authenticate")]
+        [AllowAnonymous]
         public  IActionResult Authenticate(LoginRequest login)
          {
             if (login == null)
@@ -67,7 +75,7 @@ namespace CentralizedSecurity.webApi.Controllers
         /// <param name="login"></param>
         /// <returns>jwt</returns>
         [AllowAnonymous]
-        [HttpPost("[action]")]
+        [HttpPost("auth")]
         public IActionResult auth(LoginRequestAuth login)
         {
             ActiveDirectoryUser user = null;
