@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -21,10 +21,10 @@
 
   <ItemGroup>
     <Reference Include="fwk.bases.core">
-      <HintPath>..\..\libs\fwk.bases.core.dll</HintPath>
+      <HintPath>..\libs\fwk.bases.core.dll</HintPath>
     </Reference>
     <Reference Include="Fwk.security.core">
-      <HintPath>..\..\libs\Fwk.security.core.dll</HintPath>
+      <HintPath>..\libs\Fwk.security.core.dll</HintPath>
     </Reference>
   </ItemGroup>
 
