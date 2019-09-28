@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using epironApi.webApi.common;
 using epironApi.webApi.helpers;
 using epironApi.webApi.models;
@@ -48,23 +49,24 @@ namespace epironApi.webApi.Controllers
 
 
         [HttpPost("[action]")]
-        public IActionResult enqueueBotComment(EnqueueCommentBotReq req)
+        public  IActionResult  enqueueBotComment(EnqueueCommentBotReq req)
         {
-            return Ok("El ping secure funciona correctamente");
+
+        
+            try
+            {
+               this.epironService.Bot_update_sendStatus(req);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
 
-        /// <summary>
-        /// web hook de bot api
-        /// </summary>
-        /// <param name="req"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
-        public IActionResult eendResponseBotCommentReq(SendResponseBotCommentReq req)
-        {
-            return Ok("El ping secure funciona correctamente");
-        }
+       
 
 
 

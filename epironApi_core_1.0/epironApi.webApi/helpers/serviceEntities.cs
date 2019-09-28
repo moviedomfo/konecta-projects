@@ -19,20 +19,20 @@ namespace epironApi.webApi.helpers
     public class apiAppSettings
     {
         public static WebProxy proxy { get; set; }
-        
-        public static serverSettings serverSettings  { get; set; }
+
+        public static ServerSettings serverSettings { get; set; }
 
 
         static apiAppSettings()
         {
-            set_proxy();
+            //set_proxy();
         }
 
-        static  void set_proxy()
+        static void set_proxy()
         {
 
             if (serverSettings.apiConfig.proxyEnabled == false)
-                return ;
+                return;
 
             if (proxy == null)
             {
@@ -45,17 +45,17 @@ namespace epironApi.webApi.helpers
                 proxy.Credentials = new System.Net.NetworkCredential(apiAppSettings.serverSettings.apiConfig.proxyUser, apiAppSettings.serverSettings.apiConfig.proxyPassword, apiAppSettings.serverSettings.apiConfig.proxyDomain);
 
             }
-           
+
         }
 
         public static HttpClientHandler getProxy_HttpClientHandler()
         {
             HttpClientHandler httpClientHandler = null;
-            if (serverSettings.apiConfig.proxyEnabled)
+            if (apiAppSettings.serverSettings.apiConfig.proxyEnabled)
             {
                 var proxy = new WebProxy()
                 {
-                    Address = new Uri(string.Format("http://{0}:{1}", serverSettings.apiConfig.proxyName, serverSettings.apiConfig.proxyPort)),
+                    Address = new Uri(string.Format("http://{0}:{1}", apiAppSettings.serverSettings.apiConfig.proxyName, apiAppSettings.serverSettings.apiConfig.proxyPort)),
                     //BypassOnLocal = false,
                     UseDefaultCredentials = true
 
@@ -96,7 +96,7 @@ namespace epironApi.webApi.helpers
                 {
                     var e = ex.InnerException as System.Net.Sockets.SocketException;
                     if (e.ErrorCode == 10060)
-                        msg = wapiHelper.apiConfig.apiDomain + " no es accesible " + Environment.NewLine + msg;
+                        msg = apiAppSettings.serverSettings.apiConfig.bootApiBaseUrl + " no es accesible " + Environment.NewLine + msg;
                 }
                 //if (ex.InnerException.GetType() == typeof(WebExcepcion))
                 //{
@@ -202,7 +202,7 @@ namespace epironApi.webApi.helpers
                     if (!System.IO.Directory.Exists(config.logsFolder))
                         System.IO.Directory.CreateDirectory(config.logsFolder);
 
-                    setProxy();
+                    //setProxy();
                 }
 
 
@@ -215,7 +215,7 @@ namespace epironApi.webApi.helpers
             }
         }
 
-            #endregion
+        #endregion
 
         public static cnnStrings get_cnnStrings(List<ConnectionString> connectionStrings)
         {
@@ -251,7 +251,7 @@ namespace epironApi.webApi.helpers
         /// <returns></returns>
         public static ConnectionString get_cnnString_byName(string cnnStringName)
         {
-            var cn = serverSettings.connectionStrings.Where(c => c.name.Equals(cnnStringName)).FirstOrDefault();
+            var cn = apiAppSettings.serverSettings.connectionStrings.Where(c => c.name.Equals(cnnStringName)).FirstOrDefault();
             if (cn != null)
             {
                 return cn as ConnectionString;
@@ -265,24 +265,24 @@ namespace epironApi.webApi.helpers
         }
 
 
-        public static void setProxy()
-        {
-            if (serverSettings.apiConfig.proxyEnabled)
-            {
-                var proxyURI = new Uri(string.Format("http://{0}:{1}", serverSettings.apiConfig.proxyName, serverSettings.apiConfig.proxyPort));
-                proxy = new HttpClientHandler
-                {
-                    Proxy = new WebProxy(proxyURI, false),
-                    UseProxy = true,
-                    Credentials = new NetworkCredential(serverSettings.apiConfig.proxyUser, serverSettings.apiConfig.proxyPassword,
-                    serverSettings.apiConfig.proxyDomain)
-                };
-            }
-        }
+        //public static void setProxy()
+        //{
+        //    if (apiAppSettings.serverSettings.apiConfig.proxyEnabled)
+        //    {
+        //        var proxyURI = new Uri(string.Format("http://{0}:{1}", apiAppSettings.serverSettings.apiConfig.proxyName, apiAppSettings.serverSettings.apiConfig.proxyPort));
+        //        proxy = new HttpClientHandler
+        //        {
+        //            Proxy = new WebProxy(proxyURI, false),
+        //            UseProxy = true,
+        //            Credentials = new NetworkCredential(apiAppSettings.serverSettings.apiConfig.proxyUser, apiAppSettings.serverSettings.apiConfig.proxyPassword,
+        //            apiAppSettings.serverSettings.apiConfig.proxyDomain)
+        //        };
+        //    }
+        //}
+
     }
 
-
-    public class serverSettings
+    public class ServerSettings
     {
         public ConnectionStrings connectionStrings { get; set; }
         //public cnnStrings cnnStrings { get; set; }

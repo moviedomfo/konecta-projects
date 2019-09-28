@@ -47,11 +47,11 @@ namespace epironApi.webApi
 
             //services.a(  // enable Configuration Services
             #region load appSettings
-            var appSettings = new serverSettings();
-            Configuration.Bind("serverSettings", appSettings);      //  <--- This
-            services.AddSingleton(appSettings);
-            //https://weblog.west-wind.com/posts/2017/dec/12/easy-configuration-binding-in-aspnet-core-revisited
-            apiAppSettings.serverSettings = appSettings;
+            var serverSettings = new ServerSettings();
+            Configuration.Bind("serverSettings", serverSettings);      //  <--- This
+            services.AddSingleton(serverSettings);
+        
+            apiAppSettings.serverSettings = serverSettings;
             #endregion
 
 
@@ -70,7 +70,7 @@ namespace epironApi.webApi
 
             #region configure jwt authentication
             //  var appSettings = appSettingsSection.Get<serverSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.apiConfig.api_secretKey);
+            var key = Encoding.ASCII.GetBytes(serverSettings.apiConfig.api_secretKey);
 
 
             services.AddAuthentication(x =>
@@ -112,7 +112,7 @@ namespace epironApi.webApi
             {
                 c.SwaggerDoc("v1", new Info
                 {
-                    Title = "API doc de Reseteos",
+                    Title = "API bot comment",
                     Version = "v1"
                 });
 
@@ -165,7 +165,8 @@ namespace epironApi.webApi
             //    app.UseHsts();
             //}
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+
             // global cors policy
             app.UseCors(x => x
                 .AllowAnyOrigin()
@@ -173,6 +174,7 @@ namespace epironApi.webApi
                 .AllowAnyHeader());
 
 
+            
 
             app.UseAuthentication();
 
@@ -185,7 +187,7 @@ namespace epironApi.webApi
             ///https://localhost:44359/swagger/v1/swagger.json
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/swagger/v1/swagger.json", "Doc. API Reseteos");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Doc. API Reseteos");
                 c.RoutePrefix = String.Empty; //To serve the Swagger UI at the app's root (http://localhost:<port>/) -->   https://localhost:44359/swagger
                                               // c.DocExpansion("none");
             });

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace epironApi.webApi.Controllers
 {
-    [Route("/api/oauth")]
+    [Route("api/oauth")]
     [ApiController]
     public class OAuthController : Controller
     {

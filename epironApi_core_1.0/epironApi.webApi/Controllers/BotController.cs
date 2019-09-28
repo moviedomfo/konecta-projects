@@ -3,36 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using epironApi.webApi.common;
-using epironApi.webApi.helpers;
 using epironApi.webApi.models;
-using epironApi.webApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace epironApi.webApi.Controllers
 {
     ///[Authorize]
-    [Route("/api/epiron")]
+    [Route("api/bot")]
     [ApiController]
-    public class EpironController : ControllerBase
+    public class BotController : ControllerBase
     {
         private readonly IEpironService epironService;
   
-        public EpironController(IEpironService epironService)
+        public BotController(IEpironService epironService)
         {
             this.epironService = epironService;
             
-                    }
-        /// <summary>
-        /// Metodo solo para test.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("[action]")]
-        public IActionResult pingSecure()
-        {
-            return Ok("El ping secure funciona correctamente");
-        }
-
+          }
+       
         /// <summary>
         /// Metodo solo para test.
         /// </summary>
@@ -47,13 +36,7 @@ namespace epironApi.webApi.Controllers
 
 
 
-        [HttpPost("[action]")]
-        public IActionResult enqueueBotComment(EnqueueCommentBotReq req)
-        {
-            return Ok("El ping secure funciona correctamente");
-        }
-
-
+  
 
         /// <summary>
         /// web hook de bot api
@@ -61,43 +44,25 @@ namespace epironApi.webApi.Controllers
         /// <param name="req"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public IActionResult eendResponseBotCommentReq(SendResponseBotCommentReq req)
+        public IActionResult resesponseBotComment(SendResponseBotCommentReq req)
         {
-            return Ok("El ping secure funciona correctamente");
-        }
-
-
-
-
-
-
-        /// <summary>
-        /// Retorna informacion del servidor de reseteos web-api
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("[action]")]
-        public IActionResult GetServerInfo()
-        {
+            //TODO: analizar si existe un api que me retorne comment enviados por sin respuesta
             try
             {
-
-                ApiServerInfo info = new ApiServerInfo();
-                var sql = Common.Get_SqlConnectionStringBuilder(Common.CnnStringNameepiron);
-                info.SQLServerepiron = "Coneccion :" + Common.CnnStringNameepiron + " Sql Server = " + sql.DataSource + " BD " + sql.InitialCatalog;
-
-                sql = Common.Get_SqlConnectionStringBuilder(Common.CnnStringNameAD);
-                info.SQLServerepiron = "Coneccion :" + Common.CnnStringNameAD + " Sql Server = " + sql.DataSource + " BD " + sql.InitialCatalog;
-
-                info.Ip = Common.Get_IPAddress();
-                info.HostName = Dns.GetHostName();
-                return Ok(info);
+                epironService.Bot_webhook_update_recivedStatus(req);
+                return Ok();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                var msg = apiHelper.getMessageException(ex);
-                return BadRequest(new ApiErrorResponse(HttpStatusCode.InternalServerError, msg)); ;
+                return BadRequest(ex.Message);
             }
+            
+            
         }
+
+        
+
+
 
 
     }

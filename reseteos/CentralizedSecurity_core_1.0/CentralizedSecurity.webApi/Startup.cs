@@ -185,7 +185,7 @@ namespace CentralizedSecurity.webApi
             ///https://localhost:44359/swagger/v1/swagger.json
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/swagger/v1/swagger.json", "Doc. API Reseteos");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Doc. API Reseteos");
                 c.RoutePrefix = String.Empty; //To serve the Swagger UI at the app's root (http://localhost:<port>/) -->   https://localhost:44359/swagger
                                               // c.DocExpansion("none");
             });
