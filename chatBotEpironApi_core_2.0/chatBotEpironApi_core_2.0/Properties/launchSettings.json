@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "epironApi.webApi": {
+    "chatBotEpironApi.webApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/bot/ping",

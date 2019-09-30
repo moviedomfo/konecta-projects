@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using System.Data.SqlClient;
-using epironApi.webApi.Models;
-using epironApi.webApi.common;
-using epironApi.webApi.models;
+using chatBotEpironApi.webApi.Models;
+using chatBotEpironApi.webApi.common;
+using chatBotEpironApi.webApi.models;
 
-namespace epironApi.webApi.DAC
+namespace chatBotEpironApi.webApi.DAC
 {
     public class EpironDAC
     {

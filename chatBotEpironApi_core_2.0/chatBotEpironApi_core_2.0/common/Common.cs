@@ -1,5 +1,5 @@
-using epironApi.webApi.helpers;
-using epironApi.webApi.Models;
+using chatBotEpironApi.webApi.helpers;
+using chatBotEpironApi.webApi.Models;
 using Fwk.Exceptions;
 using Fwk.HelperFunctions;
 using Fwk.Security.ActiveDirectory;
@@ -12,7 +12,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Web;
 
-namespace epironApi.webApi.common
+namespace chatBotEpironApi.webApi.common
 {
     public class Common
     {

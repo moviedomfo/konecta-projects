@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using epironApi.webApi.common;
+using chatBotEpironApi.webApi.common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +19,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace epironApi.webApi
+namespace chatBotEpironApi.webApi
 {
     public class Startup
     {
@@ -44,7 +44,7 @@ namespace epironApi.webApi
             apiAppSettings.serverSettings = serverSettings;
             #endregion
 
-
+            
             // configure DI for application services
             services.AddScoped<IEpironService, EpironService>();
             //services.AddScoped<ILDAPService, LDAPService>();

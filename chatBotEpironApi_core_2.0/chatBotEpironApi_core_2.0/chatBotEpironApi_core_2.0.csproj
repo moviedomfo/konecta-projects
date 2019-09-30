@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <RootNamespace>epironApi.webApi</RootNamespace>
+    <RootNamespace>chatBotEpironApi.webApi</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>e:\projects\pelsoft_allus\konecta-projects\epironApi_core_2.0\epironApi_core_2.0\epironApi_core_2.0.xml</DocumentationFile>
+    <DocumentationFile>e:\projects\pelsoft_allus\konecta-projects\chatBotEpironApi_core_2.0\chatBotEpironApi_core_2.0\chatBotEpironApi_core_2.0.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

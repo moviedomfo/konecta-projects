@@ -10,7 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace epironApi.webApi.helpers
+namespace chatBotEpironApi.webApi.helpers
 {
     public class apiHelper
     {

@@ -1,7 +1,7 @@
-using epironApi.webApi.DAC;
-using epironApi.webApi.helpers;
-using epironApi.webApi.models;
-using Fwk.epironApi.Contracts;
+using chatBotEpironApi.webApi.DAC;
+using chatBotEpironApi.webApi.helpers;
+using chatBotEpironApi.webApi.models;
+using Fwk.chatBotEpironApi.Contracts;
 using Fwk.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace epironApi.webApi.common
+namespace chatBotEpironApi.webApi.common
 {
     public interface IEpironService
     {
@@ -53,10 +53,9 @@ namespace epironApi.webApi.common
                 var res = await sendMessaged_async(req);
                 if (res.StatusCode == HttpStatusCode.OK)
                 {
-                    //TODO: desserializar y leer el resulñtado
+                    //TODO: desserializar y leer el resultado
                     //Podria venir internamente un error
                     var content = res.Content.ReadAsStringAsync().Result;
-
                     EpironDAC.Bot_update_sendStatus(req.CaseCommentGUID, "OK", "");
                 }
                 else

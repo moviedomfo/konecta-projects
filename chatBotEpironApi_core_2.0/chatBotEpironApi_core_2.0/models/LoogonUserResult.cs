@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Fwk.epironApi.Contracts
+namespace Fwk.chatBotEpironApi.Contracts
 {
 
     public class LoogonUserResult
