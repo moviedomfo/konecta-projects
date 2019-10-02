@@ -16,7 +16,9 @@ namespace chatBotEpironApi.webApi.helpers
         public static  string GenerateTokenEpiron(UserAPiBE emmpleadoBE)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(apiAppSettings.serverSettings.apiConfig.api_secretKey);
+            var secretKey = Encoding.ASCII.GetBytes(apiAppSettings.serverSettings.apiConfig.api_secretKey);
+            var securityKey = new SymmetricSecurityKey(secretKey);
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emmpleadoBE.WindowsUser) });
             if (emmpleadoBE != null)
@@ -39,7 +41,7 @@ namespace chatBotEpironApi.webApi.helpers
 
                 Issuer = apiAppSettings.serverSettings.apiConfig.api_issuerToken,
                 NotBefore = DateTime.UtcNow,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = signingCredentials
             };
 
 
@@ -68,7 +70,7 @@ namespace chatBotEpironApi.webApi.helpers
             //hora de caducidad a partir de la cual el JWT NO DEBE ser aceptado para su procesamiento.
             var expireTime = apiAppSettings.serverSettings.apiConfig.api_expireTime;
 
-            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secretKey));
+            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(secretKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
             // create a claimsIdentity

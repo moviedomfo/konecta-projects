@@ -96,7 +96,7 @@ namespace chatBotEpironApi.webApi
                 {
                     var e = ex.InnerException as System.Net.Sockets.SocketException;
                     if (e.ErrorCode == 10060)
-                        msg = apiAppSettings.serverSettings.apiConfig.bootApiBaseUrl + " no es accesible " + Environment.NewLine + msg;
+                        msg = apiAppSettings.serverSettings.apiConfig.api_bootApiBaseUrl + " no es accesible " + Environment.NewLine + msg;
                 }
                 //if (ex.InnerException.GetType() == typeof(WebExcepcion))
                 //{
@@ -329,7 +329,9 @@ namespace chatBotEpironApi.webApi
         public string api_issuerToken { get; set; }
         public string api_expireTime { get; set; }
         public string api_authServerBaseUrl { get; set; }
-        
+
+        public string api_bootApiBaseUrl { get; set; }
+
         public string proxyPort { get; set; }
         public string proxyName { get; set; }
         public bool proxyEnabled { get; set; }
@@ -341,7 +343,7 @@ namespace chatBotEpironApi.webApi
         public string proxyDomain { get; set; }
 
 
-        public string bootApiBaseUrl { get; set; }
+        
     }
 
 

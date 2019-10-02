@@ -83,9 +83,6 @@
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="T:chatBotEpironApi.webApi.Controllers.EpironController">
-            [Authorize]
-        </member>
         <member name="M:chatBotEpironApi.webApi.Controllers.EpironController.enqueueBotComment(chatBotEpironApi.webApi.models.EnqueueCommentBotReq)">
              <summary>
              Este metodo es utilizado por Epiron para informar de algun comentario o mensaje de usuario :

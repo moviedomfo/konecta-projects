@@ -17,15 +17,13 @@ using System.Threading.Tasks;
 
 namespace chatBotEpironApi.webApi.common
 {
+  
     public interface IEpironService
     {
         string Authenticate(string username, string password, string domain);
-
-
-        void Bot_webhook_update_recivedStatus(SendResponseBotCommentReq req);
         void Bot_update_sendStatus(EnqueueCommentBotReq req);
+        void Bot_webhook_update_recivedStatus(SendResponseBotCommentReq req);
     }
-
     public class EpironService : IEpironService
     {
         //private readonly AppSettings _appSettings;
@@ -36,10 +34,7 @@ namespace chatBotEpironApi.webApi.common
 
         }
 
-        void IEpironService.Bot_update_sendStatus(EnqueueCommentBotReq req)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         /// <summary>
         /// 
@@ -60,7 +55,9 @@ namespace chatBotEpironApi.webApi.common
                 }
                 else
                 {
-                    var msg = await res.RequestMessage.Content.ReadAsStringAsync();
+                    
+                    //var msg = await res.RequestMessage.Content.ReadAsStringAsync();
+                    var msg = res.ReasonPhrase;
                     EpironDAC.Bot_update_sendStatus(req.CaseCommentGUID, "Error", msg);
                 }
 
@@ -80,10 +77,10 @@ namespace chatBotEpironApi.webApi.common
         {
             //TODO: analizar que pasa si ocurre un error al intentar almacenar la data
             //ver si existe la forma de responder un ACK para q bot lo marque como recibido ok
-           
+
             try
             {
-                EpironDAC.Bot_update_response(req.CaseCommentGUID, req.Action,req.Text);
+                EpironDAC.Bot_update_response(req.CaseCommentGUID, req.Action, req.Text);
             }
             catch (Exception ex)
             {
@@ -91,10 +88,11 @@ namespace chatBotEpironApi.webApi.common
             }
 
         }
+
         async Task<HttpResponseMessage> sendMessaged_async(EnqueueCommentBotReq message)
         {
 
-            var url = string.Format("{0}api/send", apiAppSettings.serverSettings.apiConfig.bootApiBaseUrl);
+            var url = string.Format("{0}api/send", apiAppSettings.serverSettings.apiConfig.api_bootApiBaseUrl);
 
 
             try
@@ -125,7 +123,7 @@ namespace chatBotEpironApi.webApi.common
         }
 
 
-  
+
 
 
         /// <summary>
@@ -141,7 +139,7 @@ namespace chatBotEpironApi.webApi.common
             FunctionalException fe = null;
             try
             {
-             
+
                 var emmpleadoBE = EpironDAC.VirifyUser(username);
 
                 //Emp_Id, legajo correspondiente al usuario reseteador, si devuelve NULL mostrar el mensaje “Usuario no registrado en Epiron” y cerrar aplicación.
@@ -177,9 +175,9 @@ namespace chatBotEpironApi.webApi.common
 
         }
 
-      
+
     }
-       
+
 
 }
 
