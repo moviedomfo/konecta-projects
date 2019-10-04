@@ -1,3 +1,9 @@
 packages/
 obj/
 bin/
+chatBotEpironApi_core_2.0/libs/fwk.security.core.pdb
+chatBotEpironApi_core_2.0/.vs/chatBotEpironApi_core_2.0/v16/Server/sqlite3/storage.ide-shm
+chatBotEpironApi_core_2.0/.vs/chatBotEpironApi_core_2.0/v16/Server/sqlite3/storage.ide
+chatBotEpironApi_core_2.0/.vs/chatBotEpironApi_core_2.0/v16/Server/sqlite3/db.lock
+chatBotEpironApi_core_2.0/.vs/chatBotEpironApi_core_2.0/v16/.suo
+chatBotEpironApi_core_2.0/.vs/chatBotEpironApi_core_2.0/v16/Server/sqlite3/storage.ide-wal

@@ -18,11 +18,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
   </ItemGroup>
  <ItemGroup>
-    <Reference Include="fwk.bases.core">
-      <HintPath>..\libs\fwk.bases.core.dll</HintPath>
+    <Reference Include="fwk.base.core">
+      <HintPath>..\libs\fwk.base.core.dll</HintPath>
     </Reference>
-    <Reference Include="Fwk.security.core">
-      <HintPath>..\libs\Fwk.security.core.dll</HintPath>
+    <Reference Include="fwk.security.core">
+      <HintPath>..\libs\fwk.security.core.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
