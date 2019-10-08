@@ -92,7 +92,7 @@ namespace chatBotEpironApi.webApi.common
         async Task<HttpResponseMessage> sendMessaged_async(EnqueueCommentBotReq message)
         {
 
-            var url = string.Format("{0}api/send", apiAppSettings.serverSettings.apiConfig.api_bootApiBaseUrl);
+            var url = string.Format("{0}api/sendBotComment", apiAppSettings.serverSettings.apiConfig.api_bootApiBaseUrl);
 
 
             try

@@ -11,7 +11,7 @@ namespace chatBotEpironApi.webApi.models
         /// <summary>
         /// Identificador del caso.
         /// </summary>
-        public string CaseId { get; set; }
+        public int CaseId { get; set; }
 
 
 

@@ -103,16 +103,5 @@ namespace chatBotEpironApi.webApi.Controllers
         #endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
     }
 }
