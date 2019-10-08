@@ -9,7 +9,7 @@
       "fwk.security.core/1.0.0": {
         "dependencies": {
           "System.Data.SqlClient": "4.7.0",
-          "fwk.base.core": "0.0.0.0"
+          "fwk.bases.core": "1.0.0"
         },
         "runtime": {
           "fwk.security.core.dll": {}
@@ -39,6 +39,14 @@
             "assetType": "runtime",
             "assemblyVersion": "4.1.2.0",
             "fileVersion": "4.700.19.46214"
+          }
+        }
+      },
+      "Newtonsoft.Json/12.0.2": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.2.23222"
           }
         }
       },
@@ -186,12 +194,13 @@
           }
         }
       },
-      "fwk.base.core/0.0.0.0": {
+      "fwk.bases.core/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2",
+          "System.Data.SqlClient": "4.7.0"
+        },
         "runtime": {
-          "fwk.base.core.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
+          "fwk.bases.core.dll": {}
         }
       }
     }
@@ -215,6 +224,13 @@
       "sha512": "sha512-Xuqo5Lf5h1eUAbT8sJwNSEgusyEcQQQcza1R8dxJ6q/1vLSU1SG/WxtgiCPAth14dz/IjBXCxWT/+6E9glX33w==",
       "path": "microsoft.win32.registry/4.6.0",
       "hashPath": "microsoft.win32.registry.4.6.0.nupkg.sha512"
+    },
+    "Newtonsoft.Json/12.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
+      "path": "newtonsoft.json/12.0.2",
+      "hashPath": "newtonsoft.json.12.0.2.nupkg.sha512"
     },
     "runtime.native.System.Data.SqlClient.sni/4.6.0": {
       "type": "package",
@@ -286,8 +302,8 @@
       "path": "system.text.encoding.codepages/4.6.0",
       "hashPath": "system.text.encoding.codepages.4.6.0.nupkg.sha512"
     },
-    "fwk.base.core/0.0.0.0": {
-      "type": "reference",
+    "fwk.bases.core/1.0.0": {
+      "type": "project",
       "serviceable": false,
       "sha512": ""
     }
