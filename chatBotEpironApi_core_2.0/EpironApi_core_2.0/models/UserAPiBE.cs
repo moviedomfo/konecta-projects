@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace chatBotEpironApi.webApi.Models
+namespace epironApi.webApi.Models
 {
 
     public class UserAPiBE

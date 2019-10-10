@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace chatBotEpironApi.webApi.models
+namespace epironApi.webApi.models
 {
 
     public class EnqueueCommentBotReq

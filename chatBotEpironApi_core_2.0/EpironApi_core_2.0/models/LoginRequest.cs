@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace chatBotEpironApi.webApi.Models
+namespace epironApi.webApi.Models
 {
     public class LoginRequest
     {
         public string username { get; set; }
         public string password { get; set; }
         public string domain { get; set; }
-
+        public string securityProviderName { get; set; }
 
     }
 

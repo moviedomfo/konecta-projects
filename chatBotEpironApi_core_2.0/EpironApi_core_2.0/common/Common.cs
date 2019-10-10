@@ -1,5 +1,5 @@
-using chatBotEpironApi.webApi.helpers;
-using chatBotEpironApi.webApi.Models;
+using epironApi.webApi.helpers;
+using epironApi.webApi.Models;
 using Fwk.Exceptions;
 using Fwk.HelperFunctions;
 using Fwk.Security.ActiveDirectory;
@@ -12,7 +12,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Web;
 
-namespace chatBotEpironApi.webApi.common
+namespace epironApi.webApi.common
 {
     public class Common
     {
@@ -23,56 +23,14 @@ namespace chatBotEpironApi.webApi.common
         public const string CnnStringNameepiron = "Epiron";
         internal static ISymetriCypher ISymetriCypher;
         public static List<DomainUrlInfo> DomainUrlInfoList;
-        public static List<DomainsBE> Domains;
+        
         public static int ExpirationSeconds=600;
         static DateTime expirationDate = new DateTime();
 
         static Common()
         {
             expirationDate = DateTime.Now.AddSeconds(ExpirationSeconds);
-            //string domains = "";
-            //if (System.Configuration.ConfigurationManager.AppSettings["domains"] != null)
-            //    domains = System.Configuration.ConfigurationManager.AppSettings["domains"].ToString();
-
-
-
-            //if (domains == null)
-            //{
-            //    throw new TechnicalException("No se encontro configurada la appSetting secConfig ");
-            //}
-            //if (!System.IO.File.Exists(domains))
-            //{
-            //    throw new TechnicalException("No se encontro el archivo " + domains);
-            //}
-
-            //string domainsJson = FileFunctions.OpenTextFile(domains);
-
-         
-
-
-            try
-            {
-                var cnn = Common.GetCnn(Common.CnnStringNameAD);
-                DomainUrlInfoList = Fwk.Security.ActiveDirectory.DirectoryServicesBase.DomainsUrl_Get_FromSp_all(cnn.ConnectionString);
-                //Domains = new List<DomainsBE>();
-                //DomainsBE dbe =null;
-                //DomainUrlInfoList.ForEach(d =>
-                //{
-                //    dbe = new DomainsBE();
-                //    dbe.Domain = d.SiteName;
-                //    Domains.Add(dbe);
-
-                //});
-                //Domains = (List<DomainsBE>)SerializationFunctions.DeSerializeObjectFromJson(typeof(List<DomainsBE>), domainsJson);
-
-                
-            }
-            catch (Exception ex)
-            {
-                throw new TechnicalException(ex.Message) ;// "El archivo " + domains + " No tiene un formato correcto");
-            }
-
-
+        
         }
 
 

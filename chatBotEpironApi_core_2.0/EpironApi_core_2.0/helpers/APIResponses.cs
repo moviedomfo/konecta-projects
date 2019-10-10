@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace chatBotEpironApi.webApi.helpers
+namespace epironApi.webApi.helpers
 {
     public class ApiOkResponse : ApiResponse
     {

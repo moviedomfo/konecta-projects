@@ -1,7 +1,7 @@
-using chatBotEpironApi.webApi.DAC;
-using chatBotEpironApi.webApi.helpers;
-using chatBotEpironApi.webApi.models;
-using Fwk.chatBotEpironApi.Contracts;
+using epironApi.webApi.DAC;
+using epironApi.webApi.helpers;
+using epironApi.webApi.models;
+using Fwk.epironApi.Contracts;
 using Fwk.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chatBotEpironApi.webApi.common
+namespace epironApi.webApi.common
 {
   
     public interface IEpironService

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using chatBotEpironApi.webApi.Models;
+using epironApi.webApi.Models;
 using Fwk.Security.ActiveDirectory;
 
 
-namespace chatBotEpironApi.webApi.common
+namespace epironApi.webApi.common
 {
     public class LDAPService : ILDAPService
     {

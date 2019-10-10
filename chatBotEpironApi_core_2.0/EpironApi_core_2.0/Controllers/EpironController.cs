@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using chatBotEpironApi.webApi.common;
-using chatBotEpironApi.webApi.helpers;
-using chatBotEpironApi.webApi.models;
-using chatBotEpironApi.webApi.Models;
+using epironApi.webApi.common;
+using epironApi.webApi.helpers;
+using epironApi.webApi.models;
+using epironApi.webApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace chatBotEpironApi.webApi.Controllers
+namespace epironApi.webApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

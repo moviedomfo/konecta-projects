@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>chatBotEpironApi_core_2.0</name>
+        <name>EpironApi_core_2.0</name>
     </assembly>
     <members>
-        <member name="M:chatBotEpironApi.webApi.common.Common.Expired_ttl">
+        <member name="M:epironApi.webApi.common.Common.Expired_ttl">
             <summary>
             Retorna si expiro el tiempo de cacheo
             </summary>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.EpironService.Bot_update_sendStatus(chatBotEpironApi.webApi.models.EnqueueCommentBotReq)">
+        <member name="M:epironApi.webApi.common.EpironService.Bot_update_sendStatus(epironApi.webApi.models.EnqueueCommentBotReq)">
             <summary>
             
             </summary>
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.EpironService.Bot_webhook_update_recivedStatus(chatBotEpironApi.webApi.models.SendResponseBotCommentReq)">
+        <member name="M:epironApi.webApi.common.EpironService.Bot_webhook_update_recivedStatus(epironApi.webApi.models.SendResponseBotCommentReq)">
             <summary>
             
             </summary>
             <param name="req"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.EpironService.Authenticate(System.String,System.String,System.String)">
+        <member name="M:epironApi.webApi.common.EpironService.Authenticate(System.String,System.String,System.String)">
             <summary>
             
             </summary>
@@ -31,59 +31,62 @@
             <param name="domain"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.LDAPService.Get_correct_DomainName(System.String)">
+        <member name="M:epironApi.webApi.common.LDAPService.Get_correct_DomainName(System.String)">
             <summary>
             Retorna DomainName que utiliza fwk DirectoryServices
             </summary>
             <param name="anotherDomainNameOrigin"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.LDAPService.GetRandomPassword">
+        <member name="M:epironApi.webApi.common.LDAPService.GetRandomPassword">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="T:chatBotEpironApi.webApi.common.ILDAPService">
+        <member name="T:epironApi.webApi.common.ILDAPService">
             <summary>
             
             </summary>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.ILDAPService.set_DomainsUrl">
+        <member name="M:epironApi.webApi.common.ILDAPService.set_DomainsUrl">
             <summary>
             
             </summary>
         </member>
-        <member name="M:chatBotEpironApi.webApi.common.ILDAPService.Get_correct_DomainName(System.String)">
+        <member name="M:epironApi.webApi.common.ILDAPService.Get_correct_DomainName(System.String)">
             <summary>
             Retorna DomainName que utiliza fwk DirectoryServices
             </summary>
             <param name="anotherDomainNameOrigin"></param>
             <returns></returns>
         </member>
-        <member name="T:chatBotEpironApi.webApi.Controllers.BotController">
-            [Authorize]
-        </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.BotController.#ctor(chatBotEpironApi.webApi.common.IEpironService)">
+        <member name="M:epironApi.webApi.Controllers.BotController.#ctor(epironApi.webApi.common.IEpironService)">
             <summary>
             
             </summary>
             <param name="epironService"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.BotController.ping">
+        <member name="M:epironApi.webApi.Controllers.BotController.ping">
             <summary>
             Metodo solo para test.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.BotController.resesponseBotComment(chatBotEpironApi.webApi.models.SendResponseBotCommentReq)">
+        <member name="M:epironApi.webApi.Controllers.BotController.authenticate(epironApi.webApi.Models.LoginRequest)">
+            <summary>
+            Metodo solo para test.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:epironApi.webApi.Controllers.BotController.resesponseBotComment(epironApi.webApi.models.SendResponseBotCommentReq)">
             <summary>
             web hook de bot api
             </summary>
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.EpironController.enqueueBotComment(chatBotEpironApi.webApi.models.EnqueueCommentBotReq)">
+        <member name="M:epironApi.webApi.Controllers.EpironController.enqueueBotComment(epironApi.webApi.models.EnqueueCommentBotReq)">
              <summary>
              Este metodo es utilizado por Epiron para informar de algun comentario o mensaje de usuario :
              El mensaje sera enviado a la api de bot. La api contestara inmediatemaente reibido Ok  o un error
@@ -95,38 +98,38 @@
              <param name="req"></param>
              <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.EpironController.pingSecure">
+        <member name="M:epironApi.webApi.Controllers.EpironController.pingSecure">
             <summary>
             Metodo solo para test contra un jwt.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.EpironController.ping">
+        <member name="M:epironApi.webApi.Controllers.EpironController.ping">
             <summary>
             Metodo solo para test.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.Controllers.EpironController.GetServerInfo">
+        <member name="M:epironApi.webApi.Controllers.EpironController.GetServerInfo">
             <summary>
             Retorna informacion del servidor de konecta bot web-api
             </summary>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.DAC.EpironDAC.VirifyUser(System.String)">
+        <member name="M:epironApi.webApi.DAC.EpironDAC.VirifyUser(System.String)">
             <summary>
             verificará que el usuario esté habilitado para resetear o desbloquear un UW y que no registre un ausentismo para ese día.
             </summary>
             <param name="userName"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.DAC.EpironDAC.GetBot(System.Int32)">
+        <member name="M:epironApi.webApi.DAC.EpironDAC.GetBot(System.Int32)">
             <summary>
             
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.DAC.EpironDAC.Bot_update_response(System.Guid,System.String,System.String)">
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Bot_update_response(System.Guid,System.String,System.String)">
             <summary>
             
             </summary>
@@ -134,7 +137,7 @@
             <param name="action"></param>
             <param name="caseCommentTextReceived"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.DAC.EpironDAC.RetriveDatosUserAPi(System.String,System.Int32,System.String)">
+        <member name="M:epironApi.webApi.DAC.EpironDAC.RetriveDatosUserAPi(System.String,System.Int32,System.String)">
             <summary>
             Buscar
             </summary>
@@ -142,7 +145,7 @@
             <param name="domainId"></param>
             <param name="DNI"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.helpers.apiHelper.ToEpoch(System.DateTime)">
+        <member name="M:epironApi.webApi.helpers.apiHelper.ToEpoch(System.DateTime)">
             <summary>
             Converts a DateTime to the long representation which is the number of seconds since the unix epoch.
             Epoch (UNIX Epoch time) : It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970,[2] Coordinated Universal Time (UTC), minus leap seconds. 
@@ -150,7 +153,7 @@
             <param name="dateTime">A DateTime to convert to epoch time.</param>
             <returns>The long number of seconds since the unix epoch.</returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.helpers.apiHelper.FromEpoch(System.Int64)">
+        <member name="M:epironApi.webApi.helpers.apiHelper.FromEpoch(System.Int64)">
             <summary>
             Converts a long representation of time since the unix epoch to a DateTime.
             </summary>
@@ -158,25 +161,25 @@
             Epoch (UNIX Epoch time) : It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970,[2] Coordinated Universal Time (UTC), minus leap seconds. </param>
             <returns>A DateTime representing the time since the epoch.</returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.helpers.TokenGenerator.GenerateTokenJwt_test(System.String)">
+        <member name="M:epironApi.webApi.helpers.TokenGenerator.GenerateTokenJwt_test(System.String)">
             <summary>
             Retorna informacion basada en el dominio
             </summary>
             <param name="userName"></param>
             <returns></returns>
         </member>
-        <member name="T:chatBotEpironApi.webApi.apiAppSettings">
+        <member name="T:epironApi.webApi.apiAppSettings">
             <summary>
             appsettings.json 
             </summary>
         </member>
-        <member name="M:chatBotEpironApi.webApi.apiAppSettings.InitializeConfig(System.String)">
+        <member name="M:epironApi.webApi.apiAppSettings.InitializeConfig(System.String)">
             <summary>
             sobrecarga para cargar apiConfig desde una ruta espesifica
             </summary>
             <param name="path"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.apiAppSettings.CreateNew(System.String)">
+        <member name="M:epironApi.webApi.apiAppSettings.CreateNew(System.String)">
             <summary>
             Carga un appsettings.json y lo serializa en <see>wapiAppSettings</see>  
             asp net core utiliza este archivo en lugar de un xml.config como en el caso de las aplicaciones .net
@@ -184,162 +187,162 @@
             <param name="path"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.apiAppSettings.updateConfig(chatBotEpironApi.webApi.apiConfig)">
+        <member name="M:epironApi.webApi.apiAppSettings.updateConfig(epironApi.webApi.apiConfig)">
             <summary>
             update and set current apiConfig
             </summary>
             <param name="config"></param>
         </member>
-        <member name="M:chatBotEpironApi.webApi.apiAppSettings.get_cnnString_byName(System.String)">
+        <member name="M:epironApi.webApi.apiAppSettings.get_cnnString_byName(System.String)">
             <summary>
             
             </summary>
             <param name="cnnStringName"></param>
             <returns></returns>
         </member>
-        <member name="M:chatBotEpironApi.webApi.apiConfig.CreateNew(System.String)">
+        <member name="M:epironApi.webApi.apiConfig.CreateNew(System.String)">
             <summary>
             si wapiConfigPath = "" intenta buscarlo en AppSettings si no lo encuntra configurado lo buscara en el root de la aplicacion
             </summary>
             <param name="wapiConfigPath"></param>
             <returns></returns>
         </member>
-        <member name="P:chatBotEpironApi.webApi.Models.userResetPasswordReq.ResetUserId">
+        <member name="P:epironApi.webApi.Models.userResetPasswordReq.ResetUserId">
             <summary>
             Id del usuario logueado
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.Models.userResetPasswordReq.host">
+        <member name="P:epironApi.webApi.Models.userResetPasswordReq.host">
             <summary>
             con el nombre de la PC usada
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.Models.userUnlockReq.ResetUserName">
+        <member name="P:epironApi.webApi.Models.userUnlockReq.ResetUserName">
             <summary>
             Nombre del usuario logueado
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.Models.userUnlockReq.ResetUserId">
+        <member name="P:epironApi.webApi.Models.userUnlockReq.ResetUserId">
             <summary>
             Id del usuario logueado
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.Models.userUnlockReq.host">
+        <member name="P:epironApi.webApi.Models.userUnlockReq.host">
             <summary>
             con el nombre de la PC usada
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.EnqueueCommentBotReq.CaseId">
+        <member name="P:epironApi.webApi.models.EnqueueCommentBotReq.CaseId">
             <summary>
             Identificador del caso.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.EnqueueCommentBotReq.CaseCommentGUID">
+        <member name="P:epironApi.webApi.models.EnqueueCommentBotReq.CaseCommentGUID">
             <summary>
              guid del comentario
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.EnqueueCommentBotReq.SCInternalCode">
+        <member name="P:epironApi.webApi.models.EnqueueCommentBotReq.SCInternalCode">
             <summary>
             Código interno del canal.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.EnqueueCommentBotReq.ElementTypePublic">
+        <member name="P:epironApi.webApi.models.EnqueueCommentBotReq.ElementTypePublic">
             <summary>
             bit que indica si el comentario es público (1) o privado(0).
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.EnqueueCommentBotReq.CaseCommentTextSent">
+        <member name="P:epironApi.webApi.models.EnqueueCommentBotReq.CaseCommentTextSent">
             <summary>
             comentario que envía el usuario desde la red social y es enviado a la ApiBot, para ser analizado.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.EnqueueCommentBotReq.AccountUnique">
+        <member name="P:epironApi.webApi.models.EnqueueCommentBotReq.AccountUnique">
             <summary>
             guid de la unidad de negocio.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.SendResponseBotCommentReq.CaseId">
+        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.CaseId">
             <summary>
             Identificador del caso.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.SendResponseBotCommentReq.CaseCommentGUID">
+        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.CaseCommentGUID">
             <summary>
              guid del comentario
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.SendResponseBotCommentReq.Action">
+        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.Action">
             <summary>
             acción que se debe realizar una vez obtenida la respuesta del ApiBot. (Respoder, Liberar, Cerrar) 
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.SendResponseBotCommentReq.Text">
+        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.Text">
             <summary>
             
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.Id">
+        <member name="P:epironApi.webApi.models.BotBE.Id">
             <summary>
             identificador de la tabla. Autoincremental
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.CaseCommentTextSent">
+        <member name="P:epironApi.webApi.models.BotBE.CaseCommentTextSent">
             <summary>
             comentario que envía el usuario desde la red social y es enviado a la ApiBot, para ser analizado.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.CaseId">
+        <member name="P:epironApi.webApi.models.BotBE.CaseId">
             <summary>
             Identificador del caso.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.CaseCommentGUID">
+        <member name="P:epironApi.webApi.models.BotBE.CaseCommentGUID">
             <summary>
              guid del comentario
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.SCInternalCode">
+        <member name="P:epironApi.webApi.models.BotBE.SCInternalCode">
             <summary>
             Código interno del canal. 
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.ElementTypePublic">
+        <member name="P:epironApi.webApi.models.BotBE.ElementTypePublic">
             <summary>
             bit que indica si el comentario es público (1) o privado(0).
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.CaseCommentTextReceived">
+        <member name="P:epironApi.webApi.models.BotBE.CaseCommentTextReceived">
             <summary>
             respuesta al comentario enviado por el usuario, la cual es enviada por la ApiBot. 
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.Action">
+        <member name="P:epironApi.webApi.models.BotBE.Action">
             <summary>
             acción que se debe realizar una vez obtenida la respuesta del ApiBot. (Respoder, Liberar, Cerrar) 
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.Status">
+        <member name="P:epironApi.webApi.models.BotBE.Status">
             <summary>
             estado enviado por el ApiBot.Se recibió Ok la información, Error.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.Error">
+        <member name="P:epironApi.webApi.models.BotBE.Error">
             <summary>
             si ocurrió un error, se inserta el detalle del mismo.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.CreatedRow">
+        <member name="P:epironApi.webApi.models.BotBE.CreatedRow">
             <summary>
             fecha y hora que en que se envía el comentario del usuario. (lleva por defecto el valor getdate()).
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.CreatedDateReceived">
+        <member name="P:epironApi.webApi.models.BotBE.CreatedDateReceived">
             <summary>
              fecha y hora en que se recibe una respuesta del comentario.
             </summary>
         </member>
-        <member name="P:chatBotEpironApi.webApi.models.BotBE.ProcessDate">
+        <member name="P:epironApi.webApi.models.BotBE.ProcessDate">
             <summary>
             fecha y hora en que se concluyó el procesamiento de insertar en  la mc.casecomment, mc.Publication
             </summary>

@@ -1,5 +1,5 @@
-using chatBotEpironApi.webApi.Models;
-using Fwk.chatBotEpironApi.Contracts;
+using epironApi.webApi.Models;
+using Fwk.epironApi.Contracts;
 using Fwk.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace chatBotEpironApi.webApi.helpers
+namespace epironApi.webApi.helpers
 {
     public class TokenGenerator
     {
