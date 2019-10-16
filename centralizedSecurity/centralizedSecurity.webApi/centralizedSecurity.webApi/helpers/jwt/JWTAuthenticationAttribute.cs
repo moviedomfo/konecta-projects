@@ -108,7 +108,7 @@ namespace CentralizedSecurity.webApi.helpers
             Microsoft.IdentityModel.Tokens.SecurityToken validatedToken;
             if (string.IsNullOrWhiteSpace(protectedText))
             {
-                throw new ArgumentNullException("protectedText");
+                throw new ArgumentNullException("Este servicio requiere autenticacion JWT (protectedText requerido)");
             }
             //Fwk.Security.Identity.jwtSecurityProvider sec_provider = null;
 
