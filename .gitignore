@@ -4,3 +4,4 @@ bin/
 chatBotEpironApi_core_2.0/libs/fwk.security.core.pdb
 chatBotEpironApi_core_2.0/.vs/
 .vs/
+centralizedSecurity/centralizedSecurity.webApi/libs/Fwk.Bases.Connector.dll
