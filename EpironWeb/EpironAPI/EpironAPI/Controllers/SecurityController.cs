@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EpironAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,14 +22,17 @@ namespace EpironAPI.Controllers
             return "value";
         }
 
-        // POST api/values
-        public void Post([FromBody]string value)
+        
+        public void ValidarAplicacion(ValidarAplicacionReq req)
         {
         }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        
+        public void UserAutenticacion(UserAutenticacionReq req)
         {
+
+            Guid guidSession =  Guid.NewGuid();
+
         }
 
         // DELETE api/values/5
