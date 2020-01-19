@@ -21,7 +21,7 @@ namespace EpironAPI.Models
         public string LoginHost { get; set; }
         public string LoginIP { get; set; }
 
-        public string AutTypeGUID { get; set; }
+        public Guid AutTypeGUID { get; set; }
 
 
         public string UserName { get; set; }

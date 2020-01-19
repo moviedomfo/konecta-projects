@@ -130,8 +130,11 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BE\LoginResponseBE.cs" />
+    <Compile Include="BE\UserIdBE.cs" />
     <Compile Include="classes\AccesoDatos.cs" />
     <Compile Include="classes\ActiveDirectory.cs" />
+    <Compile Include="classes\apiHelper.cs" />
     <Compile Include="classes\AuditTrailSessionsBE.cs" />
     <Compile Include="classes\Encriptador.cs" />
     <Compile Include="classes\MetaDatos.cs" />
@@ -140,6 +143,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\ValidarAplicacionReq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,7 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

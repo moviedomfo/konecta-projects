@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EpironAPI.BE;
+using EpironAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -169,13 +171,21 @@ namespace EpironAPI.classes
             /// <returns>
             /// Devuelve todos los datos de la respuesta a evento, realizando la busqueda por el codigo interno 
             /// </returns>
-            public static DataTable EventResponse_s_ByInternalCode(int Par_EventResponseInternalCode)
-            {
-                SqlCommand comando = MetaDatos.CrearComandoProc("Security.EventResponse_s_ByInternalCode");
+            public static Error EventResponse_s_ByInternalCode(int Par_EventResponseInternalCode)
+        {
+            Error errorResponse = new Error();
+            SqlCommand comando = MetaDatos.CrearComandoProc("Security.EventResponse_s_ByInternalCode");
                 comando.Parameters.AddWithValue("@EventResponseInternalCode", Par_EventResponseInternalCode);
 
-                return MetaDatos.EjecutarComandoSelect(comando);
-            }
+                var dtError = MetaDatos.EjecutarComandoSelect(comando);
+
+            errorResponse.EventResponseId = Convert.ToInt32(dtError.Rows[0][0].ToString());
+            errorResponse.EventResponseText = dtError.Rows[0][1].ToString();
+            errorResponse.EventResponseInternalCode = Convert.ToInt32(dtError.Rows[0][2].ToString());
+            errorResponse.Guid = Guid.Empty;
+            errorResponse.Guid = dtLog.Rows[0][0].ToString();
+            return errorResponse;
+        }
 
             /// <summary>
             /// Anexo 7 CU004 SistemaDeSeguridad_Aplicación_CU004_LoginDeAplicaciones
@@ -305,12 +315,24 @@ namespace EpironAPI.classes
             /// <returns>
             /// Devuelve los datos de un usuario particular
             /// </returns>
-            public static DataTable User_s_ByUserName_Valid(string Par_UserName)
+            public static UserBE User_s_ByUserName_Valid(string Par_UserName)
             {
                 SqlCommand comando = MetaDatos.CrearComandoProc("Security.User_s_ByUserName_Valid");
                 comando.Parameters.AddWithValue("@UserName", Par_UserName);
 
-                return MetaDatos.EjecutarComandoSelect(comando);
+                var dtUser = MetaDatos.EjecutarComandoSelect(comando);
+            UserBE userBE  = new UserBE();
+
+            if (dtUser.Rows.Count > 0)
+            {
+                userBE.UserId = Convert.ToInt32(dtUser.Rows[0][0].ToString());
+                if (dtUser.Rows[0]["UserPlaceDescript"] != DBNull.Value)
+                    userBE.UserPlaceDescript = dtUser.Rows[0]["UserPlaceDescript"].ToString();
+
+                dtType = AccesoDatos.AuthenticationType_s_ByGUID(req.AutTypeGUID);
+
+            }
+                return userBE;
             }
 
             /// <summary>

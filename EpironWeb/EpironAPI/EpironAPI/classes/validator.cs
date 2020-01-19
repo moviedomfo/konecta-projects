@@ -8,9 +8,7 @@ using System.Web;
 
 namespace EpironAPI.classes
 {
-    public class validator
-    {
-    }
+   
     public class Validaciones
     {
         public DataTable Valida(string Par_Event_Tag,
