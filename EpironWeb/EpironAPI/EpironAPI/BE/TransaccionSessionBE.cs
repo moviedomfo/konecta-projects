@@ -12,8 +12,8 @@ namespace EpironAPI.BE
     public class TransaccionSessionBE
     {
     
-        public Guid GUID { get; set; }
-        public Guid Id { get; set; }
+        public Guid AuditTrailSessionGUID { get; set; }
+        public int AuditTrailSessionId { get; set; }
         public int AuditTrailLoginId { get; set; }
     }
     

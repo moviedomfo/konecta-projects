@@ -1,5 +1,6 @@
 ﻿using EpironAPI.BE;
 using EpironAPI.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -104,7 +105,7 @@ namespace EpironAPI.classes
 
             ////Guid Par_AuditTrailLoginGUID = new Guid(RetornoGUID.Value.ToString());
             ////int AuditTrailLoginId = Convert.ToInt32(RetornoID.Value.ToString());
-            item.GUID = new Guid(RetornoGUID.Value.ToString());
+            item.AuditTrailSessionGUID = new Guid(RetornoGUID.Value.ToString());
             item.AuditTrailLoginId = Convert.ToInt32(RetornoID.Value.ToString());
 
 
@@ -152,6 +153,28 @@ namespace EpironAPI.classes
             return MetaDatos.EjecutarComandoSelect(comando);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="auditTrailSessionId"></param>
+        /// <param name="authenticationTypeUserMustChangePassword"> permite generar el json auditTrailSessionResponse</param>
+        /// <param name="auditTrailSessionGUID">permite generar el json auditTrailSessionResponse</param>
+        public static void UpdateResponseSession(
+            int auditTrailSessionId, 
+            
+            Boolean authenticationTypeUserMustChangePassword,
+            Guid auditTrailSessionGUID)
+        {
+            //AccesoDatos objAccesoDatos = new AccesoDatos();
+
+            //int AuditTralSessionId = int.Parse(dtLog.Rows[0][1].ToString());
+            UserAuthentic userAuthentic = new UserAuthentic();
+            userAuthentic.AuditTrailSessionGUID = auditTrailSessionGUID;
+            userAuthentic.AuthenticationTypeUserMustChangePassword = authenticationTypeUserMustChangePassword;
+
+            var json = JsonConvert.SerializeObject(userAuthentic);
+            AccesoDatos.AuditTrailSession_u_SessionResponse(auditTrailSessionId, json);
+        }
 
         /// <summary>
         /// Busca todos los controles que tiene configurada la aplicación para ese menu
@@ -227,6 +250,20 @@ namespace EpironAPI.classes
 
             var dtt = MetaDatos.EjecutarComandoSelect(comando);
 
+            if (dtt.Rows.Count > 0)
+            {
+                item = new AuditTrailLoginBE();
+                item.EventId = Convert.ToInt32(dtt.Rows[0]["EventId"].ToString());
+                item.AuditTrailLoginAppInstanceGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginAppInstanceGUID"].ToString());
+                item.AuditTrailLoginGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginGUID"].ToString());
+                item.EventName = dtt.Rows[0]["EventName"].ToString();
+
+                item.AuditTrailLoginIP = dtt.Rows[0]["AuditTrailLoginIP"].ToString();
+                item.AuditTrailLoginHost = dtt.Rows[0]["AuditTrailLoginHost"].ToString();
+                item.AuditTrailLoginEndDate = Convert.ToDateTime(dtt.Rows[0]["AuditTrailLoginEndDate"].ToString());
+                item.AuditTrailLoginRequest = dtt.Rows[0]["AuditTrailLoginRequest"].ToString();
+                item.AuditTrailLoginResponse = dtt.Rows[0]["AuditTrailLoginResponse"].ToString();
+            }
             return item;
         }
 
@@ -390,7 +427,7 @@ namespace EpironAPI.classes
         /// <param name="Par_AuditTrailSessionId">ID de la tabla AuditTrailSession</param>
         /// <param name="Par_AuditTrailSessionResponse">Respuesta a enviar a la aplicación</param>
         /// <returns></returns>
-        public int AuditTrailSession_u_SessionResponse(int Par_AuditTrailSessionId, string Par_AuditTrailSessionResponse)
+        public static int AuditTrailSession_u_SessionResponse(int Par_AuditTrailSessionId, string Par_AuditTrailSessionResponse)
         {
             SqlCommand comando = MetaDatos.CrearComandoProc("Security.AuditTrailSession_u_SessionResponse");
             comando.Parameters.AddWithValue("@AuditTrailSessionId", Par_AuditTrailSessionId);
@@ -914,19 +951,19 @@ namespace EpironAPI.classes
 
                 comando.ExecuteNonQuery();
 
-                Guid AuditTrailSessionGUID = new Guid(RetornoSessionGUID.Value.ToString());
-                int AuditTrailSessionId = Convert.ToInt32(RetornoSessionID.Value.ToString());
+                Guid auditTrailSessionGUID = new Guid(RetornoSessionGUID.Value.ToString());
+                int auditTrailSessionId = Convert.ToInt32(RetornoSessionID.Value.ToString());
 
                 //Commit
                 transaction.Commit();
 
                 ////DataRow row = dsSessionT.Tables["mitabla"].NewRow();
                 ////row["GUID"] = AuditTrailSessionGUID;
-                ////row["ID"] = AuditTrailSessionId;
+                ////row["ID"] =   AuditTrailSessionId;
                 ////row["AuditTrailLoginId"] = Par_AuditTrailLoginId;
                 ////dsSessionT.Tables["mitabla"].Rows.Add(row);
-                transaccionSession.GUID = AuditTrailSessionGUID;
-                transaccionSession.Id = AuditTrailSessionGUID;
+                transaccionSession.AuditTrailSessionGUID = auditTrailSessionGUID;
+                transaccionSession.AuditTrailSessionId = auditTrailSessionId;
                 transaccionSession.AuditTrailLoginId = Par_AuditTrailLoginId;
                 //Cerramos
                 comando.Dispose();

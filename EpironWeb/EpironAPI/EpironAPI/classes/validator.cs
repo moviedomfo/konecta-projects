@@ -21,7 +21,7 @@ namespace EpironAPI.classes
             string Par_PersonDocument,
             Guid? Par_PersonGuidForAttributes = null)
         {
-            DataTable dtGuidSessionValido, dtError, dtEvento, dtUser, dtPermisos, dtUsersEnabled, dtInstanceApp, dtDomain = new DataTable();//dtLogSession
+            DataTable dtGuidSessionValido, dtError,  dtUser, dtPermisos, dtUsersEnabled, dtInstanceApp = new DataTable();//dtLogSession
             DataTable dtValida = new DataTable();
             DataSet dsXml = new DataSet();
             DataSet dsXmlError = new DataSet();
@@ -36,7 +36,7 @@ namespace EpironAPI.classes
             if (Par_Event_Tag == string.Empty | Par_RequestSessionGuid == Guid.Empty | Par_ApplicationInstanceGuid == Guid.Empty)
             {
                 //No recibe todos los parametros
-                dtError = AccesoDatos.EventResponse_s_ByInternalCode(2).Copy();
+                dtError = AccesoDatos.EventResponse_s_ByInternalCode(2);
                 dtError.TableName = "tablaError2";
                 dtValida = dtError;
 
@@ -101,12 +101,12 @@ namespace EpironAPI.classes
 
                 xmlRequest = ToStringAsXml(dsXml);
 
-                dtEvento = AccesoDatos.Event_s_ByTag(Par_Event_Tag);
+                var dtEvento = AccesoDatos.Event_s_ByTag(Par_Event_Tag);
                 //Existen los datos del evento?
-                if (dtEvento.Rows.Count > 0)
+                if (dtEvento!=null)
                 {
                     DataSet dsGuidSessionValido = new DataSet();
-                    int idEvento = int.Parse(dtEvento.Rows[0][0].ToString());
+                    //int idEvento = int.Parse(dtEvento.Rows[0][0].ToString());
                     dsGuidSessionValido = AccesoDatos.AuditTrailSession_s_ByAuditTrailSessionGUID_Valid(Par_RequestSessionGuid);
 
                     dtGuidSessionValido = dsGuidSessionValido.Tables[0];
@@ -159,17 +159,18 @@ namespace EpironAPI.classes
                                                         if (Par_AutenticationTypeTag == "WINDOWS")
                                                         {
                                                             //El sistema obtiene los datos del dominio con que el usuario inició sesión
-                                                            dtDomain = AccesoDatos.Domain_s_ByGUID(Par_DomainGUID);
+                                                            var dtDomain = AccesoDatos.Domain_s_ByGUID(Par_DomainGUID);
 
-                                                            if (dtDomain.Rows.Count > 0)
+                                                            if (dtDomain != null)
                                                             {
                                                                 //verifica si puede conectarse al controlador del dominio de sesión mediante el protocolo LDAP
 
                                                                 ActiveDirectory objAD = new ActiveDirectory();
                                                                 //Pregunto si se puede conectar al controlador de dominio
-                                                                if (objAD.IsAuthenticated(dtDomain.Rows[0][2].ToString(), dtDomain.Rows[0][3].ToString(), Encriptador.desencriptar(dtDomain.Rows[0][4].ToString())) == true)
+                                                                
+                                                                    if (objAD.IsAuthenticated(dtDomain.LDAPPath, dtDomain.DomainName, Encriptador.desencriptar(dtDomain.DomainPwd.ToString())) == true)
                                                                 {
-                                                                    dtGrupos = objAD.GetGroups(dtDomain.Rows[0][2].ToString(), dtDomain.Rows[0][3].ToString(), dtDomain.Rows[0][4].ToString(), dtUser.Rows[0][1].ToString()).Copy();
+                                                                    dtGrupos = objAD.GetGroups(dtDomain.DomainName, dtDomain.DomainUsr, dtDomain.DomainPwd, dtUser.Rows[0][1].ToString());
                                                                     //existen grupos?
                                                                     if (dtGrupos.Rows.Count > 0)
                                                                     {
@@ -181,7 +182,7 @@ namespace EpironAPI.classes
                                                                             strNombreGrupo = dtGrupos.Rows[i][0].ToString();
 
                                                                             //POR CADA GRUPO OBTENER LOS GUID CORRESPONDIENTES                                                               
-                                                                            dtGuidGrupo = AccesoDatos.Group_s_ByName(strNombreGrupo).Copy();
+                                                                            dtGuidGrupo = AccesoDatos.Group_s_ByName(strNombreGrupo);
 
                                                                             if (dtGuidGrupo.Rows.Count > 0)
                                                                             {
@@ -204,7 +205,7 @@ namespace EpironAPI.classes
                                                                                     if ((entro != true) && (i == dtGrupos.Rows.Count - 1))
                                                                                     {
                                                                                         //El usuario no tiene permisos sobre los elementos del menu
-                                                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                                         rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                                         rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                                         rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -245,7 +246,7 @@ namespace EpironAPI.classes
                                                                             {
                                                                                 //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                                                 //los grupos activedirectory del usuario
-                                                                                //dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                                //dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                                 txtError = string.Empty; //dtError.Rows[0][1].ToString();
                                                                                 AccesoDatos.AuditTrailSessionDet_i(Par_AuditTrailSessionId, idEvento, txtError, xmlRequest);
 
@@ -257,7 +258,7 @@ namespace EpironAPI.classes
                                                                         {
                                                                             //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                                             //los grupos activedirectory del usuario
-                                                                            //dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                            //dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                             txtError = string.Empty; //dtError.Rows[0][1].ToString();
                                                                             AccesoDatos.AuditTrailSessionDet_i(Par_AuditTrailSessionId, idEvento, txtError, xmlRequest);
 
@@ -268,7 +269,7 @@ namespace EpironAPI.classes
                                                                         //{
                                                                         //    //Ninguno de los Grupos Active Directory del usuario se encuentra 
                                                                         //    //registrado en el Sistema de Seguridad
-                                                                        //    dtError = AccesoDatos.EventResponse_s_ByInternalCode(43).Copy();
+                                                                        //    dtError = AccesoDatos.EventResponse_s_ByInternalCode(43);
                                                                         //    rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                         //    rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                         //    rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -284,7 +285,7 @@ namespace EpironAPI.classes
                                                                     else
                                                                     {
                                                                         //No encuentra grupos de AD para el usuario
-                                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(27).Copy();
+                                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(27);
                                                                         rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                         rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                         rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -299,7 +300,7 @@ namespace EpironAPI.classes
                                                                 else
                                                                 {
                                                                     //No puede contectarse al controlador de dominio
-                                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(24).Copy();
+                                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(24);
                                                                     rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                     rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                     rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -377,7 +378,7 @@ namespace EpironAPI.classes
                                                             else
                                                             {
                                                                 //El usuario no posee permiso sobre el elemento del menu seleccionado
-                                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                 rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                 rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                 rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -450,7 +451,7 @@ namespace EpironAPI.classes
                                                         else
                                                         {
                                                             //El usuario no posee permiso sobre el elemento del menu seleccionado
-                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -468,14 +469,14 @@ namespace EpironAPI.classes
                                                 else
                                                 {
                                                     //Guid de menu no valido
-                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(26).Copy();
+                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(26);
                                                     dtValida = dtError;
                                                 }
                                             }
                                             else
                                             {
                                                 //No recibe todos los parametros
-                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(2).Copy();
+                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(2);
                                                 dtValida = dtError;
                                             }
 
@@ -486,7 +487,7 @@ namespace EpironAPI.classes
                                         #region CaseUsersEnabled
 
                                         //obtiene todos los usuarios habilitados para la instancia de aplicación
-                                        dtUsersEnabled = AccesoDatos.User_s_ByApplicationInstanceGUID(Par_ApplicationInstanceGuid).Copy();
+                                        dtUsersEnabled = AccesoDatos.User_s_ByApplicationInstanceGUID(Par_ApplicationInstanceGuid);
 
                                         if (dtUsersEnabled.Rows.Count > 0)
                                         {
@@ -518,7 +519,7 @@ namespace EpironAPI.classes
                                         else
                                         {
                                             //Usuario no existe en la instancia de aplicacion o bien no esta vigente en la misma
-                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(25).Copy();
+                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(25);
                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -535,7 +536,7 @@ namespace EpironAPI.classes
                                         #region CaseUsersEnabled
 
                                         //obtiene todos los usuarios habilitados para la instancia de aplicación
-                                        dtUsersEnabled = AccesoDatos.Application_s_byPersonDocument(Par_PersonDocument).Copy();
+                                        dtUsersEnabled = AccesoDatos.Application_s_byPersonDocument(Par_PersonDocument);
 
                                         if (dtUsersEnabled.Rows.Count > 0)
                                         {
@@ -567,7 +568,7 @@ namespace EpironAPI.classes
                                         else
                                         {
                                             //Usuario no existe en la instancia de aplicacion o bien no esta vigente en la misma
-                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(25).Copy();
+                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(25);
                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -601,7 +602,7 @@ namespace EpironAPI.classes
                                                     if (objAD.IsAuthenticated(dtDomain.Rows[0][2].ToString(), dtDomain.Rows[0][3].ToString(), Encriptador.desencriptar(dtDomain.Rows[0][4].ToString())) == true)
                                                     {
 
-                                                        dtGrupos = objAD.GetGroups(dtDomain.Rows[0][2].ToString(), dtDomain.Rows[0][3].ToString(), Encriptador.desencriptar(dtDomain.Rows[0][4].ToString()), dtUser.Rows[0][1].ToString()).Copy();
+                                                        dtGrupos = objAD.GetGroups(dtDomain.Rows[0][2].ToString(), dtDomain.Rows[0][3].ToString(), Encriptador.desencriptar(dtDomain.Rows[0][4].ToString()), dtUser.Rows[0][1].ToString());
                                                         //existen grupos?
                                                         if (dtGrupos.Rows.Count > 0)
                                                         {
@@ -612,7 +613,7 @@ namespace EpironAPI.classes
                                                                 strNombreGrupo = dtGrupos.Rows[i][0].ToString();
 
                                                                 //POR CADA GRUPO OBTENER LOS GUID CORRESPONDIENTES                                                               
-                                                                dtGuidGrupo = AccesoDatos.Group_s_ByName(strNombreGrupo).Copy();
+                                                                dtGuidGrupo = AccesoDatos.Group_s_ByName(strNombreGrupo);
 
                                                                 if (dtGuidGrupo.Rows.Count > 0)
                                                                 {
@@ -620,7 +621,7 @@ namespace EpironAPI.classes
                                                                     groupRegistrados += 1;
 
                                                                     guidGrupo = new Guid(dtGuidGrupo.Rows[0][5].ToString());
-                                                                    dtAuxPermisos = AccesoDatos.MenuPermission_s_ByGroupGUID(Par_ApplicationInstanceGuid, guidGrupo, Par_DomainGUID).Copy();
+                                                                    dtAuxPermisos = AccesoDatos.MenuPermission_s_ByGroupGUID(Par_ApplicationInstanceGuid, guidGrupo, Par_DomainGUID);
 
 
                                                                     if (primeravez)
@@ -703,7 +704,7 @@ namespace EpironAPI.classes
                                                                         {
                                                                             //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                                             //los grupos activedirectory del usuario
-                                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -719,7 +720,7 @@ namespace EpironAPI.classes
                                                                     {
                                                                         //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                                         //los grupos activedirectory del usuario
-                                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                         rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                         rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                         rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -735,7 +736,7 @@ namespace EpironAPI.classes
                                                                 {
                                                                     //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                                     //los grupos activedirectory del usuario
-                                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                                     rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                     rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                     rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -751,7 +752,7 @@ namespace EpironAPI.classes
                                                             {
                                                                 //Ninguno de los Grupos Active Directory del usuario se encuentra 
                                                                 //registrado en el Sistema de Seguridad
-                                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(43).Copy();
+                                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(43);
                                                                 rowxmlError = dsXmlError.Tables[0].NewRow();
                                                                 rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                                 rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -766,7 +767,7 @@ namespace EpironAPI.classes
                                                         else
                                                         {
                                                             //el sistema no encontro ningun grupo active directory configurado para el usuario
-                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(27).Copy();
+                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(27);
                                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -781,7 +782,7 @@ namespace EpironAPI.classes
                                                     else
                                                     {
                                                         //No puede conectarse con el controlado de dominio
-                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(24).Copy();
+                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(24);
                                                         rowxmlError = dsXmlError.Tables[0].NewRow();
                                                         rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                         rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -860,7 +861,7 @@ namespace EpironAPI.classes
                                                     {
                                                         //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                         //los grupos activedirectory del usuario
-                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                        dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                         rowxmlError = dsXmlError.Tables[0].NewRow();
                                                         rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                         rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -876,7 +877,7 @@ namespace EpironAPI.classes
                                                 {
                                                     //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                     //los grupos activedirectory del usuario
-                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                     rowxmlError = dsXmlError.Tables[0].NewRow();
                                                     rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                     rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -951,7 +952,7 @@ namespace EpironAPI.classes
                                                 {
                                                     //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                     //los grupos activedirectory del usuario
-                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                     rowxmlError = dsXmlError.Tables[0].NewRow();
                                                     rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                     rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -967,7 +968,7 @@ namespace EpironAPI.classes
                                             {
                                                 //el sistemano encuentra ningun permiso configurado para los perfiles de
                                                 //los grupos activedirectory del usuario
-                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(9).Copy();
+                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(9);
                                                 rowxmlError = dsXmlError.Tables[0].NewRow();
                                                 rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                                 rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -987,7 +988,7 @@ namespace EpironAPI.classes
                                         var paso1 = AccesoDatos.Entity_s_ApplicationId(wApplicationId);
                                         if (paso1.Count == 0)
                                         {
-                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(70).Copy();
+                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(70);
                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -1012,7 +1013,7 @@ namespace EpironAPI.classes
                                             if (paso1.FirstOrDefault(x => x.EntityGUID == wCurrentGuid) == null)//si es null no se encontro el guid
                                             {
                                                 //7.C.2 CURSO A
-                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(71).Copy();
+                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(71);
                                                 dtError.Rows[0][1] = dtError.Rows[0][1].ToString() + " " + wCurrentGuid.ToString();
                                                 dtError.TableName = "Error";
                                                 dtError.AcceptChanges();
@@ -1060,7 +1061,7 @@ namespace EpironAPI.classes
                                         if (wPermisosUnificados.Count == 0)
                                         {
 
-                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(72).Copy();
+                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(72);
                                             rowxmlError = dsXmlError.Tables[0].NewRow();
                                             rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                             rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -1110,7 +1111,7 @@ namespace EpironAPI.classes
                             else
                             {
                                 //Detecta que la instancia de la aplicacion no es valida
-                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(1).Copy();
+                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(1);
                                 //CONSULTAR SOBRE EL PARAMETRO PAR_AUDITTRAILSESSIONDETREQUEST
                                 rowxmlError = dsXmlError.Tables[0].NewRow();
                                 rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
@@ -1129,7 +1130,7 @@ namespace EpironAPI.classes
                             {
                                 //Usuario no existe, no esta activo o no vigente
                                 case 6:
-                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(6).Copy();
+                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(6);
                                     //CONSULTAR SOBRE EL PARAMETRO PAR_AUDITTRAILSESSIONDETREQUEST
                                     rowxmlError = dsXmlError.Tables[0].NewRow();
                                     rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
@@ -1142,7 +1143,7 @@ namespace EpironAPI.classes
                                     break;
                                 //Usuario no existe o no esta vigente para la instancia de aplicacion
                                 case 25:
-                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(25).Copy();
+                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(25);
                                     rowxmlError = dsXmlError.Tables[0].NewRow();
                                     rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                     rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -1164,14 +1165,14 @@ namespace EpironAPI.classes
                         {
                             //No existe el Guid de session
                             case 5:
-                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(5).Copy();
+                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(5);
                                 dtValida = dtError;
                                 break;
                             //Caduco el Guid de session
                             case 20:
 
                                 Par_AuditTrailSessionId = int.Parse(dsGuidSessionValido.Tables[1].Rows[0][0].ToString());
-                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(20).Copy();
+                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(20);
                                 rowxmlError = dsXmlError.Tables[0].NewRow();
                                 rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                 rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -1185,7 +1186,7 @@ namespace EpironAPI.classes
                             //GUID VALIDO PERO ALGUNA TABLA NO CUMPLE CON ACTIVEFLAG O VIGENCIA
                             case 40:
                                 Par_AuditTrailSessionId = int.Parse(dsGuidSessionValido.Tables[1].Rows[0][0].ToString());
-                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(40).Copy();
+                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(40);
                                 rowxmlError = dsXmlError.Tables[0].NewRow();
                                 rowxmlError["EventResponseId"] = dtError.Rows[0][0].ToString();
                                 rowxmlError["EventResponseText"] = dtError.Rows[0][1].ToString();
@@ -1202,7 +1203,7 @@ namespace EpironAPI.classes
                 else
                 {
                     //No encuentra los datos del evento
-                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(22).Copy();
+                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(22);
                     dtValida = dtError;
                 }
             }

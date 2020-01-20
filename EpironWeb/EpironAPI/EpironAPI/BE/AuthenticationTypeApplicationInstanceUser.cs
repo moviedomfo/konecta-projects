@@ -11,4 +11,11 @@ namespace EpironAPI.BE
         public Guid UserGUID { get; set; }
         public Boolean AuthenticationTypeUserMustChangePassword { get; set; }
     }
+    public class UserAuthentic
+    {
+        
+        public Guid AuditTrailSessionGUID { get; set; }
+        public Boolean AuthenticationTypeUserMustChangePassword { get; set; }
+    }
+
 }

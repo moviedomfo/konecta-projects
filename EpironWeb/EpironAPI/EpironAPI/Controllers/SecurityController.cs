@@ -57,9 +57,9 @@ namespace EpironAPI.Controllers
 
                     //Consulto si el guid de negociacion es valido
                     var dtValido = AccesoDatos.AuditTrailLogin_s_ByAuditTrailLoginGUID_Valid(req.AppInstanceGUID, req.guidintercambio);
-                    reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, dtValido);
+                    reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, null);
                     //si el dtvalido tiene mas de una columna es valido, si tiene solo una columna significa que me devuelve un codigo de error
-                    if (dtValido.Rows.Count > 1)//No hay error
+                    if (dtValido!=null)//No hay error
                     {
 
                         if ((reintentos != 999) && (reintentos != 22))
@@ -109,7 +109,7 @@ namespace EpironAPI.Controllers
                                                     if (Membership.ValidateUser(req.UserName, req.UserKey))
                                                     {
                                                         //DataSet dsLogDevolucion = new DataSet();
-                                                        //dsLogDevolucion.Tables.Add(Log(Guid.Empty, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq).Copy());
+                                                        //dsLogDevolucion.Tables.Add(Log(Guid.Empty, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq));
 
                                                         ////Validaciones objValidaciones = new Validaciones();
                                                         ////string eventResponseText = objValidaciones.ToStringAsXml(dsLogDevolucion);
@@ -119,11 +119,9 @@ namespace EpironAPI.Controllers
 
                                                         //Transacción!!
                                                         var dtSession = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, 0, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, eventIDUserOk, auditTrailLoginEndDateUserAuthentic);
-                                                        guidSession = dtSession.GUID;
-                                                        mustChangePassword = dtInstanceUser.AuthenticationTypeUserMustChangePassword;
-
-                                                        XMLResponse = ResponseUserAuthenticXML(mustChangePassword, guidSession);
-                                                        UpdateResponseSession(dtSession, XMLResponse);
+                                                        
+                                                        ////XMLResponse = ResponseUserAuthenticXML(dtInstanceUser.AuthenticationTypeUserMustChangePassword, dtSession.AuditTrailSessionGUID);
+                                                        AccesoDatos.UpdateResponseSession(dtSession.AuditTrailSessionId, dtInstanceUser.AuthenticationTypeUserMustChangePassword, dtSession.AuditTrailSessionGUID);
                                                         ///dtSession.Columns.Remove("AuditTrailLoginId");
 
                                                         ///dtSession.Columns.Add("UserGuid");
@@ -182,11 +180,11 @@ namespace EpironAPI.Controllers
                                                         //row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
                                                         //row["Guid"] = dtLog.Rows[0][0].ToString();
 
-                                                        dtCampos.Rows.Add(row);
-                                                        XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                        UpdateResponse(dtLog, XMLResponse);
+                                                        //dtCampos.Rows.Add(row);
+                                                        //XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                        //UpdateResponse(dtLog, XMLResponse);
 
-                                                        dsSession.Tables.Add(dtCampos);
+                                                        //dsSession.Tables.Add(dtCampos);
 
                                                     }
                                                 }
@@ -251,7 +249,7 @@ namespace EpironAPI.Controllers
                                                         {
 
                                                             //DataSet dsLogDevolucion = new DataSet();
-                                                            //dsLogDevolucion.Tables.Add(Log(Guid.Empty, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq).Copy());
+                                                            //dsLogDevolucion.Tables.Add(Log(Guid.Empty, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq));
 
                                                             ////Validaciones objValidaciones = new Validaciones();
                                                             ////string eventResponseText = objValidaciones.ToStringAsXml(dsLogDevolucion);
@@ -261,12 +259,15 @@ namespace EpironAPI.Controllers
 
                                                             //Transacción!!}
                                                             ///DataTable dtTransaccion = new DataTable();
-                                                            var dtTransaccion = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, dtDominio.DomainId, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, eventIDUserOk, req.AuditTrailLoginEndDateUserAuthentic);
+                                                            var dtTransaccion = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, 
+                                                                dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, dtDominio.DomainId, 
+                                                                req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, 
+                                                                jsonReq, eventIDUserOk, auditTrailLoginEndDateUserAuthentic);
                                                             ///guidSession = dtTransaccion.GUID;
                                                             ///mustChangePassword = bool.Parse(dtDominioUser.Rows[0][1].ToString());
-                                                            XMLResponse = ResponseUserAuthenticXML(dtDominioUser.AuthenticationTypeUserMustChangePassword, dtTransaccion.GUID);
-                                                            UpdateResponseSession(dtTransaccion, XMLResponse);
-
+                                                            ////XMLResponse = ResponseUserAuthenticXML(dtDominioUser.AuthenticationTypeUserMustChangePassword, dtTransaccion.AuditTrailSessionGUID);
+                                                            ///UpdateResponseSession(dtTransaccion.AuditTrailSessionId, XMLResponse);
+                                                            AccesoDatos.UpdateResponseSession(dtTransaccion.AuditTrailSessionId, dtDominioUser.AuthenticationTypeUserMustChangePassword, dtTransaccion.AuditTrailSessionGUID);
                                                             ///dtTransaccion.Columns.Remove("AuditTrailLoginId");
 
                                                             ///dtTransaccion.Columns.Add("UserGuid");
@@ -458,12 +459,12 @@ namespace EpironAPI.Controllers
                         }
 
                     }
-                    else //Error
-                    {
-                        errorResponse = new Error();
-                        int codigoError = int.Parse(dtValido.Rows[0][0].ToString());
-                        //reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, dtValido);
-                    }
+                    //else //Error
+                    //{
+                    //    errorResponse = new Error();
+                    //    int codigoError = int.Parse(dtValido.Rows[0][0].ToString());
+                    //    //reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, dtValido);
+                    //}
                 }
                 else //Error
                 {
@@ -481,6 +482,8 @@ namespace EpironAPI.Controllers
                 return apiHelper.fromEx(ex);
             }
         }
+
+       
 
         public int CalcularReintentos(string Event_Tag, Guid AppInstanceGUID, Guid RequestLoginGUID, DataTable dtValido)
         {
@@ -548,7 +551,7 @@ namespace EpironAPI.Controllers
             DateTime auditTrailLoginEndDate = DateTime.Now.AddSeconds(dtEvent.EventDurationTime);
 
             var dtLog = AccesoDatos.AuditTrailLogin_i(auditTrailLoginParentGUID, auditTrailLoginAppInstanceGUID, dtEvent.EventId, auditTrailLoginEndDate, auditTrailLoginHost, auditTrailLoginIP, "", auditTrailLoginRequest);
-            return dtLog.GUID;
+            return dtLog.AuditTrailSessionGUID;
         }
     }
 }
