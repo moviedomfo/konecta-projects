@@ -17,4 +17,17 @@ namespace EpironAPI.BE
         //UserName{ get; set; }
         public string AuthenticationTypeTag { get; set; }
     }
+
+    public class AuthenticationTypeUserBE
+    {
+        public int AuthenticationTypeUserId { get; set; }
+        public Guid AuthenticationTypeUserGUID { get; set; }
+        public int AuthenticationTypeId { get; set; }
+        public int DomainId { get; set; }
+        public int MemberShipUserId { get; set; }
+        public bool AuthenticationTypeUserMustChangePassword { get; set; }
+
+
+
+}
 }

@@ -20,7 +20,7 @@ namespace EpironAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        
+
 
 
         public void ValidarAplicacion(ValidarAplicacionReq req)
@@ -34,25 +34,25 @@ namespace EpironAPI.Controllers
             Error errorResponse;
             LoginResponseBE loginResponseBE = new LoginResponseBE();
 
-            var jsonReq=  Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
-            int reintentos, idUser, idType;
+            var jsonReq = Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
+            int reintentos, idType;
             try
             {
                 Guid guidSession = Guid.NewGuid();
                 if (req.AppInstanceGUID == Guid.Empty | req.LoginHost == string.Empty | req.LoginIP == string.Empty | req.guidintercambio == Guid.Empty | req.AutTypeGUID == Guid.Empty | req.UserName == string.Empty | req.UserKey == string.Empty)
                 {
                     //Error
-                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
+                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
                     return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(errorResponse));
-                    
+
                 }
 
                 var dtTag = AccesoDatos.Event_s_ByTag(req.Event_Tag);
-                int eventIDUserAutenticacion = int.Parse(dtTag.Rows[0][0].ToString()); //<--- EventId para USER-AUTENTIC
-                DateTime auditTrailLoginEndDateUserAuthentic = DateTime.Now.AddSeconds(Convert.ToInt32(dtTag.Rows[0][8].ToString()));
+                int eventIDUserAutenticacion = dtTag.EventId; //<--- EventId para USER-AUTENTIC
+                DateTime auditTrailLoginEndDateUserAuthentic = DateTime.Now.AddSeconds(dtTag.EventDurationTime);
 
                 //Pregunto si existen los datos del evento
-                if (dtTag.Rows.Count > 0)
+                if (dtTag != null)
                 {
 
                     //Consulto si el guid de negociacion es valido
@@ -61,7 +61,7 @@ namespace EpironAPI.Controllers
                     //si el dtvalido tiene mas de una columna es valido, si tiene solo una columna significa que me devuelve un codigo de error
                     if (dtValido.Rows.Count > 1)//No hay error
                     {
-                        
+
                         if ((reintentos != 999) && (reintentos != 22))
                         {
                             //Verificar que el usuario sea valido
@@ -71,39 +71,39 @@ namespace EpironAPI.Controllers
                             {
                                 //idUser = Convert.ToInt32(dtUser.Rows[0][0].ToString());
 
-                               var dtType = AccesoDatos.AuthenticationType_s_ByGUID(req.AutTypeGUID);
+                                var dtType = AccesoDatos.AuthenticationType_s_ByGUID(req.AutTypeGUID);
 
                                 //Pregunto si la consulta me devuelve resultados para el tipo de autenticacion seleccionado
                                 //va a depender entre otras cosas del activeflag
-                                if (dtType == null)
+                                if (dtType != null)
                                 {
                                     ////AuthenticationTypeTag = dtType.Rows[0][8].ToString();
 
-                                    idType = int.Parse(dtType.Rows[0][0].ToString());
+                                    ///idType = int.Parse(dtType.Rows[0][0].ToString());
 
-                                    dtEvent = AccesoDatos.Event_s_ByTag("USER-OK");
+                                    var dtEvent = AccesoDatos.Event_s_ByTag("USER-OK");
                                     //Da
-                                    if (dtEvent.Rows.Count > 0)
+                                    if (dtEvent != null)
                                     {
 
-                                        int EventIDUserOk = Convert.ToInt32(dtEvent.Rows[0][0].ToString()); //<---obtengo el id para el evento USER-OK
+                                        int eventIDUserOk = Convert.ToInt32(dtEvent.EventId); //<---obtengo el id para el evento USER-OK
                                         //a la fecha y hora actual se le suman los segundos definidos para el evento req.Event_Tag
-                                        req.AuditTrailLoginEndDate = DateTime.Now.AddSeconds(Convert.ToInt32(dtEvent.Rows[0][8].ToString()));
+                                        DateTime auditTrailLoginEndDate = DateTime.Now.AddSeconds(Convert.ToInt32(dtEvent.EventDurationTime));
                                         bool mustChangePassword;
                                         //En caso de que no sea autenticacion de AD
                                         if (req.DomainGUID == Guid.Empty)
                                         {
                                             //Consulta si el usuario tiene acceso a la instncia de la app
                                             //con el tipo de autenticacion seleccionado
-                                            dtInstanceUser = AccesoDatos.AuthenticationTypeApplicationInstanceUser_s_Valid(req.UserName, req.AppInstanceGUID, req.AutTypeGUID);
+                                            var dtInstanceUser = AccesoDatos.AuthenticationTypeApplicationInstanceUser_s_Valid(req.UserName, req.AppInstanceGUID, req.AutTypeGUID);
 
-                                            if (dtInstanceUser.Rows.Count > 0)
+                                            if (dtInstanceUser != null)
                                             {
                                                 //validar previamente si el usuario para el tipo de autenticacion tiene asignado la validacion
                                                 //mediante membership
-                                                dtMembership = AccesoDatos.AuthenticationTypeUser_s_MembershipUserID(idUser, idType);
+                                                var dtMembership = AccesoDatos.AuthenticationTypeUser_s_MembershipUserID(dtUser.UserId, dtType.AuthenticationTypeId);
                                                 //Valido si el usuario tiene activo la opcion de validar mediante membership
-                                                if (dtMembership.Rows.Count > 0)
+                                                if (dtMembership != null)
                                                 {
                                                     //Valida si el usuario existe en la aplicación mediante Membership
                                                     if (Membership.ValidateUser(req.UserName, req.UserKey))
@@ -118,48 +118,57 @@ namespace EpironAPI.Controllers
                                                         //Guid GuidIntercambio = (Guid)dsLogDevolucion.Tables[0].Rows[0][0];
 
                                                         //Transacción!!
-                                                        dtSession = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, idUser, idType, string.Empty, req.AuditTrailLoginEndDate, 0, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, EventIDUserOk, req.AuditTrailLoginEndDateUserAuthentic);
-                                                        guidSession = new Guid(dtSession.Rows[0][0].ToString());
-                                                        mustChangePassword = bool.Parse(dtInstanceUser.Rows[0][1].ToString());
+                                                        var dtSession = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, 0, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, eventIDUserOk, auditTrailLoginEndDateUserAuthentic);
+                                                        guidSession = dtSession.GUID;
+                                                        mustChangePassword = dtInstanceUser.AuthenticationTypeUserMustChangePassword;
 
                                                         XMLResponse = ResponseUserAuthenticXML(mustChangePassword, guidSession);
                                                         UpdateResponseSession(dtSession, XMLResponse);
-                                                        dtSession.Columns.Remove("AuditTrailLoginId");
+                                                        ///dtSession.Columns.Remove("AuditTrailLoginId");
 
                                                         ///dtSession.Columns.Add("UserGuid");
-                                                        loginResponseBE.UserGuid = dtInstanceUser.Rows[0]["UserGuid"].ToString();
+                                                        loginResponseBE.UserGuid = dtInstanceUser.UserGUID;
 
                                                         ////Se agregan los datos de la persona y el usuario
                                                         ////dtSession.Columns.Add("UserName");
                                                         loginResponseBE.UserName = dtUser.UserName;
 
-                                                        dtSession.Columns.Add("PersonFirstName");
+                                                        ///dtSession.Columns.Add("PersonFirstName");
                                                         loginResponseBE.PersonFirstName = dtUser.PersonFirstName;
 
-                                                        dtSession.Columns.Add("PersonLastName");
-                                                        dtSession.Rows[0]["PersonLastName"] = dtUser.PersonLastName;
+                                                        ///dtSession.Columns.Add("PersonLastName");
+                                                        loginResponseBE.PersonLastName = dtUser.PersonLastName;
 
-                                                        dtSession.Columns.Add("PersonDocNumber");
-                                                        dtSession.Rows[0]["PersonDocNumber"] = dtUser.PersonDocNumber;
+                                                        ////dtSession.Columns.Add("PersonDocNumber");
+                                                        ////dtSession.Rows[0]["PersonDocNumber"] = dtUser.PersonDocNumber;
+                                                        loginResponseBE.PersonDocNumber = dtUser.PersonDocNumber;
 
-                                                        dtSession.Columns.Add("UserPlaceGUID");
-                                                        dtSession.Rows[0]["UserPlaceGUID"] = dtUser.UserPlaceGuid;
 
-                                                        dtSession.Columns.Add("UserPlaceName");
-                                                        dtSession.Rows[0]["UserPlaceName"] = dtUser.UserPlaceName;
+                                                        ////dtSession.Columns.Add("UserPlaceGUID");
+                                                        ////dtSession.Rows[0]["UserPlaceGUID"] = dtUser.UserPlaceGuid;
+                                                        loginResponseBE.UserPlaceGuid = dtUser.UserPlaceGuid;
 
-                                                        dtSession.Columns.Add("UserPlaceDescript");
-                                                        if (dtUser.Rows[0]["UserPlaceDescript"] != DBNull.Value)
-                                                            dtSession.Rows[0]["UserPlaceDescript"] = dtUser.Rows[0]["UserPlaceDescript"].ToString();
+                                                        ////dtSession.Columns.Add("UserPlaceName");
+                                                        ////dtSession.Rows[0]["UserPlaceName"] = dtUser.UserPlaceName;
+                                                        loginResponseBE.UserPlaceName = dtUser.UserPlaceName;
 
-                                                        dtSession.Columns.Add("PersonGUID");
-                                                        dtSession.Rows[0]["PersonGUID"] = dtUser.Rows[0]["PersonGUID"].ToString();
+                                                        //dtSession.Columns.Add("UserPlaceDescript");
+                                                        loginResponseBE.UserPlaceDescript = dtUser.UserPlaceDescript;
 
-                                                        dtSession.Columns.Add("PersonModifiedDate");
-                                                        dtSession.Rows[0]["PersonModifiedDate"] = ((DateTime)dtUser.Rows[0]["PersonModifiedDate"]).ToString("o");
+                                                        ////if (dtUser.Rows[0]["UserPlaceDescript"] != DBNull.Value)
+                                                        ////    dtSession.Rows[0]["UserPlaceDescript"] = dtUser.Rows[0]["UserPlaceDescript"].ToString();
+
+                                                        ////dtSession.Columns.Add("PersonGUID");
+                                                        ////dtSession.Rows[0]["PersonGUID"] = dtUser.Rows[0]["PersonGUID"].ToString();
+                                                        loginResponseBE.PersonGUID = dtUser.PersonGUID;
+
+                                                        ////dtSession.Columns.Add("PersonModifiedDate");
+                                                        ////dtSession.Rows[0]["PersonModifiedDate"] = ((DateTime)dtUser.Rows[0]["PersonModifiedDate"]).ToString("o");
+
+                                                        loginResponseBE.PersonModifiedDate = dtUser.PersonModifiedDate;
                                                         /////////////////////////////////////////////
 
-                                                        dsSession.Tables.Add(dtSession);
+                                                        ///dsSession.Tables.Add(dtSession);
 
                                                         //GuidIntercambio = new Guid(dtSession.Rows[0][0].ToString());
                                                     }
@@ -178,7 +187,7 @@ namespace EpironAPI.Controllers
                                                         UpdateResponse(dtLog, XMLResponse);
 
                                                         dsSession.Tables.Add(dtCampos);
-                                                        
+
                                                     }
                                                 }
                                                 else
@@ -192,30 +201,29 @@ namespace EpironAPI.Controllers
                                                     //row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
                                                     //row["Guid"] = dtLog.Rows[0][0].ToString();
 
-                                                    dtCampos.Rows.Add(row);
-                                                    XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                    UpdateResponse(dtLog, XMLResponse);
-                                                    dsSession.Tables.Add(dtCampos);
+                                                    ////dtCampos.Rows.Add(row);
+                                                    ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                    ////UpdateResponse(dtLog, XMLResponse);
+                                                    ////dsSession.Tables.Add(dtCampos);
                                                     //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
                                                 }
                                             }
                                             else
                                             {
                                                 //El usuario no posee acceso a la instancia de aplicación
-                                                //con el tipo de autenticacion seleccionado
-                                                //7 (si NO ES Windows)
-                                                row = dtCampos.NewRow();
-                                                dtError = AccesoDatos.EventResponse_s_ByInternalCode(7);
-                                                dtLog = Log(guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
-                                                row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                row["Guid"] = dtLog.Rows[0][0].ToString();
+                                                //con el tipo de autenticacion seleccionado   7 (si NO ES Windows)
+                                                ///row = dtCampos.NewRow();
+                                                errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(7);
+                                                errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
+                                                ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
+                                                ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
+                                                ////row["Guid"] = dtLog.Rows[0][0].ToString();
 
-                                                dtCampos.Rows.Add(row);
-                                                XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                UpdateResponse(dtLog, XMLResponse);
-                                                dsSession.Tables.Add(dtCampos);
+                                                ////dtCampos.Rows.Add(row);
+                                                ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                ////UpdateResponse(dtLog, XMLResponse);
+                                                ////dsSession.Tables.Add(dtCampos);
                                                 //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
 
                                             }
@@ -223,23 +231,23 @@ namespace EpironAPI.Controllers
                                         else //Si autentica por Active Directory
                                         {
                                             //Consulta si el dominio de Active Directory existe
-                                            dtDominio = AccesoDatos.Domain_s_ByGUID(req.DomainGUID);
+                                            DomainBE dtDominio = AccesoDatos.Domain_s_ByGUID(req.DomainGUID);
 
-                                            if (dtDominio.Rows.Count > 0)
+                                            if (dtDominio != null)
                                             {
                                                 //Verifica si el usuario tiene acceso a la instancia de la app 
                                                 //con el tipo de autenticacion seleccionado
                                                 //y dominio seleccionado
-                                                dtDominioUser = AccesoDatos.AuthenticationTypeApplicationInstanceUser_s_Valid_Domain(req.UserName, req.AppInstanceGUID, req.AutTypeGUID, req.DomainGUID);
-                                                if (dtDominioUser.Rows.Count > 0)
+                                                var dtDominioUser = AccesoDatos.AuthenticationTypeApplicationInstanceUser_s_Valid_Domain(req.UserName, req.AppInstanceGUID, req.AutTypeGUID, req.DomainGUID);
+                                                if (dtDominioUser != null)
                                                 {
                                                     ActiveDirectory objAD = new ActiveDirectory();
 
                                                     //Pregunto si se puede conectar al controlador de dominio
-                                                    if (objAD.IsAuthenticated(dtDominio.Rows[0][2].ToString(), dtDominio.Rows[0][3].ToString(), Encriptador.desencriptar(dtDominio.Rows[0][4].ToString())) == true)
+                                                    if (objAD.IsAuthenticated(dtDominio.LDAPPath, dtDominio.DomainUsr.ToString(), Encriptador.desencriptar(dtDominio.DomainPwd.ToString())) == true)
                                                     {
                                                         //Pregunto si el usuario tiene las credenciales necesarias en active directory para dicho dominio
-                                                        if (objAD.IsAuthenticated(dtDominio.Rows[0][2].ToString(), req.UserName, req.UserKey) == true)
+                                                        if (objAD.IsAuthenticated(dtDominio.LDAPPath, req.UserName, req.UserKey) == true)
                                                         {
 
                                                             //DataSet dsLogDevolucion = new DataSet();
@@ -252,66 +260,66 @@ namespace EpironAPI.Controllers
                                                             //Guid GuidIntercambio = (Guid)dsLogDevolucion.Tables[0].Rows[0][0];
 
                                                             //Transacción!!}
-                                                            DataTable dtTransaccion = new DataTable();
-                                                            dtTransaccion = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, idUser, idType, string.Empty, req.AuditTrailLoginEndDate, int.Parse(dtDominio.Rows[0][0].ToString()), guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, EventIDUserOk, req.AuditTrailLoginEndDateUserAuthentic).Copy();
-                                                            guidSession = new Guid(dtTransaccion.Rows[0][0].ToString());
-                                                            mustChangePassword = bool.Parse(dtDominioUser.Rows[0][1].ToString());
-                                                            XMLResponse = ResponseUserAuthenticXML(mustChangePassword, guidSession);
+                                                            ///DataTable dtTransaccion = new DataTable();
+                                                            var dtTransaccion = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, dtDominio.DomainId, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, eventIDUserOk, req.AuditTrailLoginEndDateUserAuthentic);
+                                                            ///guidSession = dtTransaccion.GUID;
+                                                            ///mustChangePassword = bool.Parse(dtDominioUser.Rows[0][1].ToString());
+                                                            XMLResponse = ResponseUserAuthenticXML(dtDominioUser.AuthenticationTypeUserMustChangePassword, dtTransaccion.GUID);
                                                             UpdateResponseSession(dtTransaccion, XMLResponse);
 
-                                                            dtTransaccion.Columns.Remove("AuditTrailLoginId");
+                                                            ///dtTransaccion.Columns.Remove("AuditTrailLoginId");
 
-                                                            dtTransaccion.Columns.Add("UserGuid");
-                                                            dtTransaccion.Rows[0]["UserGuid"] = dtDominioUser.Rows[0]["UserGuid"].ToString();
+                                                            ///dtTransaccion.Columns.Add("UserGuid");
+                                                            loginResponseBE.UserGuid = dtDominioUser.UserGUID;
 
                                                             //Se agregan los datos de la persona y el usuario.
-                                                            dtTransaccion.Columns.Add("UserName");
-                                                            dtTransaccion.Rows[0]["UserName"] = dtUser.Rows[0]["UserName"].ToString();
+                                                            //dtTransaccion.Columns.Add("UserName");
+                                                            loginResponseBE.UserName = dtUser.UserName.ToString();
 
-                                                            dtTransaccion.Columns.Add("PersonFirstName");
-                                                            dtTransaccion.Rows[0]["PersonFirstName"] = dtUser.Rows[0]["PersonFirstName"].ToString();
+                                                            ////dtTransaccion.Columns.Add("PersonFirstName");
+                                                            loginResponseBE.PersonFirstName = dtUser.PersonFirstName;
 
-                                                            dtTransaccion.Columns.Add("PersonLastName");
-                                                            dtTransaccion.Rows[0]["PersonLastName"] = dtUser.Rows[0]["PersonLastName"].ToString();
+                                                            ////dtTransaccion.Columns.Add("PersonLastName");
+                                                            loginResponseBE.PersonLastName = dtUser.PersonLastName;
 
-                                                            dtTransaccion.Columns.Add("PersonDocNumber");
-                                                            dtTransaccion.Rows[0]["PersonDocNumber"] = dtUser.Rows[0]["PersonDocNumber"].ToString();
-                                                            dtTransaccion.Columns.Add("UserPlaceGUID");
-                                                            dtTransaccion.Rows[0]["UserPlaceGUID"] = dtUser.Rows[0]["UserPlaceGUID"].ToString();
+                                                            ////dtTransaccion.Columns.Add("PersonDocNumber");
+                                                            loginResponseBE.PersonDocNumber = dtUser.PersonDocNumber;
+                                                            ////dtTransaccion.Columns.Add("UserPlaceGUID");
+                                                            loginResponseBE.UserPlaceGuid = dtUser.UserPlaceGuid;
 
-                                                            dtTransaccion.Columns.Add("UserPlaceName");
-                                                            dtTransaccion.Rows[0]["UserPlaceName"] = dtUser.Rows[0]["UserPlaceName"].ToString();
+                                                            ////dtTransaccion.Columns.Add("UserPlaceName");
+                                                            loginResponseBE.UserPlaceName = dtUser.UserPlaceName;
 
-                                                            dtTransaccion.Columns.Add("UserPlaceDescript");
-                                                            if (dtUser.Rows[0]["UserPlaceDescript"] != DBNull.Value)
-                                                                dtTransaccion.Rows[0]["UserPlaceDescript"] = dtUser.Rows[0]["UserPlaceDescript"].ToString();
+                                                            ///dtTransaccion.Columns.Add("UserPlaceDescript");
+                                                            ////if (dtUser.Rows[0]["UserPlaceDescript"] != DBNull.Value)
+                                                            loginResponseBE.UserPlaceDescript = dtUser.UserPlaceDescript;
 
-                                                            dtTransaccion.Columns.Add("PersonGUID");
-                                                            dtTransaccion.Rows[0]["PersonGUID"] = dtUser.Rows[0]["PersonGUID"].ToString();
+                                                            ////dtTransaccion.Columns.Add("PersonGUID");
+                                                            loginResponseBE.PersonGUID = dtUser.PersonGUID;
 
 
-                                                            dtTransaccion.Columns.Add("PersonModifiedDate");
-                                                            dtTransaccion.Rows[0]["PersonModifiedDate"] = ((DateTime)dtUser.Rows[0]["PersonModifiedDate"]).ToString("o");
+                                                            ///dtTr/*/*a*/*/nsaccion.Columns.Add("PersonModifiedDate");
+                                                            loginResponseBE.PersonModifiedDate = dtUser.PersonModifiedDate;
 
-                                                            dsSession.Tables.Add(dtTransaccion);
+                                                            ////dsSession.Tables.Add(dtTransaccion);
                                                             //GuidIntercambio = new Guid(dtTransaccion.Rows[0][0].ToString());
                                                         }
                                                         else
                                                         {
-                                                            row = dtCampos.NewRow();
+                                                            ///row = dtCampos.NewRow();
                                                             //Error 8
-                                                            dtError = AccesoDatos.EventResponse_s_ByInternalCode(8).Copy();
-                                                            dtLog = Log(guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
-                                                            row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                            row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                            row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                            row["Guid"] = dtLog.Rows[0][0].ToString();
+                                                            errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(8);
+                                                            errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                            ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
+                                                            ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
+                                                            ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
+                                                            ////row["Guid"] = dtLog.Rows[0][0].ToString();
 
-                                                            dtCampos.Rows.Add(row);
+                                                            ////dtCampos.Rows.Add(row);
 
-                                                            XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                            UpdateResponse(dtLog, XMLResponse);
-                                                            dsSession.Tables.Add(dtCampos);
+                                                            ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                            ////UpdateResponse(dtLog, XMLResponse);
+                                                            ////dsSession.Tables.Add(dtCampos);
                                                             //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
                                                         }
                                                     }
@@ -320,16 +328,16 @@ namespace EpironAPI.Controllers
                                                         //Error 24 - EL usuario no pudo autenticarse en el controlador de active directory
                                                         ////row = dtCampos.NewRow();
                                                         errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(24);
-                                                        ////errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                        errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
                                                         ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                         ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                         ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
                                                         ////row["Guid"] = dtLog.Rows[0][0].ToString();
 
                                                         ////dtCampos.Rows.Add(row);
-                                                        XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                        UpdateResponse(dtLog, XMLResponse);
-                                                        dsSession.Tables.Add(dtCampos);
+                                                        ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                        ////UpdateResponse(dtLog, XMLResponse);
+                                                        ////dsSession.Tables.Add(dtCampos);
                                                         //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
                                                     }
 
@@ -341,17 +349,17 @@ namespace EpironAPI.Controllers
                                                     //Anexo 10 no devuelve resultados (AuthenticationTypeApplicationInstanceUser_s_Valid)
                                                     //21 (si ES Windows)
                                                     ////row = dtCampos.NewRow();
-                                                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(21).Copy();
-                                                    errorResponse.Guid = Log(guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(21);
+                                                    errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
                                                     ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                     ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                     ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
                                                     ////row["Guid"] = dtLog.Rows[0][0].ToString();
 
                                                     ////dtCampos.Rows.Add(row);
-                                                    XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                    UpdateResponse(dtLog, XMLResponse);
-                                                    dsSession.Tables.Add(dtCampos);
+                                                    ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                    ////UpdateResponse(dtLog, XMLResponse);
+                                                    ////dsSession.Tables.Add(dtCampos);
                                                     //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
 
                                                 }
@@ -368,12 +376,10 @@ namespace EpironAPI.Controllers
                                                 ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
                                                 ////row["Guid"] = dtLog.Rows[0][0].ToString();
 
-                                                XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                UpdateResponse(dtLog, XMLResponse);
-
-                                                dtCampos.Rows.Add(row);
-
-                                                dsSession.Tables.Add(dtCampos);
+                                                ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                                ////UpdateResponse(dtLog, XMLResponse);
+                                                ////dtCampos.Rows.Add(row);
+                                                ////dsSession.Tables.Add(dtCampos);
                                                 //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
                                             }
                                         }
@@ -390,21 +396,21 @@ namespace EpironAPI.Controllers
                                 {
                                     //No hoy datos del tipo de autenticacion
 
-                                    row = dtCampos.NewRow();
+                                    ///row = dtCampos.NewRow();
 
-                                    dtError = AccesoDatos.EventResponse_s_ByInternalCode(41).Copy();
-                                    dtLog = Log(guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
-                                    row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                    row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                    row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                    row["Guid"] = dtLog.Rows[0][0].ToString();
+                                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(41);
+                                    errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                    ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
+                                    ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
+                                    ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
+                                    ////row["Guid"] = dtLog.Rows[0][0].ToString();
 
-                                    dtCampos.Rows.Add(row);
 
-                                    XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                    UpdateResponse(dtLog, XMLResponse);
 
-                                    dsSession.Tables.Add(dtCampos);
+                                    ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                    ////UpdateResponse(dtLog, XMLResponse);
+                                    ////dtCampos.Rows.Add(row);
+                                    ////dsSession.Tables.Add(dtCampos);
                                     //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
                                 }
 
@@ -425,10 +431,10 @@ namespace EpironAPI.Controllers
                                 ///dtCampos.Rows.Add(drow);
 
                                 //Actualizo el campo Response de AuditTrailLogin
-                                XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                UpdateResponse(dtLog, XMLResponse);
+                                ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                ////UpdateResponse(dtLog, XMLResponse);
 
-                                dsSession.Tables.Add(dtCampos);
+                                ////dsSession.Tables.Add(dtCampos);
                                 //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
                             }
                         }
@@ -439,16 +445,16 @@ namespace EpironAPI.Controllers
                             errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(18);
                             errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
 
-                            dsSession.Tables.Add(dtError);
-                            XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                            UpdateResponse(dtLog, XMLResponse);
+                            ////dsSession.Tables.Add(dtError);
+                            ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                            ////UpdateResponse(dtLog, XMLResponse);
 
                         }
                         if (reintentos == 22)
                         {
                             //No se encuentran los datos del evento
                             errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
-                            dsSession.Tables.Add(dtError);
+                            ////dsSession.Tables.Add(dtError);
                         }
 
                     }
@@ -461,14 +467,14 @@ namespace EpironAPI.Controllers
                 }
                 else //Error
                 {
-                    
+
                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
                     return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(errorResponse));
 
                 }
 
 
-                    return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
+                return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
             }
             catch (Exception ex)
             {
@@ -536,19 +542,13 @@ namespace EpironAPI.Controllers
         /// <returns>string con el guid </returns>
         public Guid Log(Guid auditTrailLoginParentGUID, Guid auditTrailLoginAppInstanceGUID, string event_Tag, string auditTrailLoginHost, string auditTrailLoginIP, string auditTrailLoginRequest)
         {
-            int EventId;
-            DataTable dtEvent, dtLog = new DataTable();
-            DateTime AuditTrailLoginEndDate;
-            AccesoDatos AccesoDatos = new AccesoDatos();
-
-            dtEvent = AccesoDatos.Event_s_ByTag(event_Tag);
-            EventId = Convert.ToInt32(dtEvent.Rows[0][0].ToString());
+            
+            var dtEvent = AccesoDatos.Event_s_ByTag(event_Tag);
             //a la fecha y hora actual se le suman los segundos definidos para el evento req.Event_Tag
-            AuditTrailLoginEndDate = DateTime.Now.AddSeconds(Convert.ToInt32(dtEvent.Rows[0][8].ToString()));
+            DateTime auditTrailLoginEndDate = DateTime.Now.AddSeconds(dtEvent.EventDurationTime);
 
-            dtLog = AccesoDatos.AuditTrailLogin_i(auditTrailLoginParentGUID, auditTrailLoginAppInstanceGUID, EventId, AuditTrailLoginEndDate, auditTrailLoginHost, auditTrailLoginIP, "", auditTrailLoginRequest);
-            //row["Guid"] 
-            return Guid.Parse(dtLog.Rows[0][0].ToString()); 
+            var dtLog = AccesoDatos.AuditTrailLogin_i(auditTrailLoginParentGUID, auditTrailLoginAppInstanceGUID, dtEvent.EventId, auditTrailLoginEndDate, auditTrailLoginHost, auditTrailLoginIP, "", auditTrailLoginRequest);
+            return dtLog.GUID;
         }
     }
 }

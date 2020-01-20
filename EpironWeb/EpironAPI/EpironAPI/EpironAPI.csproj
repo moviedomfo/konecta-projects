@@ -130,7 +130,13 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BE\AuditTrailLoginBE.cs" />
+    <Compile Include="BE\AuthenticationTypeApplicationInstanceUser.cs" />
+    <Compile Include="BE\AuthenticationTypeBE.cs" />
+    <Compile Include="BE\DomainBE.cs" />
+    <Compile Include="BE\EventBE.cs" />
     <Compile Include="BE\LoginResponseBE.cs" />
+    <Compile Include="BE\TransaccionSessionBE.cs" />
     <Compile Include="BE\UserIdBE.cs" />
     <Compile Include="classes\AccesoDatos.cs" />
     <Compile Include="classes\ActiveDirectory.cs" />
