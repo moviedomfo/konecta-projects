@@ -11,5 +11,11 @@ namespace EpironAPI.Models
         public string EventResponseText { get; set; }
         public int EventResponseInternalCode { get; set; }
         public Guid Guid { get; set; }
+
+
+        public string toJson()
+        {
+            return Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(this);
+        }
     }
 }

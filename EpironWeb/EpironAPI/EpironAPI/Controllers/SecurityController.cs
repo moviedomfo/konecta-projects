@@ -12,6 +12,7 @@ using System.Web.Security;
 
 namespace EpironAPI.Controllers
 {
+    [RoutePrefix("api/security")]
     public class SecurityController : ApiController
     {
         // GET api/values
@@ -20,14 +21,24 @@ namespace EpironAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-
-
-
-        public void ValidarAplicacion(ValidarAplicacionReq req)
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("check")]
+        public bool check()
         {
+            return true;
         }
 
-        [Route("execute")]
+        [AllowAnonymous]
+        [Route("validarAplicacion")]
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage ValidarAplicacion(ValidarAplicacionReq req)
+        {
+            return apiHelper.fromErrorString("ValidarAplicacion no implementado ", HttpStatusCode.MethodNotAllowed);
+        }
+
+        [AllowAnonymous]
+        [Route("userAutenticacion")]
         [System.Web.Http.HttpPost]
         public HttpResponseMessage UserAutenticacion(UserAutenticacionReq req)
         {
@@ -35,7 +46,7 @@ namespace EpironAPI.Controllers
             LoginResponseBE loginResponseBE = new LoginResponseBE();
 
             var jsonReq = Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
-            int reintentos, idType;
+            int reintentos;
             try
             {
                 Guid guidSession = Guid.NewGuid();

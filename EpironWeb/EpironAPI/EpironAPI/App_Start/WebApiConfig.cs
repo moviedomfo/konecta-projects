@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace EpironAPI
 {
@@ -10,6 +11,8 @@ namespace EpironAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            EnableCorsAttribute cors1 = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors1);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
