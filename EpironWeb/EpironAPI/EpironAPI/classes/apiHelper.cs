@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-
+using EpironAPI.BE;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using EpironAPI.Models;
 
 namespace EpironAPI
 {
@@ -56,11 +57,34 @@ namespace EpironAPI
             return resp;
         }
 
-        public static HttpResponseMessage fromObject<T>(T obj)
+
+        /// <summary>
+        /// retorna un HttpResponseMessage con un objeto EpironApiResponse
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="errorResponse"></param>
+        /// <returns></returns>
+        public static HttpResponseMessage fromObject<T>(T obj, Error errorResponse=null, HttpStatusCode statusCode= HttpStatusCode.OK)
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK)
+            
+
+            EpironApiResponse res = new EpironApiResponse(obj);
+            res.Errors = errorResponse;
+            res.StatusCode = statusCode;
+            //if (typeof(EpironApiResponse).IsAssignableFrom(typeof(T)))
+            //{
+            //    var o = obj as EpironApiResponse;
+            //    status = o.StatusCode;
+
+
+            //}
+
+            var resp = new HttpResponseMessage(res.StatusCode)
             {
-                Content = new ObjectContent(typeof(T), obj, GlobalConfiguration.Configuration.Formatters.JsonFormatter)
+                Content = new ObjectContent(typeof(EpironApiResponse), res, GlobalConfiguration.Configuration.Formatters.JsonFormatter)
+
+
             };
             return resp;
         }
@@ -72,9 +96,13 @@ namespace EpironAPI
     public class ApiOkResponse : ApiResponse
     {
         public object Result { get; }
+        public Error Errors { get; set; }
+        public ApiOkResponse(object result) : base((int)HttpStatusCode.OK)
+        {
+            Result = result;
+        }
 
-        public ApiOkResponse(object result)
-            : base(200)
+        public ApiOkResponse(object result, HttpStatusCode statusCode) : base((int)statusCode)
         {
             Result = result;
         }
@@ -122,5 +150,21 @@ namespace EpironAPI
             }
         }
 
+
+
+    }
+
+
+    public class EpironApiResponse
+    {
+        public EpironApiResponse(object result)
+        {
+            Result = result;
+        }
+
+        
+        public HttpStatusCode StatusCode { get; set; }
+        public Error Errors { get; set; }
+        public  Object Result { get; set; }
     }
 }

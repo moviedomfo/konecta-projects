@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 
-namespace EpironAPI.BE
+namespace EpironAPI.Model
 {
-    public class LoginResponseBE 
+    public class UserAutenticacionRes 
     {
+        public UserAutenticacionRes()
+        {
+
+        }
+        //public UserAutenticacionRes(HttpStatusCode statusCode ) :base (statusCode)
+        //{
+           
+        //}
+
         public Guid Token { get; set; }
         public int WsUserId { get; set; }
         public Guid UserGuid { get; set; }

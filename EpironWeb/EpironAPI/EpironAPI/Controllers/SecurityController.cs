@@ -1,5 +1,6 @@
 ﻿using EpironAPI.BE;
 using EpironAPI.classes;
+using EpironAPI.Model;
 using EpironAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -42,9 +43,9 @@ namespace EpironAPI.Controllers
         [System.Web.Http.HttpPost]
         public HttpResponseMessage UserAutenticacion(UserAutenticacionReq req)
         {
-            Error errorResponse;
-            LoginResponseBE loginResponseBE = new LoginResponseBE();
-
+            Error errorResponse=null;
+            UserAutenticacionRes loginResponseBE = new UserAutenticacionRes();
+            
             var jsonReq = Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
             int reintentos;
             try
@@ -54,7 +55,8 @@ namespace EpironAPI.Controllers
                 {
                     //Error
                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
-                    return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(errorResponse));
+
+                    return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
 
                 }
 
@@ -100,7 +102,7 @@ namespace EpironAPI.Controllers
                                         int eventIDUserOk = Convert.ToInt32(dtEvent.EventId); //<---obtengo el id para el evento USER-OK
                                         //a la fecha y hora actual se le suman los segundos definidos para el evento req.Event_Tag
                                         DateTime auditTrailLoginEndDate = DateTime.Now.AddSeconds(Convert.ToInt32(dtEvent.EventDurationTime));
-                                        bool mustChangePassword;
+                                        //bool mustChangePassword;
                                         //En caso de que no sea autenticacion de AD
                                         if (req.DomainGUID == Guid.Empty)
                                         {
@@ -205,6 +207,7 @@ namespace EpironAPI.Controllers
                                                     //row = dtCampos.NewRow();
                                                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(42);
                                                     errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                    //
                                                     //row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                     //row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                     //row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -224,6 +227,7 @@ namespace EpironAPI.Controllers
                                                 ///row = dtCampos.NewRow();
                                                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(7);
                                                 errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                
                                                 ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                 ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                 ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -322,6 +326,7 @@ namespace EpironAPI.Controllers
                                                             //Error 8
                                                             errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(8);
                                                             errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                          
                                                             ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                             ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                             ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -341,6 +346,7 @@ namespace EpironAPI.Controllers
                                                         ////row = dtCampos.NewRow();
                                                         errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(24);
                                                         errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                   
                                                         ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                         ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                         ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -363,6 +369,7 @@ namespace EpironAPI.Controllers
                                                     ////row = dtCampos.NewRow();
                                                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(21);
                                                     errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                    
                                                     ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                     ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                     ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -383,6 +390,7 @@ namespace EpironAPI.Controllers
                                                 //El dominio de AD no existe
                                                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(23);
                                                 errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                                
                                                 ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                                 ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                                 ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -401,6 +409,7 @@ namespace EpironAPI.Controllers
                                     {
                                         //No se encuentran los datos del evento
                                         errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
+                                        
                                         ///dsSession.Tables.Add(dtError);
                                     }
                                 }
@@ -412,6 +421,7 @@ namespace EpironAPI.Controllers
 
                                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(41);
                                     errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                                    
                                     ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                     ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
                                     ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -434,7 +444,7 @@ namespace EpironAPI.Controllers
                                 //El usuario no es válido
                                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(6);
                                 errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
-
+                                
                                 ////drow["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
                                 ////drow["EventResponseText"] = dtError.Rows[0][1].ToString();
                                 ////drow["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
@@ -456,7 +466,7 @@ namespace EpironAPI.Controllers
                             //El sistema detecta que se alcanzó el tope de reintentos
                             errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(18);
                             errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
-
+                            
                             ////dsSession.Tables.Add(dtError);
                             ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
                             ////UpdateResponse(dtLog, XMLResponse);
@@ -466,27 +476,32 @@ namespace EpironAPI.Controllers
                         {
                             //No se encuentran los datos del evento
                             errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
+                            
                             ////dsSession.Tables.Add(dtError);
                         }
-
+                        
                     }
-                    //else //Error
-                    //{
-                    //    errorResponse = new Error();
-                    //    int codigoError = int.Parse(dtValido.Rows[0][0].ToString());
-                    //    //reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, dtValido);
-                    //}
+                  
                 }
                 else //Error
                 {
 
                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
-                    return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(errorResponse));
 
+                    
+                    return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
                 }
 
-
-                return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
+                if (errorResponse != null)
+                {
+                    return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+                }
+                else
+                {
+                    return apiHelper.fromObject<UserAutenticacionRes>(loginResponseBE, null, HttpStatusCode.OK);
+                    return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
+                }
+                
             }
             catch (Exception ex)
             {

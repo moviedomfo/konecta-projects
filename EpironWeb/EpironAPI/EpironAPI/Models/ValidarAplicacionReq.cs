@@ -23,8 +23,15 @@ namespace EpironAPI.Models
 
         public Guid AutTypeGUID { get; set; }
         public string UserName { get; set; }
+        /// <summary>
+        /// password
+        /// </summary>
         public string UserKey { get; set; }
         public Guid DomainGUID { get; set; }
+
+        /// <summary>
+        /// token
+        /// </summary>
         public Guid guidintercambio { get; set; }
     }
 }
