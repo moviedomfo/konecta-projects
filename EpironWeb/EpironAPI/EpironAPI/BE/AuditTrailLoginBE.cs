@@ -20,5 +20,8 @@ namespace EpironAPI.BE
         public string AuditTrailLoginIP { get; set; }
         public string AuditTrailLoginRequest { get; set; }
         public DateTime AuditTrailLoginEndDate { get; set; }
+
+
+        public int? EventResponseInternalCode { get; set; }
     }
 }

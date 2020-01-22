@@ -253,16 +253,26 @@ namespace EpironAPI.classes
             if (dtt.Rows.Count > 0)
             {
                 item = new AuditTrailLoginBE();
-                item.EventId = Convert.ToInt32(dtt.Rows[0]["EventId"].ToString());
-                item.AuditTrailLoginAppInstanceGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginAppInstanceGUID"].ToString());
-                item.AuditTrailLoginGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginGUID"].ToString());
-                item.EventName = dtt.Rows[0]["EventName"].ToString();
 
-                item.AuditTrailLoginIP = dtt.Rows[0]["AuditTrailLoginIP"].ToString();
-                item.AuditTrailLoginHost = dtt.Rows[0]["AuditTrailLoginHost"].ToString();
-                item.AuditTrailLoginEndDate = Convert.ToDateTime(dtt.Rows[0]["AuditTrailLoginEndDate"].ToString());
-                item.AuditTrailLoginRequest = dtt.Rows[0]["AuditTrailLoginRequest"].ToString();
-                item.AuditTrailLoginResponse = dtt.Rows[0]["AuditTrailLoginResponse"].ToString();
+                if (dtt.Rows[0]["EventResponseInternalCode"] == null){
+                    
+                    item.EventId = Convert.ToInt32(dtt.Rows[0]["EventId"].ToString());
+                    item.AuditTrailLoginAppInstanceGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginAppInstanceGUID"].ToString());
+                    item.AuditTrailLoginGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginGUID"].ToString());
+                    item.EventName = dtt.Rows[0]["EventName"].ToString();
+
+                    item.AuditTrailLoginIP = dtt.Rows[0]["AuditTrailLoginIP"].ToString();
+                    item.AuditTrailLoginHost = dtt.Rows[0]["AuditTrailLoginHost"].ToString();
+                    item.AuditTrailLoginEndDate = Convert.ToDateTime(dtt.Rows[0]["AuditTrailLoginEndDate"].ToString());
+                    item.AuditTrailLoginRequest = dtt.Rows[0]["AuditTrailLoginRequest"].ToString();
+                    item.AuditTrailLoginResponse = dtt.Rows[0]["AuditTrailLoginResponse"].ToString();
+                }
+                else
+                {
+                    item.EventResponseInternalCode= Convert.ToInt32(dtt.Rows[0]["EventResponseInternalCode"].ToString());
+                }
+
+                
             }
             return item;
         }

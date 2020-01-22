@@ -72,7 +72,7 @@ namespace EpironAPI.Controllers
                     var dtValido = AccesoDatos.AuditTrailLogin_s_ByAuditTrailLoginGUID_Valid(req.AppInstanceGUID, req.guidintercambio);
                     reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, null);
                     //si el dtvalido tiene mas de una columna es valido, si tiene solo una columna significa que me devuelve un codigo de error
-                    if (dtValido!=null)//No hay error
+                    if (!dtValido.EventResponseInternalCode.HasValue)//No hay error
                     {
 
                         if ((reintentos != 999) && (reintentos != 22))
@@ -499,7 +499,7 @@ namespace EpironAPI.Controllers
                 else
                 {
                     return apiHelper.fromObject<UserAutenticacionRes>(loginResponseBE, null, HttpStatusCode.OK);
-                    return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
+                    //return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
                 }
                 
             }
