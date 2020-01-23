@@ -214,17 +214,17 @@ namespace EpironAPI.classes
         /// <returns>
         /// Devuelve todos los datos de la respuesta a evento, realizando la busqueda por el codigo interno 
         /// </returns>
-        public static Error EventResponse_s_ByInternalCode(int Par_EventResponseInternalCode)
+        public static Error EventResponse_s_ByInternalCode(int eventResponseInternalCode)
         {
             Error errorResponse = new Error();
             SqlCommand comando = MetaDatos.CrearComandoProc("Security.EventResponse_s_ByInternalCode");
-            comando.Parameters.AddWithValue("@EventResponseInternalCode", Par_EventResponseInternalCode);
+            comando.Parameters.AddWithValue("@EventResponseInternalCode", eventResponseInternalCode);
 
             var dtError = MetaDatos.EjecutarComandoSelect(comando);
 
-            errorResponse.EventResponseId = Convert.ToInt32(dtError.Rows[0][0].ToString());
-            errorResponse.EventResponseText = dtError.Rows[0][1].ToString();
-            errorResponse.EventResponseInternalCode = Convert.ToInt32(dtError.Rows[0][2].ToString());
+            errorResponse.EventResponseId = Convert.ToInt32(dtError.Rows[0]["EventResponseId"].ToString());
+            errorResponse.EventResponseText = dtError.Rows[0]["EventResponseText"].ToString();
+            errorResponse.EventResponseInternalCode = Convert.ToInt32(dtError.Rows[0]["EventResponseInternalCode"].ToString());
             errorResponse.Guid = Guid.Empty;
 
             return errorResponse;

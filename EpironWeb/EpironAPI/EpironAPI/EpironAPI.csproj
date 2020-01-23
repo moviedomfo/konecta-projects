@@ -48,12 +48,30 @@
     <Reference Include="Fwk.Bases">
       <HintPath>..\libs\Fwk.Bases.dll</HintPath>
     </Reference>
+    <Reference Include="Fwk.Security">
+      <HintPath>..\libs\Fwk.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Fwk.Security.Identity">
+      <HintPath>..\libs\Fwk.Security.Identity.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.6.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.6.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.6.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Cors, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Cors.4.1.0\lib\net45\Microsoft.Owin.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -63,6 +81,10 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.6.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -148,31 +170,40 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="BE\AuditTrailLoginBE.cs" />
-    <Compile Include="BE\AuthenticationTypeApplicationInstanceUser.cs" />
-    <Compile Include="BE\AuthenticationTypeBE.cs" />
-    <Compile Include="BE\DomainBE.cs" />
-    <Compile Include="BE\EventBE.cs" />
+    <Compile Include="classes\BE\AuditTrailLoginBE.cs" />
+    <Compile Include="classes\BE\AuthenticationTypeApplicationInstanceUser.cs" />
+    <Compile Include="classes\BE\AuthenticationTypeBE.cs" />
+    <Compile Include="classes\BE\DomainBE.cs" />
+    <Compile Include="classes\BE\EventBE.cs" />
+    <Compile Include="classes\jwt\CustomJwtFormat.cs" />
+    <Compile Include="classes\jwt\TokenGenerator.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\DispController.cs" />
+    <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Models\dipatcherModels.cs" />
     <Compile Include="Models\LoginResponseBE.cs" />
-    <Compile Include="BE\TransaccionSessionBE.cs" />
-    <Compile Include="BE\UserIdBE.cs" />
-    <Compile Include="classes\AccesoDatos.cs" />
+    <Compile Include="classes\BE\TransaccionSessionBE.cs" />
+    <Compile Include="classes\BE\UserIdBE.cs" />
+    <Compile Include="classes\dac\AccesoDatos.cs" />
     <Compile Include="classes\ActiveDirectory.cs" />
     <Compile Include="classes\apiHelper.cs" />
-    <Compile Include="classes\AuditTrailSessionsBE.cs" />
+    <Compile Include="classes\BE\AuditTrailSessionsBE.cs" />
     <Compile Include="classes\Encriptador.cs" />
-    <Compile Include="classes\MetaDatos.cs" />
+    <Compile Include="classes\dac\MetaDatos.cs" />
     <Compile Include="classes\validator.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\OauthRequets.cs" />
     <Compile Include="Models\ValidarAplicacionReq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="docs\packageToInstall.txt" />
     <Content Include="Global.asax" />
+    <Content Include="docs\Readme.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -186,6 +217,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Content Include="Models\whiteListSVC.json" />
+    <Content Include="docs\requetsSample.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>

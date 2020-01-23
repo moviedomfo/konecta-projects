@@ -7,6 +7,8 @@ namespace EpironAPI.BE
 {
     public class EventBE
     {
+
+        
         public int EventId { get; set; }
         public Guid EventGUID { get; set; }
         public string EventName { get; set; }
@@ -17,6 +19,13 @@ namespace EpironAPI.BE
 
         public int EventRetriesQuantity { get; set; }
         public string EventTag { get; set; }
-  
+
+
+      
+
+        public DateTime auditTrailLoginEndDate 
+        {
+            get => DateTime.Now.AddSeconds(this.EventDurationTime);
+        }
     }
 }

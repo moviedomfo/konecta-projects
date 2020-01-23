@@ -48,17 +48,18 @@ namespace EpironAPI.Controllers
             
             var jsonReq = Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
             int reintentos;
+            ///Guid guidSession = Guid.NewGuid();
+            if (req.AppInstanceGUID == Guid.Empty | req.LoginHost == string.Empty | req.LoginIP == string.Empty | req.guidintercambio == Guid.Empty | req.AutTypeGUID == Guid.Empty | req.UserName == string.Empty | req.UserKey == string.Empty)
+            {
+                //Error
+                errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
+
+                return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+
+            }
             try
             {
-                Guid guidSession = Guid.NewGuid();
-                if (req.AppInstanceGUID == Guid.Empty | req.LoginHost == string.Empty | req.LoginIP == string.Empty | req.guidintercambio == Guid.Empty | req.AutTypeGUID == Guid.Empty | req.UserName == string.Empty | req.UserKey == string.Empty)
-                {
-                    //Error
-                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
-
-                    return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
-
-                }
+               
 
                 var dtTag = AccesoDatos.Event_s_ByTag(req.Event_Tag);
                 int eventIDUserAutenticacion = dtTag.EventId; //<--- EventId para USER-AUTENTIC
@@ -99,9 +100,9 @@ namespace EpironAPI.Controllers
                                     if (dtEvent != null)
                                     {
 
-                                        int eventIDUserOk = Convert.ToInt32(dtEvent.EventId); //<---obtengo el id para el evento USER-OK
+                                        int eventIDUserOk = dtEvent.EventId; //<---obtengo el id para el evento USER-OK
                                         //a la fecha y hora actual se le suman los segundos definidos para el evento req.Event_Tag
-                                        DateTime auditTrailLoginEndDate = DateTime.Now.AddSeconds(Convert.ToInt32(dtEvent.EventDurationTime));
+                                        ///DateTime auditTrailLoginEndDate = DateTime.Now.AddSeconds(dtEvent.EventDurationTime);
                                         //bool mustChangePassword;
                                         //En caso de que no sea autenticacion de AD
                                         if (req.DomainGUID == Guid.Empty)
@@ -131,7 +132,7 @@ namespace EpironAPI.Controllers
                                                         //Guid GuidIntercambio = (Guid)dsLogDevolucion.Tables[0].Rows[0][0];
 
                                                         //Transacción!!
-                                                        var dtSession = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, 0, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, eventIDUserOk, auditTrailLoginEndDateUserAuthentic);
+                                                        var dtSession = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, dtType.AuthenticationTypeId, string.Empty, dtEvent.auditTrailLoginEndDate, 0, req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, jsonReq, eventIDUserOk, auditTrailLoginEndDateUserAuthentic);
                                                         
                                                         ////XMLResponse = ResponseUserAuthenticXML(dtInstanceUser.AuthenticationTypeUserMustChangePassword, dtSession.AuditTrailSessionGUID);
                                                         AccesoDatos.UpdateResponseSession(dtSession.AuditTrailSessionId, dtInstanceUser.AuthenticationTypeUserMustChangePassword, dtSession.AuditTrailSessionGUID);
@@ -275,7 +276,7 @@ namespace EpironAPI.Controllers
                                                             //Transacción!!}
                                                             ///DataTable dtTransaccion = new DataTable();
                                                             var dtTransaccion = AccesoDatos.TransaccionSession(eventIDUserAutenticacion, dtUser.UserId, 
-                                                                dtType.AuthenticationTypeId, string.Empty, auditTrailLoginEndDate, dtDominio.DomainId, 
+                                                                dtType.AuthenticationTypeId, string.Empty, dtEvent.auditTrailLoginEndDate, dtDominio.DomainId, 
                                                                 req.guidintercambio, req.AppInstanceGUID, req.LoginHost, req.LoginIP, string.Empty, 
                                                                 jsonReq, eventIDUserOk, auditTrailLoginEndDateUserAuthentic);
                                                             ///guidSession = dtTransaccion.GUID;
@@ -481,14 +482,18 @@ namespace EpironAPI.Controllers
                         }
                         
                     }
+                    else
+                    {
+                        errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(dtValido.EventResponseInternalCode.Value);
+                        return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+                    }
+
                   
                 }
                 else //Error
                 {
 
                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
-
-                    
                     return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
                 }
 

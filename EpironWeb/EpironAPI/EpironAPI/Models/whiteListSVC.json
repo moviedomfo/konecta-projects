@@ -1,0 +1,12 @@
+{
+  "whiteList":
+  [
+    { "serviceName": "AuthenticateUserService" },
+    { "serviceName": "SearchParametroByParamsService" },
+    { "serviceName": "GetHealthInstitutionByIdService" },
+    { "serviceName": "RetriveHealthInstitutionService" },
+    { "serviceName": "other_here" }
+  ]
+
+}
+
