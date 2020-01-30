@@ -39,9 +39,9 @@ namespace EpironAPI.Controllers
         }
 
         [AllowAnonymous]
-        [Route("userAutenticacion")]
+        [Route("authenticate")]
         [System.Web.Http.HttpPost]
-        public HttpResponseMessage UserAutenticacion(UserAutenticacionReq req)
+        public HttpResponseMessage authenticate(UserAutenticacionReq req)
         {
             Error errorResponse=null;
             UserAutenticacionRes loginResponseBE = new UserAutenticacionRes();
@@ -137,6 +137,8 @@ namespace EpironAPI.Controllers
                                                         ////XMLResponse = ResponseUserAuthenticXML(dtInstanceUser.AuthenticationTypeUserMustChangePassword, dtSession.AuditTrailSessionGUID);
                                                         AccesoDatos.UpdateResponseSession(dtSession.AuditTrailSessionId, dtInstanceUser.AuthenticationTypeUserMustChangePassword, dtSession.AuditTrailSessionGUID);
                                                         ///dtSession.Columns.Remove("AuditTrailLoginId");
+
+                                                        loginResponseBE.WsUserId = dtUser.UserId;
 
                                                         ///dtSession.Columns.Add("UserGuid");
                                                         loginResponseBE.UserGuid = dtInstanceUser.UserGUID;

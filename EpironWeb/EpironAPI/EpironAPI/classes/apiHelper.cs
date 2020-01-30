@@ -29,22 +29,30 @@ namespace EpironAPI
 
         public static HttpResponseMessage fromEx(Exception ex, HttpStatusCode code = HttpStatusCode.InternalServerError)
         {
-            //if (ex.InnerException.InnerException != null)
-            //    ex = ex.InnerException.InnerException;
+           
 
-            //if (ex == null && ex.InnerException != null)
-            //    ex = ex.InnerException;
-
-
-            var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, dispatcherErrorHandlerGetStackTrace);
-            var resp = new HttpResponseMessage(code)
+            if (ex.InnerException != null)
             {
-                Content = new StringContent(msg),
+                if (ex.InnerException.InnerException != null)
+                    return get_HttpResponseMessage(ex.InnerException.InnerException);
+                else
+                    return get_HttpResponseMessage(ex.InnerException);
+            }
+            return get_HttpResponseMessage(ex);
+           
+        }
+        static HttpResponseMessage get_HttpResponseMessage(Exception ex)
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            {
+                Content = new StringContent(ex.Message),
                 ReasonPhrase = "Error"
             };
 
             return resp;
         }
+
+
         public static HttpResponseMessage fromErrorString(string message, HttpStatusCode status)
         {
             EpironApiResponse res = new EpironApiResponse(null);
@@ -74,19 +82,10 @@ namespace EpironAPI
             EpironApiResponse res = new EpironApiResponse(obj);
             res.Errors = errorResponse;
             res.StatusCode = statusCode;
-            //if (typeof(EpironApiResponse).IsAssignableFrom(typeof(T)))
-            //{
-            //    var o = obj as EpironApiResponse;
-            //    status = o.StatusCode;
-
-
-            //}
-
+         
             var resp = new HttpResponseMessage(res.StatusCode)
             {
                 Content = new ObjectContent(typeof(EpironApiResponse), res, GlobalConfiguration.Configuration.Formatters.JsonFormatter)
-
-
             };
             return resp;
         }
@@ -98,13 +97,7 @@ namespace EpironAPI
             EpironApiResponse res = new EpironApiResponse(obj);
             res.Errors = errorResponse;
             res.StatusCode = statusCode;
-            //if (typeof(EpironApiResponse).IsAssignableFrom(typeof(T)))
-            //{
-            //    var o = obj as EpironApiResponse;
-            //    status = o.StatusCode;
-
-
-            //}
+         
 
             var resp = new HttpResponseMessage(res.StatusCode)
             {
