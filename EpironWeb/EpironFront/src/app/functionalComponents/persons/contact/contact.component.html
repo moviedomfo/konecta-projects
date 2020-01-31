@@ -1,0 +1,150 @@
+<fieldset ngModelGroup="providerContactForm">
+  <div class="row">
+    <div class="col-12">
+      <div class="card p-0 m-0">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-3">
+              <div class="input-group p-0 m-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-phone-square" aria-hidden="true"></i></span>
+                </div>
+                <input type="email" name="txtTelefono1" class="form-control" placeholder="telefono 1"
+                  [(ngModel)]="currentPerson.phone1">
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="input-group  p-0 m-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+                </div>
+                <input type="email" name="txtTelefono1Label" class="form-control" placeholder="Etiqueta "
+                  [(ngModel)]="currentPerson.phone1_label">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <div class="input-group  p-0 m-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-phone-square" aria-hidden="true"></i></span>
+                </div>
+                <input type="email" name="txtTelefono2" class="form-control" placeholder="telefono 2"
+                  [(ngModel)]="currentPerson.phone2">
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="input-group  p-0 m-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+                </div>
+                <input type="email" name="txtTelefono2Label" class="form-control" placeholder="Etiqueta "
+                  [(ngModel)]="currentPerson.phone2_label">
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="input-group col-md-6 p-0 m-1">
+            <div class="input-group-prepend">
+              <span class="input-group-text">@</span>
+            </div>
+            <input type="email" name="txtEmail" class="form-control" placeholder="email"
+              [(ngModel)]="currentPerson.email">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div><!-- Fin row -->
+
+  <div class="row">
+    <!-- row grilla de direc ciones -->
+    <div class="col-md-12 col-xs-12 no-padding no-margin">
+      <div class="card">
+        <!-- <div class="box-header">
+        <h3 class="card-title">Seleccione una direccion </h3>
+      </div> -->
+        <div class="card-body">
+          <div class="form-group ">
+            <app-address-list #appPersonAddressGrid [currentPerson]="currentPerson"
+              (onGridAddressDoubleClick)="onGridAddressDoubleClick($event)"
+              (onGridAddressClick)="onGridAddressClick($event)" (onAddressCreated)="onAddressCreated($event)">
+            </app-address-list>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- Fin row grilla de direcciones-->
+
+
+  <div class="row" *ngIf="currentAddress.street">
+
+    <div class="col-ld-4 col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-body table-responsive no-padding">
+            <table class="table table-bordered">
+
+              <tbody>
+                <tr>
+                  <th class="text-black-50" style="width: 80px"><b>Calle</b> </th>
+                  <th class="text text-info ">{{currentAddress.street}} </th>
+
+
+                </tr>
+                <tr>
+                  <th class="text-bold text-black-50 " style="width: 80px">Nro</th>
+                  <th class="text-info ">{{currentAddress.streetNumber}} </th>
+                </tr>
+                <tr>
+                  <th class="text-bold text-black-50" style="width: 80px">Piso</th>
+                  <th class="text-info ">{{currentAddress.floor}} </th>
+                </tr>
+              </tbody>
+            </table>
+          </div><!-- /.card-body -->
+        </div>
+
+
+      </div>
+      <!-- /.card -->
+
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+
+        <div class="card-body">
+          <table *ngIf="currentAddress.street != ''" class="table table-dark">
+
+            <tr>
+              <th class="text-bold text-black-50">Provincia</th>
+              <th class="text-info ">{{currentAddress.province}} </th>
+            </tr>
+            <tr>
+
+              <th class="text-bold text-black-50">Localidad</th>
+              <th class="text-info ">{{currentAddress.city}} </th>
+            </tr>
+            <tr>
+
+              <th class="text-bold text-black-50">CP</th>
+              <th class="text-info ">{{currentAddress.zipCode}} </th>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+
+
+  </div>
+
+</fieldset>

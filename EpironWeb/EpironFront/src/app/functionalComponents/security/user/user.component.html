@@ -1,0 +1,142 @@
+<!-- <form [formGroup]="userForm" (ngSubmit)="onSubmit()" > -->
+
+<form #userForm="ngForm"  (ngSubmit)="onSubmit(userForm)" novalidate>
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-0">
+      <div class="col-sm-4">
+        <h2> {{mainComponentTitle}}</h2>
+      </div>
+      <div class="col-sm-4">
+        <ol class="breadcrumb float-sm-right">
+          <button id="btnAcept" type="submit" class="btn btn-primary fa-pull-right"     >
+            <i class="fas fa-save pr-2" aria-hidden="true"></i> {{btnText}}</button>
+        </ol>
+        
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+
+</section>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <app-alert-block #alertOnSumbmit></app-alert-block>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-12">
+  
+
+          <app-error-box-container [globalError]="globalError"></app-error-box-container>
+
+          <!-- Tab headers -->
+          <ul class="nav nav-tabs " role="tablist">
+
+
+            <li class="nav-item">
+              <a  class="nav-link active" role="tab" data-toggle="tab" id="session-tab" href="#session">Inicio de
+                sesión</a>
+            </li>
+
+            <li class="nav-item">
+              <a  class="nav-link " role="tab" data-toggle="tab" id="person-tab" href="#person">Datos personales </a>
+            </li>
+       
+            <li class="nav-item">
+              <a class="nav-link" role="tab" data-toggle="tab" id="profJson-tab" href="#profJson">json </a>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+
+             <!-- Inicio de sesión  -->
+            <div  role="tabpanel" class="tab-pane fade  show active" id="session">
+
+              <app-session-setting #sessionSetting
+               [currentUser]="currentUser"
+               (OnComponentError)="OnComponentError_SessionSetting($event)"              
+               >
+              </app-session-setting> 
+              
+
+            </div>
+              <!-- Datos personales -->
+            <div role="tabpanel" class="tab-pane fade" id="person">
+
+                <app-person-card #personCardForm
+                [currentPerson]="currentUser.person"
+                  [motivoConsulta]="motivoConsulta"
+                  (OnComponentError)="OnComponentError_personCard($event)"
+                  (OnPersonChange)="OnPersonChange($event)">
+                  
+                </app-person-card>
+
+            </div> 
+            <!-- profJson -->
+            <div role="tabpanel" class="tab-pane fade" id="profJson" aria-labelledby="profJson-tab">
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    Current person
+                  </h3>
+                </div>
+
+                <div class="card-body">
+                  <div>
+                    <strong>{{currentUser | json}}</strong>
+
+                    <p>sessionSettingsForm_valid {{sessionSettingsForm_valid}}</p>
+                    <p>personCardForm_valid {{personCardForm_valid}}</p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        
+      </div>
+
+    </div>
+
+
+    <!-- show resourse sheduling modal dialog -->
+    <div class="modal fade" id="resouceShedulingModal" tabindex="-1" role="dialog"
+      aria-labelledby="resouceShedulingModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="resouceShedulingModalLabel">Plan de turnos</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+          </div>
+          <div class="modal-body">
+
+            <!-- <app-resource-scheduling-manage #resourceSchedulingManageComponent1 
+                  [currentResourceScheduling]="currentResourceScheduling"
+                  [currentResourceSchedulingList]="currentResourceSchedulingList" [isEditMode]="isEditMode_resource_scheduling" (OnResourceShedulingCreated)="OnResourceShedulingCreated($event)"
+                  (OnComponentError)="OnComponentError">
+                </app-resource-scheduling-manage> -->
+          </div>
+          <div class="modal-footer">
+            <button #closeBtn type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary" (click)="resource_scheduling_dialog_Acept()">Aceptar</button> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</form>

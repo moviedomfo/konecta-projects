@@ -1,0 +1,74 @@
+<!-- <form class="form-inline"> -->
+<div class="row">
+    <div class="form-group col-12">
+        <!-- <label for="Street">Calle </label> -->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                
+                
+            </div>
+            <input type="text" class="form-control" name="txtStreet" placeholder="calle"
+                [(ngModel)]="currentAddress.street">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-md-6 col-lg-6 col-xs-12 col-sm-12">
+        <!-- <label for="StreetNumber">Nro </label> -->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                
+                
+            </div>
+            <input type="number" class="form-control" name="txtStreetNumber" placeholder="nro"
+                [(ngModel)]="currentAddress.streetNumber">
+        </div>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-6 col-xs-12 col-sm-12">
+        <div class="input-group">
+            <input type="text" class="form-control" name="txtFloor" placeholder="piso"
+                [(ngModel)]="currentAddress.floor">
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="form-group col-md-6 col-lg-6 col-xs-12 col-sm-12">
+        <label class="text-primary">Provincia
+            <span>*</span>
+        </label>
+        <!-- <div class="input-group">
+                    <i class="fa fa-address-card-o"></i>
+                    <i class="fa fa-user"></i>
+                </div> -->
+        <select name="cmbProv" class="form-control" #cmbProv [(ngModel)]="selectedProvince"
+            (ngModelChange)="cmbProv_onSelect($event)">
+            <option *ngFor="let item of provinceList" [ngValue]="item">{{item.nombre}}</option>
+        </select>
+
+    </div>
+
+
+    <div class="form-group col-md-4 col-lg-4 col-xs-12 col-sm-12">
+        <label class="text-primary">Localidad
+            <span>*</span>
+        </label>
+
+        <select name="cmbCity" class="form-control" #cmbCity [(ngModel)]="selectedCity">
+            <option *ngFor="let item of cityList" [ngValue]="item">{{item.nombre}}</option>
+        </select>
+
+    </div>
+
+
+
+    <div class="form-group col-md-4 col-lg-4 col-xs-12 col-sm-12">
+        <label class="text-primary">CP
+        </label>
+        
+        <input type="text" class="form-control" [(ngModel)]="currentAddress.zipCode">
+
+    </div>
+
+</div>

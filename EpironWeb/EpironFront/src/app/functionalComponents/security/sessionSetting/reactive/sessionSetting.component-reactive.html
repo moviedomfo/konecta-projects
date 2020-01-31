@@ -1,0 +1,121 @@
+<ng-container [formGroup]="sessionSettingsForm">
+
+  <div class="row">
+    <div class="col-sm-6 col-xs-4">
+      <br>
+      <div class="form-group">
+        <div class="input-group">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-user-circle" aria-hidden="true"></i></span>
+          </div>
+          <input type='text' formControlName='username' class="form-control"
+            [ngClass]="{ 'is-invalid': f.userName.errors && (f.submitted || f.userName.touched)  }" autocomplete="new-username" minlength="4">
+          <div *ngIf="f.userName.errors && (submitted || f.userName.touched)" class="invalid-feedback">
+            <div *ngIf="f.userName.errors.required">Nombre de usuario es requerido</div>
+            <div *ngIf="f.userName.errors.minlength">Nombre de usuario requiere mas de 4 caracteres</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-4">
+      <div class="form-group2">
+        <!-- <pre *ngIf="username.errors">{{ username.errors | json }}</pre> -->
+        <app-alert-block #alertBlock_securityCard></app-alert-block>
+      </div>
+      <br>
+      <button class="btn btn-default " type="button" (click)='btnCheckUserName_Click()'><i
+          class="fas fa-user-check"></i> Ver disponibilidad </button>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Login info </h3>
+    </div>
+    <div class="card-body">
+
+      <div class="row">
+
+        <div class="col-sm-6">
+
+          <div class="form-group">
+            <label>Password</label>
+            <input type='password' formControlName="password" class="form-control" autocomplete="new-password"
+              [ngClass]="{ 'is-invalid': f.submitted && f.password.errors }" minlength="6">
+            <!-- <small *ngIf="submitted && f.password.errors"  [hidden]='password.valid || (password.pristine )'>
+            Password is required
+          </small> -->
+
+            <div *ngIf="f.password.errors && (f.submitted || f.password.touched)" class="invalid-feedback">
+
+              <div *ngIf="f.password.errors.required">Password is required</div>
+              <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <label>Confirme password</label>
+            <!--<input type='password' name='confirmPasswordInput' class="form-control" #confirmPasswordInput="ngModel"
+            [(ngModel)]='confirmPassword' required validateEqual="password"> -->
+            <input type="password" formControlName="confirmPassword" class="form-control"
+              [ngClass]="{ 'is-invalid': f.submitted && f.confirmPassword.errors }" minlength="6" />
+            <div *ngIf="f.confirmPassword.errors && (f.submitted || f.confirmPassword.touched)" class="invalid-feedback">
+              <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
+              <div *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</div>
+            </div>
+     
+
+          </div>
+
+          <div class="form-group">
+            <label for="email">e-mail</label>
+            <input type="text" formControlName="email" class="form-control"
+              [ngClass]="{ 'is-invalid':f.email.errors && (f.submitted || f.email.touched)}">
+
+            <div *ngIf="f.email.errors && (f.submitted || f.email.touched)" class="invalid-feedback">
+              <div *ngIf="f.email.errors.required">Email is required</div>
+              <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-sm-6">
+          <br>
+          <br>
+          <button class="btn btn-danger" type="button" value="Submit" [disabled]='!f.valid '>Resetear password</button>
+        </div> -->
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
+
+
+<div class="row">
+
+  <div class="col-sm-6 col-sm-offset-1">
+    <div class="card ">
+      <div class="card-header">
+        <h3 class="card-title">Listado de roles </h3>
+      </div>
+      <div class="card-body">
+        <p class="card-text">Seleccione aqui los roles del usuario</p>
+        <div *ngFor="let role of allRoles" class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" type="checkbox" name="{{ role.RolName }} "
+              [(ngModel)]="role.isChecked" [value]="role.RolName"> {{ role.RolName }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</ng-container>

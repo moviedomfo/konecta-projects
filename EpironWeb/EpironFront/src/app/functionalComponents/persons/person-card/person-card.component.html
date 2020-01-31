@@ -1,0 +1,173 @@
+
+<fieldset  ngModelGroup="personCardForm">
+
+  <app-alert-block #alertBlock1></app-alert-block>
+  <div class="row">
+    <div class="col-6">
+
+      <button type="button" *ngIf="enableControls === true" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+             data-target="#findPersonModal"><i class="fas fa-search"></i> Buscar contacto existente</button>
+    
+    </div>
+  </div>
+
+  <div class="row">
+    
+    <div class="col-6"> 
+      <div class="card card-warning m-0">
+        <div  *ngIf="!currentPerson && currentPerson.personId !== '00000000-0000-0000-0000-000000000000'" class="card-header">
+          <h3 class="card-title">Asociacion a contacto existente </h3>
+        </div>
+       
+        <div class="card-body" >
+          <div class="form-group">
+            <div class="row p-0 m-0">
+
+              <div class="col-6 m-0">
+                
+                <img #img2 class="img-rounded img-thumbnail" Width='110' height='110' [src]="fullImagePath"
+                  alt="Foto" />
+                <div class="btn btn-default m-r-1" (click)="loadImg()">cargar foto</div>
+              </div>
+              <div class="col-6 m-0">
+              
+                  <label><span class="text text-danger">*</span> Nombre</label>
+                  <div class="input-group mb-3">
+        
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-user" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" class="form-control"  name ="name" #name="ngModel" [(ngModel)]='currentPerson.name' 
+                     [ngClass]="{ 'is-invalid': name.invalid && (submitted || name.touched) }" required/>
+                      <div *ngIf="name.invalid && (submitted || name.touched)" class="invalid-feedback">
+                        <div *ngIf="name.errors.required">El nombre es requerido</div>
+                      </div>
+                  </div>
+        
+        
+                  <label>Apellido  </label>
+        
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text"  name ="lastName"   #lastName="ngModel" [(ngModel)]="currentPerson.lastName" class="form-control"
+                        autocomplete="off" />
+                  
+                   
+                      <!-- <div *ngIf="f.lastName.invalid && (submitted || f.lastName.touched)" class="invalid-feedback">
+                        <div *ngIf="f.lastName.errors.required">lastname is required</div>
+                      </div> -->
+                    </div>
+                  
+                  </div>
+
+              </div>
+            </div>
+            <!-- 'unsafe:data:image/jpg;base64,' + -->
+            <!-- <img #img3  [src]="loadImage()" /> -->
+
+            <div class="form-group ">
+              <label class="radio-inline">
+                <input type="radio" class="" [checked]="currentPerson.sex===0" (click)="onSexChanged(0)" name="sex">Hombre
+              </label>
+  
+              <label class="radio-inline">
+                <input type="radio" [checked]="currentPerson.sex===1" (click)="onSexChanged(1)" name="sex">Mujer
+              </label>
+  
+            </div>
+          </div>     <!-- /.card 1 body -->
+        
+    
+        </div><!-- /.card 1-->
+   
+
+      </div>
+      <!-- /.col  1-->
+
+    <!-- /.col (left) -->
+    <div class="col-6">
+      <div class="card">
+    
+        <div class="card-body">
+
+
+          <label for="cmbTipoDocumento"><span class="text text-danger">*</span> Tipo documento
+            
+          </label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+
+              <span class="input-group-text"><i class="fa fa-address-card-o" aria-hidden="true"></i></span>
+            </div>
+
+            <select name="cmbTipoDocumento" class="form-control" #cmbTipoDocumento="ngModel"   [(ngModel)]="currentPerson.identityCardNumberType">
+               <option *ngFor="let item of tipoDocumentoList" [value]="item.paramId" >{{item.description}}</option> 
+            </select>
+          </div>
+
+
+          <label for="identityCardNumber"><span class="text text-danger">*</span> Nro Documento      </label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+
+              <span class="input-group-text"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+            </div>
+            <input type="text" name="identityCardNumber" #identityCardNumber ="ngModel"  [(ngModel)]="currentPerson.identityCardNumber" class="form-control" 
+              placeholder="Nro Documento" (blur)="txtBox_NroDocumento_onBlur()" 
+              [ngClass]="{ 'is-invalid': identityCardNumber.invalid && (submitted || identityCardNumber.touched)}" required   />
+            <div *ngIf="identityCardNumber.invalid && (submitted || identityCardNumber.touched)"  class="invalid-feedback" >
+              <div *ngIf="identityCardNumber.errors.required"> El apellido es requerido</div>
+            </div>
+          </div>
+
+          <label>
+            <span class="text text-danger">*</span> Fecha alta
+          </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+            </div>
+            <input type="date" class="form-control"   name="birthDate"   #birthDate="ngModel" [(ngModel)]="currentPerson.birthDate" />
+               <div *ngIf="birthDate.invalid && (submitted || birthDate.touched)"  class="invalid-feedback">
+                <div *ngIf="birthDate.errors.required"> Fecha Alta </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.col left-->
+
+  </div>
+  
+<!-- show resourse sheduling modal dialog -->
+<div class="modal fade" id="findPersonModal" tabindex="-1" role="dialog" aria-labelledby="findPersonModalLabel">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findPersongModalLabel">Busqueda de personas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <app-person-grid #appPersonGrid 
+            [motivoConsulta]="motivoConsulta"
+            (onPersonGridDoubleClick)="onPersonGridDoubleClick($event)">
+          </app-person-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button #closeBtn type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+        <!-- <button type="button" class="btn btn-primary" (click)="resource_scheduling_dialog_Acept()">Aceptar</button> -->
+
+      </div>
+    </div>
+  </div>
+</div>
+</fieldset>
+
+

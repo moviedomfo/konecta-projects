@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { pipe } from 'rxjs';
-import { AuthenticationService, providerService } from '../../../service';
-import { CurrentLogin, Provider_FullViewBE, AppConstants, UserTask, UserMessage, PersonBE } from '../../../model';
+import { AuthenticationService } from '../../../service';
+import { CurrentLogin,  AppConstants, UserTask, UserMessage, PersonBE } from '../../../model';
 import * as moment from 'moment';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { helperFunctions } from '../../../service/helperFunctions';
@@ -31,7 +31,7 @@ export class AppheaderComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthenticationService,
-    private profService: providerService,
+    
     private domSanitizer: DomSanitizer) {
 
 

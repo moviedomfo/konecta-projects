@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { pipe } from 'rxjs';
-import { AuthenticationService, providerService } from '../../../service';
-import { CurrentLogin, Provider_FullViewBE, AppConstants, PersonBE } from '../../../model';
+import { AuthenticationService } from '../../../service';
+import { CurrentLogin,  AppConstants, PersonBE } from '../../../model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { helperFunctions } from 'src/app/service/helperFunctions';
 

@@ -1,0 +1,68 @@
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+              
+              <h3>
+                Listado de usuarios del sistema
+                <small  *ngIf="stockCount > 0 && stockCount" class="text-muted">Encontrados <span class="badge badge-pill badge-info"> {{userCount}}</span></small>
+              </h3>
+            </div>
+            <div class="col-sm-4">
+            
+            </div>
+          </div>
+    </div><!-- /.container-fluid -->
+
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+           
+                
+        <div class="row">
+            <div class="col-12 ">
+              <div class="card">
+                
+                <div class="card-body">
+                  <div class="input-group-prepend">
+               
+          
+                    <span class="input-group-btn">
+                      <input type="text" name="txtBox_Query" class="form-control" placeholder="Nombre o marca"
+                        [(ngModel)]="txtQuery" #txtBox_Query (keyup.enter)="onKey_Enter()">
+                    </span>
+                    <button class="btn btn-default" type="button" (click)="retriveData()">
+                      <i class="fa fa-search"></i> </button>
+                  
+                      <span class="text text-black">  {{      currentUser.userName}}</span>
+                  </div>
+          
+                  <form class="form-inline">
+                   
+                    <app-error-box-container [globalError]="globalError"></app-error-box-container>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 ">
+              <div class="card">
+                <div class="card-body">
+          
+          
+                  <ag-grid-angular style="width: 850px; height: 515px;" class="ag-theme-balham" [rowData]="userList"
+                    [columnDefs]="columnDefs" (cellClicked)="onCellClicked($event)"
+                    (cellDoubleClicked)="onGridCellDoubleClick($event)" (rowDoubleClicked)="onGridRowDoubleClick($event)">
+                  </ag-grid-angular>
+          
+                </div>
+              </div>
+            </div>
+          </div>
+          
+   
+      </div>
+</section>

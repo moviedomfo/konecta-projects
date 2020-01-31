@@ -1,0 +1,112 @@
+<fieldset  ngModelGroup="sessionSettingsForm" [mustMatch]="['Password', 'confirmPassword']">
+
+  <div class="row">
+    <div class="col-sm-6 col-xs-4">
+      <br>
+      <div class="form-group">
+        <div class="input-group">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-user-circle" aria-hidden="true"></i></span>
+          </div>
+          <input type='text' name ="username" #username="ngModel"  [(ngModel)]='currentUser.userName' class="form-control"
+            [ngClass]="{ 'is-invalid': username.errors && (submitted || username.touched)  }"
+             autocomplete="new-username" minlength="4" [disabled]="currentUser.personId !== '00000000-0000-0000-0000-000000000000'">
+          <div *ngIf="username.errors && (submitted || username.touched)" class="invalid-feedback">
+            <div *ngIf="username.errors.required">Nombre de usuario es requerido</div>
+            <div *ngIf="username.errors.minlength">Nombre de usuario requiere mas de 4 caracteres</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-4">
+      <div class="form-group2">
+        <!-- <pre *ngIf="username.errors">{{ username.errors | json }}</pre> -->
+        <app-alert-block #alertBlock_securityCard></app-alert-block>
+      </div>
+      <br>
+      <button *ngIf ="currentUser.userId === '00000000-0000-0000-0000-000000000000'"  class="btn btn-default " type="button" (click)='btnCheckUserName_Click()'><i
+          class="fas fa-user-check"></i> Ver disponibilidad </button>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Login info </h3>
+    </div>
+    <div class="card-body">
+
+       <div class="row">
+
+        <div class="col-sm-6">
+
+          <div *ngIf ="currentUser.userId === '00000000-0000-0000-0000-000000000000'" class="form-group">
+            <label>Password</label>
+            <input type='password' name ="password"  #password="ngModel" [(ngModel)]="currentUser.password" class="form-control" autocomplete="new-password"
+              [ngClass]="{ 'is-invalid': password.errors && (submitted || password.touched) }" minlength="6" required>
+          
+            <div *ngIf="password.errors && (submitted || password.touched)" class="invalid-feedback">
+
+              <div *ngIf="password.errors.required">Password is required</div>
+              <div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>
+            </div>
+
+          </div> 
+       
+            <div *ngIf ="currentUser.userId === '00000000-0000-0000-0000-000000000000'" class="form-group">
+            <input type="password" name ="confirmPassword"  #confirmPassword="ngModel" [(ngModel)]="currentUser.confirmPassword" class="form-control" autocomplete="new-password"
+              [ngClass]="{ 'is-invalid': confirmPassword.errors && (submitted || confirmPassword.touched)}" minlength="6" required />
+            <div *ngIf="confirmPassword.errors && (submitted || confirmPassword.touched)" class="invalid-feedback">
+              <div *ngIf="confirmPassword.errors.required">Confirm Password is required</div>
+              <div *ngIf="confirmPassword.errors.mustMatch">Passwords must match</div>
+            </div>
+     
+
+          </div> 
+          <div class="form-group">
+            <label for="email">e-mail</label>
+            <input type="text" name ="email" #email="ngModel" [(ngModel)]="currentUser.email" class="form-control"
+              [ngClass]="{ 'is-invalid':email.errors && ( submitted|| email.touched)}" required email>
+
+            <div *ngIf="email.errors && (submitted || email.touched)" class="invalid-feedback">
+              <div *ngIf="email.errors.required">Email is required</div>
+              <div *ngIf="email.errors.email">Email must be a valid email address</div>
+            </div> 
+          </div>
+        </div> 
+
+       
+      </div> 
+
+    </div>
+
+
+
+
+  </div>
+
+
+
+<div class="row">
+
+  <div class="col-sm-6 col-sm-offset-1">
+    <div class="card ">
+      <div class="card-header">
+        <h3 class="card-title">Listado de roles </h3>
+      </div>
+      <div class="card-body">
+        <p class="card-text">Seleccione aqui los roles del usuario</p>
+        <div *ngFor="let role of allRoles" class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" type="checkbox" name="{{ role.RolName }} "
+              [(ngModel)]="role.isChecked" [value]="role.RolName"> {{ role.RolName }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</fieldset >

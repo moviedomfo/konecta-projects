@@ -1,0 +1,40 @@
+
+  <div class="row">
+    <div class="col-md-12 col-lg-12 col-xs-12">
+          <div class="form-inline">
+            <div class="form-group has-feedback">
+              <input name="txtBox_Query" type="text" class="form-control" placeholder="Nombre o apellido "
+                [(ngModel)]="txtQuery" #txtBox_Query (keyup.enter)="onKey_Enter($event)">
+
+              <button class="btn btn-default" type="button" (click)="retrivePatients()">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+
+            <div *ngIf="personCount > 0 && personCount" class="form-group mx-sm-3 mb-2">
+              Encontrados <span class="badge badge-pill badge-info"> {{personCount}}</span>
+            </div>
+            <app-error-box-container [globalError]="globalError"></app-error-box-container>
+
+
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-12 col-lg-12 col-xs-12">
+     
+          <ag-grid-angular style="width: 850px; height: 515px;" class="ag-theme-balham" 
+            [rowData]="personList"
+            [columnDefs]="columnDefs" 
+            (cellClicked)="onCellClicked($event)"
+            (cellDoubleClicked)="onGridCellDoubleClick($event)"
+            (rowDoubleClicked)="onGridRowDoubleClick($event)">
+          </ag-grid-angular>
+
+
+    </div>
+  </div>
+
+

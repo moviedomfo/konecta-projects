@@ -1,0 +1,41 @@
+
+<div class="alert-dismissible">
+  <ag-grid-angular #agGridAddress style="width: 850px; height: 200px;" class="ag-theme-balham" 
+  [rowData]="currentPerson.addressBEList"
+  [columnDefs]="columnDefs" 
+  [frameworkComponents]="frameworkComponents"
+  (cellClicked)="onCellClicked($event)" 
+  (cellDoubleClicked)="onGridCellDoubleClick($event)"
+  (rowDoubleClicked)="onGridRowDoubleClick($event)">
+</ag-grid-angular>
+</div>
+<!-- (click)='addressForm_dialog(false)' -->
+<button type="button" #btnShowAddressFormModal  class="btn btn-primary" data-toggle="modal" (click)="btnShowAddressFormModal_click()" data-target="#addressFormModal">
+    Agregar nueva dirección
+  </button>
+
+<!-- show resourse sheduling modal dialog -->
+<div class="modal fade"  id="addressFormModal" tabindex="-1" role="dialog" aria-labelledby="addressFormModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addressFormModalLabel">{{addressComponentFormTittle}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <div class="modal-body">
+
+        <app-addrees #addresComponent1 >          
+        </app-addrees> 
+      </div>
+      <div class="modal-footer">
+        <button #closeBtn type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="address_dialog_Acept()">Aceptar</button> 
+
+      </div>
+    </div>
+  </div>
+</div>

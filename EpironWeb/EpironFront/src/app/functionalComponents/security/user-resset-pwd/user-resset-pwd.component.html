@@ -1,0 +1,115 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-0">
+      <div class="col-sm-10">
+        <h3> Reseteo de contraseña de usario</h3>
+      </div>
+      <!-- <div class="col-sm-4">
+        <ol class="breadcrumb float-sm-right">
+          <button id="btnAcept" class="btn btn-primary fa-pull-right" (click)="onSubmit(true)">
+            <i class="fas fa-save pr-2" aria-hidden="true"></i> Resetear password</button>
+        </ol>
+
+      </div> -->
+    </div>
+  </div><!-- /.container-fluid -->
+
+</section>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <app-alert-block #alertOnSumbmit></app-alert-block>
+        <app-error-box-container [globalError]="globalError"></app-error-box-container>
+      </div>
+    </div>
+<div class="row">
+  <div class="col-4">
+
+    <div class="form-group">
+      <div class="input-group">
+
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-user-circle" aria-hidden="true"></i></span>
+        </div>
+        <input type='text' name="userName" [(ngModel)]='userToFind' class="form-control" autocomplete="new-username"
+          minlength="4">
+
+      </div>
+    </div>
+  </div>
+  <div class="col-4 ">
+    <button class="btn btn-default " type="button" (click)='btnCheckUserName_Click()'><i class="fas fa-user-check"></i>
+      Buscar usuario </button>
+  </div>
+  <div class="col-3 ">
+    <div class="text text-primary"> {{userSession.userName}}</div>
+
+  </div>
+</div>
+
+
+    <!-- <fieldset  ngModelGroup="sessionSettingsForm" [mustMatch]="['Password', 'confirmPassword']"> -->
+    <form *ngIf="enableChange === true" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" novalidate>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Login info  </h3> 
+        </div>
+        <div class="card-body">
+
+          <div class="row">
+
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                <label>Password</label>
+                <input type='password' name="password" #password="ngModel" [(ngModel)]="userSession.password"
+                  class="form-control" autocomplete="new-password"
+                  [ngClass]="{ 'is-invalid': userForm.submitted && userForm.password.errors }" minlength="6">
+
+
+                <!-- <div *ngIf="f.password.errors && (f.submitted || f.password.touched)" class="invalid-feedback">
+
+                  <div *ngIf="f.password.errors.required">Password is required</div>
+                  <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                </div> -->
+
+              </div>
+              <div class="form-group">
+                <label>Confirme password</label>
+                <!--<input type='password' name='confirmPasswordInput' class="form-control" #confirmPasswordInput="ngModel"
+                    [(ngModel)]='confirmPassword' required validateEqual="password"> -->
+                <input type="password" [(ngModel)]="userSession.confirmPassword" name="confirmPassword"
+                  #confirmPassword="ngModel" class="form-control"
+                  [ngClass]="{ 'is-invalid': userForm.submitted && confirmPassword.errors }" minlength="6" />
+                <!-- <div *ngIf="confirmPassword.errors && (f.submitted || confirmPassword.touched)"
+                  class="invalid-feedback">
+                  <div *ngIf="confirmPassword.errors.required">Confirm Password is required</div>
+                  <div *ngIf="confirmPassword.errors.mustMatch">Passwords must match</div>
+                </div> -->
+
+
+              </div>
+
+
+            </div>
+
+            <div class="col-sm-6">
+              <br>
+              <br>
+              <button class="btn btn-danger" type="button" value="Submit" (click)="btnResetPwd_Click()"
+                [disabled]='!userForm.valid '>Resetear password</button>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+      </div>
+
+    </form>
+  </div>
+</section>

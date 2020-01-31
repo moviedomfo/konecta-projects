@@ -1,0 +1,178 @@
+
+<ng-container [formGroup]="personCardForm">
+  <app-alert-block #alertBlock1></app-alert-block>
+  <div class="row">
+    <div class="col-6">
+
+      <button *ngIf="enableControls === true" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+             data-target="#findPersonModal"><i class="fas fa-search"></i> Buscar existente</button>
+    </div>
+  </div>
+
+  <div class="row">
+    
+    <div class="col-6">
+      <div class="card m-0">
+
+        <div class="card-body">
+          <div class="form-group">
+            <div class="row p-0 m-0">
+
+              <div class="col-6 m-0">
+                
+                <img #img2 class="img-rounded img-thumbnail" Width='110' height='110' [src]="fullImagePath"
+                  alt="Foto" />
+                <div class="btn btn-default m-r-1" (click)="loadImg()">cargar foto</div>
+              </div>
+              <div class="col-6 m-0">
+              
+                  <label>Nombre 
+                    <span>*</span>
+                  </label>
+                  <div class="input-group mb-3">
+        
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-user" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" class="form-control" formControlName ='name' 
+                     [ngClass]="{ 'is-invalid': f.name.invalid && (f.submitted || f.name.touched) }" />
+                      
+                  
+                      <div *ngIf="f.name.invalid && (f.submitted || f.name.touched)" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">El nombre es requerido</div>
+                      </div>
+                  </div>
+        
+        
+                  <label>Apellido <span>*</span> </label>
+        
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" formControlName="lastName" class="form-control"
+                        autocomplete="off" />
+                  
+                   
+                      <!-- <div *ngIf="f.lastName.invalid && (submitted || f.lastName.touched)" class="invalid-feedback">
+                        <div *ngIf="f.lastName.errors.required">lastname is required</div>
+                      </div> -->
+                    </div>
+                  
+                  </div>
+
+              </div>
+            </div>
+            <!-- 'unsafe:data:image/jpg;base64,' + -->
+            <!-- <img #img3  [src]="loadImage()" /> -->
+
+            <div class="form-group ">
+              <label class="radio-inline">
+                <input type="radio" class="" [checked]="currentPerson.sex===0" (click)="onSexChanged(0)" name="sex">Hombre
+              </label>
+  
+              <label class="radio-inline">
+                <input type="radio" [checked]="currentPerson.sex===1" (click)="onSexChanged(1)" name="sex">Mujer
+              </label>
+  
+            </div>
+          </div>     <!-- /.card 1 body -->
+        
+    
+        </div><!-- /.card 1-->
+   
+
+      </div>
+      <!-- /.col  1-->
+
+    <!-- /.col (left) -->
+    <div class="col-6">
+      <div class="card">
+    
+        <div class="card-body">
+
+
+          <label>Tipo documento
+            <span>*</span>
+          </label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+
+              <span class="input-group-text"><i class="fa fa-address-card-o" aria-hidden="true"></i></span>
+            </div>
+
+            <select name="cmbTipoDocumento" class="form-control" #cmbTipoDocumento formControlName="identityCardNumberType">
+               <option *ngFor="let item of tipoDocumentoList" [value]="item.paramId" >{{item.name}}</option> <!--[ngValue]="item.paramId" -->
+            </select>
+          </div>
+
+
+          <label>Nro Documento
+            <span>*</span>
+          </label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+
+              <span class="input-group-text"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+            </div>
+            <input type="text" formControlName="identityCardNumber" class="form-control" 
+              placeholder="Nro Documento" (blur)="txtBox_NroDocumento_onBlur()" 
+              [ngClass]="{ 'is-invalid': f.identityCardNumber.invalid && (f.submitted || f.identityCardNumber.touched)}"    />
+            <div *ngIf="f.identityCardNumber.invalid && (f.submitted || f.identityCardNumber.touched)"  class="invalid-feedback">
+              <div *ngIf="f.identityCardNumber.errors.required"> El apellido es requerido</div>
+            </div>
+          </div>
+
+          <label>Fecha nacimiento
+            <span>*</span>
+          </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+            </div>
+            <input type="date" class="form-control"
+               formControlName="birthDate" />
+
+               <div *ngIf="f.birthDate.invalid && (f.submitted || f.birthDate.touched)"  class="invalid-feedback">
+                <div *ngIf="f.identityCardNumber.errors.required"> El apellido es requerido</div>
+              </div>
+
+             
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.col left-->
+
+  </div>
+  
+</ng-container>
+<!-- /.container -->
+
+
+<!-- show resourse sheduling modal dialog -->
+<div class="modal fade" id="findPersonModal" tabindex="-1" role="dialog" aria-labelledby="findPersonModalLabel">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="findPersongModalLabel">Busqueda de personas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <app-person-grid #appPersonGrid 
+            [motivoConsulta]="motivoConsulta"
+            (onPersonGridDoubleClick)="onPersonGridDoubleClick($event)">
+          </app-person-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button #closeBtn type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+        <!-- <button type="button" class="btn btn-primary" (click)="resource_scheduling_dialog_Acept()">Aceptar</button> -->
+
+      </div>
+    </div>
+  </div>
