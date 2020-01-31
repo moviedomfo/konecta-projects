@@ -61,7 +61,7 @@ ng g c functionalComponents\QuotationRequest\orderGrid
 
 
 
-# Celamdash3
+# Konecta
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
 

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "celamdash3": {
+    "Konecta": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/celamdash3",
+            "outputPath": "dist/Konecta",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -92,18 +92,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "celamdash3:build"
+            "browserTarget": "Konecta:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "celamdash3:build:production"
+              "browserTarget": "Konecta:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "celamdash3:build"
+            "browserTarget": "Konecta:build"
           }
         },
         "test": {
@@ -140,15 +140,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "celamdash3:serve"
+            "devServerTarget": "Konecta:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "celamdash3:serve:production"
+              "devServerTarget": "Konecta:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "celamdash3"
+  "defaultProject": "Konecta"
 }

@@ -252,7 +252,7 @@ export class CommonService {
     let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
     req.Culture = "ES-AR";
     req.SecurityProviderName = AppConstants.oaut_securityProviderName;
-    req.AppId = 'celam.dashboard';
+    req.AppId = 'Konecta.dashboard';
     req.ClientIp = this.ipinfo.ip;
     
     if (currentLogin.currentUser.userName) { 
