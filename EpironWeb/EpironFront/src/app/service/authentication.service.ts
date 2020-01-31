@@ -192,7 +192,7 @@ export class AuthenticationService {
       userName: userName,
       userKey: password,
       domainGUID: 'FDEB4B1F-229E-E311-9DD1-0022640637C2', //domain allus-ar,
-     
+      AutTypeGUID: '71C15455-D147-E311-A348-000C292448BD',
       guidintercambio :'75CFEFE4-5A79-E411-BD73-0022640637C2',
       UserKey : password,
 

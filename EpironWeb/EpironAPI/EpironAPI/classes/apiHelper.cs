@@ -56,9 +56,9 @@ namespace EpironAPI
         public static HttpResponseMessage fromErrorString(string message, HttpStatusCode status)
         {
             EpironApiResponse res = new EpironApiResponse(null);
-            res.Errors = new Error();
-            res.Errors.EventResponseText = message;
-            res.Errors.EventResponseInternalCode = -2000;
+            res.Error = new Error();
+            res.Error.EventResponseText = message;
+            res.Error.EventResponseInternalCode = -2000;
             var resp = new HttpResponseMessage(status)
             {
                 Content = new StringContent(message),
@@ -80,7 +80,7 @@ namespace EpironAPI
             
 
             EpironApiResponse res = new EpironApiResponse(obj);
-            res.Errors = errorResponse;
+            res.Error = errorResponse;
             res.StatusCode = statusCode;
          
             var resp = new HttpResponseMessage(res.StatusCode)
@@ -95,7 +95,7 @@ namespace EpironAPI
 
 
             EpironApiResponse res = new EpironApiResponse(obj);
-            res.Errors = errorResponse;
+            res.Error = errorResponse;
             res.StatusCode = statusCode;
          
 
@@ -183,7 +183,7 @@ namespace EpironAPI
 
         
         public HttpStatusCode StatusCode { get; set; }
-        public Error Errors { get; set; }
+        public Error Error { get; set; }
         public  Object Result { get; set; }
     }
 }

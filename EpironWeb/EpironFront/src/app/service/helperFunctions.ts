@@ -41,6 +41,12 @@ export class helperFunctions {
       return throwError(ex);
     }
 
+    if (httpError.error.Error) {
+      
+      return helperFunctions.handleEpironError(httpError.error.Error);
+      
+    }
+
     // The backend returned an unsuccessful response code.
     // The response body may contain clues as to what went wrong,
     if (httpError instanceof HttpErrorResponse) {

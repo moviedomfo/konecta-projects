@@ -353,6 +353,8 @@ export class CommonService {
         return throwError(ex);
       }
 
+     
+
       if (httpError.error) {
         ex.Type =  httpError.error.ExceptionType || httpError.error.exceptionType || httpError.error.ClassName;
         if(ex.Type){
