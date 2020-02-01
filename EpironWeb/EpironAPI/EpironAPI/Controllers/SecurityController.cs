@@ -586,5 +586,13 @@ namespace EpironAPI.Controllers
             var dtLog = AccesoDatos.AuditTrailLogin_i(auditTrailLoginParentGUID, auditTrailLoginAppInstanceGUID, dtEvent.EventId, auditTrailLoginEndDate, auditTrailLoginHost, auditTrailLoginIP, "", auditTrailLoginRequest);
             return dtLog.AuditTrailSessionGUID;
         }
+
+
+
+
+        #region fwk services
+
+
+        #endregion
     }
 }

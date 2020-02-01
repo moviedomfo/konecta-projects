@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SecurityUser, PersonBE, CurrentLogin, AuthenticationOAutResponse, CurrentLoginEpiron, UserAutenticacionRes } from '../../model/index'
-import { AuthenticationService, PersonsService } from './../../service/index';
+import { AuthenticationService, PersonsService, CommonService } from './../../service/index';
 import {  ServiceError,  } from '../../model/common.model';
 import { Observable, forkJoin } from 'rxjs';
 import { helperFunctions } from 'src/app/service/helperFunctions';
 import { Lexer } from '@angular/compiler';
+import { EpironSecurityService } from 'src/app/service/epiron.security.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
+    private epironSecurityService: EpironSecurityService,
     private personService: PersonsService) {
 
     // this.Serurity.storage_Domains$().subscribe((res: Domain[]) => {
@@ -54,6 +56,11 @@ export class LoginComponent implements OnInit {
     }
 
     //this.authenticationService.checkDomains();
+    this.epironSecurityService.vialidateAppRequest$().subscribe(res=>{
+     
+       console.log(JSON.stringify(res));
+       
+    })
   }
 
   authenticate() {

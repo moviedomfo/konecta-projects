@@ -18,7 +18,7 @@ export class ResourceSchedulingBE {
       this.TimeEnd = '18:30';
       this.TimeStart_timesp = TimeSpan.FromHHMM('08:30');
       this.TimeEnd_timesp = TimeSpan.FromHHMM('08:30');
-      this.HealthInstitutionId = AppConstants.DefaultHealthInstitutionId;
+      this.HealthInstitutionId = AppConstants.AppInstanceGUID;
       this.Generate_Attributes();
 
   }

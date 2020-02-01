@@ -1,0 +1,21 @@
+﻿{
+  "providers": [
+    {
+      "name": "epiron_sec_prov",
+      "description": "Proveedor de seguidad Epiron gral ",
+      "audienceId": "konecta_oAuth",
+      "issuer": "http://201.234.32.177:51000",
+      "audienceSecret": "qMCdFDQuF23RV1Y-1Gq9L3cF3VmuFwVbam4fMTdAfpo",
+      "securityModelContext": "epiron_sec"
+    },
+    {
+      "name": "sec_epiron_gestion",
+      "description": "Proveedor epiron dasboard web",
+      "audienceId": "konecta_oAuth",
+      "issuer": "http://201.234.32.177:51000",
+      "audienceSecret": "qMCdFDQuF23RV1Y-1Gq9L3cF3VmuFwVbam4fMTdAfpo",
+      "securityModelContext": "sec_epiron_getion"
+    }
+  ]
+
+}

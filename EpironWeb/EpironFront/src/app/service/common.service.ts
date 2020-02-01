@@ -236,7 +236,7 @@ export class CommonService {
     else { contextInfo.userName = 'moviedo'; }
 
     contextInfo.userId = '';
-    contextInfo.AppId = 'Health';
+    contextInfo.AppId = AppConstants.AppId;
     contextInfo.ProviderName = 'health';
     req.ContextInformation = contextInfo;
     req.BusinessData = bussinesData;

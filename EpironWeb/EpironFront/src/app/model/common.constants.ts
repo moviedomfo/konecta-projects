@@ -38,7 +38,7 @@ export  const AppConstants={
      //httpOptions:options,
      httpClientOption_form_urlencoded:{headers:header_httpClient_form_urlencoded},
      httpClientOption_contenttype_json:{headers:header_httpClient_contentTypeJson},
-     DefaultHealthInstitutionId:   'a92a227f-f39a-4ad5-b726-4a84963e5dd3',
+     AppId:   'Epiron',
      oaut_client_id: environment.oaut_client_id,
      oaut_client_secret:environment.oaut_client_secret, 
      oaut_securityProviderName:environment.oaut_securityProviderName,
