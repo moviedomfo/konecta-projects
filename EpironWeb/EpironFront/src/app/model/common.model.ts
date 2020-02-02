@@ -302,6 +302,7 @@ export class IAPIRequest  {
     UserId?: string;
     ClientIp?:string;
     Culture:string;
+    
     AppId:string;
 }
 

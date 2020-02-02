@@ -1,11 +1,11 @@
 
-import { IContextInformation, IRequest, IResponse, Result, ExecuteReq, HealthInstitutionBE } from '../model/common.model';
-import { AppConstants, contextInfo } from "../model/common.constants";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject, throwError, Observable } from 'rxjs';
+import {  Result } from '../model/common.model';
+import { AppConstants } from "../model/common.constants";
+import { HttpClient } from '@angular/common/http';
+import {  Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CommonService } from './common.service';
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ValidateAppResponse, ValidateAppRequest } from '../model/epiron/epiron.security.model';
 
 
@@ -15,8 +15,10 @@ export class EpironSecurityService {
   constructor(private http: HttpClient, private commonService: CommonService) {
   
   }
-  //retrivePatients
-  vialidateAppRequest$(): Observable<any> {
+
+
+  
+  public validateAppService$(): Observable<any> {
     
     
     var bussinesData = {

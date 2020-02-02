@@ -409,7 +409,10 @@ export class AuthenticationService {
   }
 
 
-  
+  /**
+   * 
+   * @param user 
+   */
   UpdateUserService$(user: SecurityUser) {
     var req: UpdateUserReq = new UpdateUserReq();
     req.update_userName = user.userName;

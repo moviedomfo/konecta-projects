@@ -189,29 +189,44 @@ export class CommonService {
     return REQ;
   }
 
-
-  generete_get_searchParams(serviceName, bussinesData): URLSearchParams {
+/**
+ * rellena un objetto  ExecuteReq que recive el método POST / Execuete del fwk
+ * @param serviceName : Nombre del servicio de capa SVC
+ * @param bussinesData : Objeto de negocio del SVC(REQ) donde bussinesData => IReq.BussinesData
+ * @param serviceProviderName : fwk service metadata provider : en la configuracion por defecto que uilizaran los servicios SVC del FWK
+ */
+  generete_get_searchParams(serviceName, bussinesData,serviceProviderName = ''): URLSearchParams {
     let searchParams: URLSearchParams = new URLSearchParams();
     var req = this.createFwk_SOA_REQ(bussinesData);
     req.ServiceName = serviceName;
+    
+    if(helperFunctions.string_IsNullOrEmpty(serviceProviderName))
+        serviceProviderName = AppConstants.fwkServiceProvider_Epiron;
+ 
 
-    searchParams.set("serviceProviderName", "health");//defaul 
+    searchParams.set("serviceProviderName", serviceProviderName);//defaul 
     searchParams.set("serviceName", serviceName);
     searchParams.set("jsonRequest", JSON.stringify(req));
 
-    // console.log("-------------"+serviceName+"------------------");
-    // console.log(JSON.stringify(JSON.stringify(req)));
-    // console.log("-------------"+serviceName+"------------------");
 
     return searchParams;
   }
 
-
-  generete_post_Params(serviceName, bussinesData): ExecuteReq {
+/**
+ * rellena un objetto  ExecuteReq que recive el método POST / Execuete del fwk
+ * @param serviceName : Nombre del servicio de capa SVC
+ * @param bussinesData : Objeto de negocio del SVC(REQ) donde bussinesData => IReq.BussinesData
+ * @param serviceProviderName : fwk service metadata provider : en la configuracion por defecto que uilizaran los servicios SVC del FWK
+ */
+  generete_post_Params(serviceName, bussinesData,serviceProviderName = ''): ExecuteReq {
     var req = this.createFwk_SOA_REQ(bussinesData);
     var executeReq: ExecuteReq = new ExecuteReq();
 
-    executeReq.serviceProviderName = 'health';
+    if(helperFunctions.string_IsNullOrEmpty(serviceProviderName))
+      executeReq.serviceProviderName = AppConstants.fwkServiceProvider_Epiron;
+    else
+      executeReq.serviceProviderName = serviceProviderName;
+
     executeReq.serviceName = serviceName;
     executeReq.jsonRequest = JSON.stringify(req);
 
@@ -219,40 +234,54 @@ export class CommonService {
   }
 
 
-
+/**
+ * Construye un Request que si utiliza como parametro para los servicios Fwk-SVC
+ *  Los Request contiennen 
+ *    contextInfo : inofrmacion de contexto fwk
+ *    bussinesData : cualquier entity
+ *    SecurityProviderName proveedor de seguridad que se utilizara
+ * @param bussinesData 
+ */
   createFwk_SOA_REQ(bussinesData: any): Request {
     let contextInfo: ContextInformation = new ContextInformation();
     let req: Request = new Request();
     let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
-    contextInfo.Culture = "ES-AR";
+    contextInfo.Culture = AppConstants.Culture;
     contextInfo.ProviderNameWithCultureInfo = "";
     contextInfo.HostName =  this.ipinfo.ip;
     contextInfo.HostIp = this.ipinfo.ip;
     contextInfo.HostTime = new Date(),
-    contextInfo.ServerName = 'WebAPIDispatcherClienteWeb';
+    //contextInfo.ServerName = 'WebAPIDispatcherClienteWeb';
     contextInfo.ServerTime = new Date();
 
-    if (currentLogin.currentUser.userName) { contextInfo.userName = currentLogin.currentUser.userName; }
-    else { contextInfo.userName = 'moviedo'; }
-
-    contextInfo.userId = '';
+    if(currentLogin){
+      if (currentLogin.currentUser.userName) { contextInfo.userName = currentLogin.currentUser.userName; }
+      
+      if (currentLogin.currentUser.userId)  { contextInfo.userId = currentLogin.currentUser.userId;}
+    }
+    
     contextInfo.AppId = AppConstants.AppId;
-    contextInfo.ProviderName = 'health';
+
+    contextInfo.ProviderName = AppConstants.fwkServiceProvider_Epiron;
     req.ContextInformation = contextInfo;
     req.BusinessData = bussinesData;
-    req.Error = null;
-    req.SecurityProviderName = "";
+    req.SecurityProviderName = AppConstants.oaut_securityProviderName;
     req.Encrypt = false;
-
+    req.Error = null;
     return req;
   }
-
+/**
+ * 
+ * @param req Cualquier servicio que implemente IAPIRequest. Esta interfaz es un standar utilizxado para servicios 
+ *  API rest Full. No es un IRequets de los servicios Fwk-SVC que sonm invocados a travez del metodo post/execute
+ * 
+ */
   set_Fwk_API_REQ(req:IAPIRequest) : IAPIRequest {
        
     let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
-    req.Culture = "ES-AR";
+    req.Culture = AppConstants.Culture;
     req.SecurityProviderName = AppConstants.oaut_securityProviderName;
-    req.AppId = 'Konecta.dashboard';
+    req.AppId = AppConstants.AppId;
     req.ClientIp = this.ipinfo.ip;
     
     if (currentLogin.currentUser.userName) { 

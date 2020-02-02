@@ -14,8 +14,10 @@ export const environment = {
   iddle_waite_Timeout_seconds : 10 ,//period of time in seconds. after 10 seconds of inactivity, the user will be considered timed out.
   version: '1.0 beta'  ,
   culture:'es-AR',
-  appInstanceGUID :'0685749B-AB4B-E311-A348-000C292448BD'
-  
+  appInstanceGUID :'0685749B-AB4B-E311-A348-000C292448BD',
+  appId: 'epiron',
+  fwkServiceProvider_Epiron:'epiron',//fwk service metadata provider : en la configuracion por defecto que uilizaran los servicios SVC del FWK
+
 };
 /*
  * For easier debugging in development mode, you can import the following file

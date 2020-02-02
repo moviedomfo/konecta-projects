@@ -9,7 +9,8 @@ export const environment = {
   iddleTimeout_seconds:600,//idle timeout of 5 
   iddle_waite_Timeout_seconds : 5 ,//period of time in seconds. after 10 seconds of inactivity, the user will be considered timed out.
   version: '1.0 beta'  ,
-  culture:'es-AR'
-  
+  culture:'es-AR',
+  appInstanceGUID :'0685749B-AB4B-E311-A348-000C292448BD',
+  fwkServiceProvider_Epiron:'epiron'
 };
 

@@ -1,6 +1,6 @@
-//import { CanDeactivateComponent } from './app/can-deactivate';
+
 import { Observable } from 'rxjs';
-import { Router, CanActivate ,CanDeactivate} from '@angular/router';
+import {CanDeactivate} from '@angular/router';
 export interface CanDeactivateComponent {
   
   hasChanges: () => Observable<boolean> | Promise<boolean> | boolean;

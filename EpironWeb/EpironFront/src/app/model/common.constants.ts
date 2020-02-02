@@ -22,7 +22,7 @@ let header_httpClient_form_urlencoded = new HttpHeaders({ 'Content-Type': 'appli
 //let options = new RequestOptions({ headers: headers });
 
 export  const AppConstants={
-    AppInstanceGUID:environment.appInstanceGUID,
+    
     AppProducion:environment.production,
     AppVersion:environment.version,
      AppAPI_URL:environment.App_BaseURL + "api/",
@@ -38,13 +38,20 @@ export  const AppConstants={
      //httpOptions:options,
      httpClientOption_form_urlencoded:{headers:header_httpClient_form_urlencoded},
      httpClientOption_contenttype_json:{headers:header_httpClient_contentTypeJson},
-     AppId:   'Epiron',
      oaut_client_id: environment.oaut_client_id,
      oaut_client_secret:environment.oaut_client_secret, 
+
      oaut_securityProviderName:environment.oaut_securityProviderName,
      iddleTimeout_seconds:environment.iddleTimeout_seconds,
      iddle_waite_Timeout_seconds:environment.iddle_waite_Timeout_seconds,
-     emptyGuid :'00000000-0000-0000-0000-000000000000'
+     emptyGuid :'00000000-0000-0000-0000-000000000000',
+
+    //
+     AppId:   environment.appId ,
+     //fwk service metadata provider : en la configuracion por defecto que uilizaran los servicios SVC del FWK
+     fwkServiceProvider_Epiron : environment.fwkServiceProvider_Epiron,
+     AppInstanceGUID:environment.appInstanceGUID,
+     
      
 }
 

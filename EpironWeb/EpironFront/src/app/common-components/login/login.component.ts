@@ -56,10 +56,10 @@ export class LoginComponent implements OnInit {
     }
 
     //this.authenticationService.checkDomains();
-    this.epironSecurityService.vialidateAppRequest$().subscribe(res=>{
-     
-       console.log(JSON.stringify(res));
-       
+
+    this.epironSecurityService.validateAppService$().subscribe(
+      res=>{
+          console.log(JSON.stringify(res));
     })
   }
 
