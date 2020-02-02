@@ -56,6 +56,7 @@ import { DateMoreThanDirective } from './common-components/controls/ReactiveForm
 import {  DateValueAccessorModule } from './common-components/controls/DateValueAccessor';
 import { AlertBlockComponent } from './common-components/alert-block/alert-block.component';
 import { PersonGridComponent } from './functionalComponents/persons/person-grid/person-grid.component';
+import { JwtAuthInterceptor } from './service/jwtIntersept';
 
 
 
@@ -94,7 +95,7 @@ import { PersonGridComponent } from './functionalComponents/persons/person-grid/
     HttpClientModule,DateValueAccessorModule 
     
   ],
-  providers: [PersonsService,  CommonService,  AuthenticationService,AuthGuard],
+  providers: [PersonsService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

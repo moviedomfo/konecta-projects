@@ -22,7 +22,7 @@
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "enableIvy": true // motor de renderizado
+    "enableIvy": false // motor de renderizado
 
 
   }
