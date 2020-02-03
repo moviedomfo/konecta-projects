@@ -89,6 +89,27 @@ namespace EpironAPI
             };
             return resp;
         }
+      
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="errorResponse"></param>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        public static HttpResponseMessage fromError(Error errorResponse = null, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+        {
+
+
+            EpironApiResponse res = new EpironApiResponse(null);
+            res.Error = errorResponse;
+            res.StatusCode = statusCode;
+
+            var resp = new HttpResponseMessage(res.StatusCode)
+            {
+                Content = new ObjectContent(typeof(EpironApiResponse), res, GlobalConfiguration.Configuration.Formatters.JsonFormatter)
+            };
+            return resp;
+        }
 
         public static HttpResponseMessage fromObject(Object obj, Error errorResponse = null, HttpStatusCode statusCode = HttpStatusCode.OK)
         {

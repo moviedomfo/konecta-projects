@@ -27,7 +27,7 @@ export  const AppConstants={
     AppVersion:environment.version,
      AppAPI_URL:environment.App_BaseURL + "api/",
      Culture:environment.culture,
-     AppExecuteAPI_URL: environment.App_BaseURL  + 'api/fwk/execute/',
+     AppExecuteAPI_URL: environment.App_BaseURL  + 'api/disp/execute/',
      AppExecuteWhiteListAPI_URL: environment.App_BaseURL  + 'api/fwk/executeWhiteList/',
      
      AppOAuth_BaseUrl: environment.AppOAuth_BaseUrl , 

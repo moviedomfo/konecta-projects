@@ -26,7 +26,7 @@ import { WeekDaysCheckEditComponent } from './common-components/controls/week-da
 import { EmailValidator } from './common-components/controls/validate-email.directive';
 import { ValidateEqualDirective } from './common-components/controls/validate-equal.directive';
 
-import { CommonService,  PersonsService,   AuthenticationService} from './service/index';
+import { CommonService,  PersonsService,   AuthenticationService, EpironSecurityService} from './service/index';
 import { HomeComponent } from './common-components/home/home.component';
 import { ErrorBoxContainerComponent } from './common-components/error-box-container/error-box-container.component';
 import { UserTasksComponent } from './common-components/userAlerts/user-tasks/user-tasks.component';
@@ -95,7 +95,7 @@ import { JwtAuthInterceptor } from './service/jwtIntersept';
     HttpClientModule,DateValueAccessorModule 
     
   ],
-  providers: [PersonsService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor],
+  providers: [EpironSecurityService,PersonsService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,5 @@
 ﻿using EpironAPI.BE;
+using EpironAPI.classes.BE;
 using EpironAPI.Models;
 using Newtonsoft.Json;
 using System;
@@ -21,11 +22,22 @@ namespace EpironAPI.classes
         /// <returns>
         /// Los datos de la instancia de la aplicación
         /// </returns>
-        public static DataTable ApplicationInstance_s_ByGUID_Valid(Guid Par_AppInstanceGUID)
+        public static ApplicationInstanceBE ApplicationInstance_s_ByGUID_Valid(Guid Par_AppInstanceGUID)
         {
+            ApplicationInstanceBE item = null;
             SqlCommand comando = MetaDatos.CrearComandoProc("Security.ApplicationInstance_s_ByGUID_Valid");
             comando.Parameters.AddWithValue("@ApplicationInstanceGUID", Par_AppInstanceGUID);
-            return MetaDatos.EjecutarComandoSelect(comando);
+            var dtt = MetaDatos.EjecutarComandoSelect(comando);
+            if (dtt.Rows.Count > 0)
+            {
+                item = new ApplicationInstanceBE();
+                item.ControlEntity = Convert.ToBoolean( dtt.Rows[0]["ControlEntity"]);
+                item.ApplicationName = dtt.Rows[0]["ApplicationName"].ToString();
+                item.ApplicationInstanceName = dtt.Rows[0]["ApplicationInstanceName"].ToString();
+
+            }
+
+            return item;
         }
 
         /// <summary>
@@ -284,13 +296,25 @@ namespace EpironAPI.classes
         /// <param name="Par_AppInstanceGUID">GUID de instancia de la aplicación</param>
         /// <returns>
         /// Devuelve los tipos de autenticacion de una instancia de aplicacion
-        /// </returns>
-        public static DataTable AuthenticationType_s_ByApplicationInstanceGUID(Guid Par_AppInstanceGUID)
+        /// </returns>s
+        public static List<AuthenticationTypeBE> AuthenticationType_s_ByApplicationInstanceGUID(Guid Par_AppInstanceGUID)
         {
+            AuthenticationTypeBE item = null;
+            List<AuthenticationTypeBE> list = new List<AuthenticationTypeBE>();
             SqlCommand comando = MetaDatos.CrearComandoProc("Security.AuthenticationType_s_ByApplicationInstanceGUID");
             comando.Parameters.AddWithValue("@ApplicationInstanceGUID", Par_AppInstanceGUID);
 
-            return MetaDatos.EjecutarComandoSelect(comando);
+            var dtt =  MetaDatos.EjecutarComandoSelect(comando);
+            for (int i = 0; i <= dtt.Rows.Count - 1; i++)
+            {
+                item = new AuthenticationTypeBE();
+                item.AuthenticationTypeName = dtt.Rows[i]["AuthenticationTypeName"].ToString();
+                item.AuthenticationTypeTag = dtt.Rows[i]["AuthenticationTypeTag"].ToString();
+                item.AuthenticationTypeGUID = Guid.Parse(dtt.Rows[i]["AuthenticationTypeGUID"].ToString());
+                
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -318,13 +342,26 @@ namespace EpironAPI.classes
         /// <returns>
         /// Devuelve los dominios de una instancia de aplicacion
         /// </returns>
-        public static DataTable Domain_s_ByApplicationInstanceGUID(Guid Par_ApplicationInstanceGUID, string Par_AuthenticationTypeTag)
+        public static List<DomainBE> Domain_s_ByApplicationInstanceGUID(Guid Par_ApplicationInstanceGUID, string Par_AuthenticationTypeTag)
         {
-            SqlCommand comando = MetaDatos.CrearComandoProc("Security.Domain_s_ByApplicationInstanceGUID");
+            List<DomainBE> list = new List<DomainBE>();
+               SqlCommand comando = MetaDatos.CrearComandoProc("Security.Domain_s_ByApplicationInstanceGUID");
             comando.Parameters.AddWithValue("@ApplicationInstanceGUID", Par_ApplicationInstanceGUID);
             comando.Parameters.AddWithValue("@AuthenticationTypeTag", Par_AuthenticationTypeTag);
+            
+            var dtt = MetaDatos.EjecutarComandoSelect(comando);
+            DomainBE item;
+            foreach (DataRow dr in dtt.Rows)
+            {
+                item = new DomainBE();
 
-            return MetaDatos.EjecutarComandoSelect(comando);
+                item.DomainName = dr["DomainName"].ToString();
+                item.DomainGuid = (Guid)dr["DomainGUID"];
+
+                list.Add(item);
+            }
+
+            return list; 
         }
 
 

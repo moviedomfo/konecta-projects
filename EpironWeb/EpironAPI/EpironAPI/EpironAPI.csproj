@@ -206,6 +206,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="classes\BE\ApplicationInstanceBE.cs" />
     <Compile Include="classes\BE\AuditTrailLoginBE.cs" />
     <Compile Include="classes\BE\AuthenticationTypeApplicationInstanceUser.cs" />
     <Compile Include="classes\BE\AuthenticationTypeBE.cs" />

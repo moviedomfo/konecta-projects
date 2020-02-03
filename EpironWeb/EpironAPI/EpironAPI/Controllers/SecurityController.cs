@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Security;
 
@@ -30,13 +31,73 @@ namespace EpironAPI.Controllers
             return true;
         }
 
+        
+
         [AllowAnonymous]
         [Route("validarAplicacion")]
         [System.Web.Http.HttpPost]
         public HttpResponseMessage ValidarAplicacion(ValidarAplicacionReq req)
         {
-            return apiHelper.fromErrorString("ValidarAplicacion no implementado ", HttpStatusCode.MethodNotAllowed);
+            ValidarAplicacionRes res = new ValidarAplicacionRes();
+            var Event_Tag = "VALIDAR-APP";
+            req.LoginIP = HttpContext.Current.Request.UserHostAddress;
+            Error errorResponse = null;
+            var jsonReq = Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
+            var dtTag = AccesoDatos.Event_s_ByTag(Event_Tag);
+            if (dtTag != null)
+            {
+                //Aplicación válida                        
+                var appInstanceBE = AccesoDatos.ApplicationInstance_s_ByGUID_Valid(req.AppInstanceGUID);
+                if (appInstanceBE != null)
+                {
+
+                    Guid guidintercambio = Log(Guid.Empty, req.AppInstanceGUID, Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                    //segun ws seguridad  string guidLogin = dtLog.Rows[0][0].ToString().ToUpper();
+                    res.Token = guidintercambio;
+                    res.ControlEntity = appInstanceBE.ControlEntity;
+                    res.ApplicationInstanceName = appInstanceBE.ApplicationInstanceName;
+                    res.ApplicationName = appInstanceBE.ApplicationName;
+
+
+                    var authenticationTypeList = AccesoDatos.AuthenticationType_s_ByApplicationInstanceGUID(req.AppInstanceGUID);
+
+                    //En el ws al consultar AuthenticationType crea un log y genera un nuevo guidintercambio. 
+                    //Parece ser innecesario por lo tanto se deja el guidintercambio generado en el log de arriba
+                    if (authenticationTypeList == null)
+                    {
+                        //No encuentra ningun tipo de autenticacion para la instancia de aplicación
+                        errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(3);
+                        errorResponse.Guid = Log(Guid.Empty, req.AppInstanceGUID, Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                        return apiHelper.fromError(errorResponse);
+                    }
+
+                    if (authenticationTypeList.Any(p => p.AuthenticationTypeTag.Equals("WINDOWS")))
+                    {
+                        var domains = AccesoDatos.Domain_s_ByApplicationInstanceGUID(req.AppInstanceGUID, "WINDOWS");
+                    }                    
+                    
+
+                    return apiHelper.fromObject<ValidarAplicacionRes>(res, null, HttpStatusCode.OK);
+                }
+                else
+                {
+                    //Aplicación y/o instancia de la aplicación no válida
+                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(1);
+                    errorResponse.Guid = Log(Guid.Empty, req.AppInstanceGUID, Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                    return apiHelper.fromError( errorResponse);
+                }
+
+            }
+            else
+            {
+                errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
+                errorResponse.Guid = Log(Guid.Empty, req.AppInstanceGUID, Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                return apiHelper.fromError( errorResponse, HttpStatusCode.BadRequest);
+            }
+
+
         }
+
 
         [AllowAnonymous]
         [Route("authenticate")]
@@ -53,8 +114,8 @@ namespace EpironAPI.Controllers
             {
                 //Error
                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
-
-                return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+                errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                return apiHelper.fromError(errorResponse);
 
             }
             try
@@ -487,7 +548,7 @@ namespace EpironAPI.Controllers
                     else
                     {
                         errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(dtValido.EventResponseInternalCode.Value);
-                        return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+                        return apiHelper.fromError(errorResponse);
                     }
 
                   

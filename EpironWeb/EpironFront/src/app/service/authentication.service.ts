@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 
 import { AppConstants, contextInfo, PersonStatus } from "../model/common.constants";
-import { ParamBE, IContextInformation, IRequest, IResponse, Result, AuthenticationOAutResponse, SecurityUser, CurrentLogin, ApiServerInfo, PersonBE, logingChange, CreateUserReq, UpdateUserReq, UserAutenticacionRes, CurrentLoginEpiron, EpironApiResponse } from '../model/index';
+import { ParamBE, IContextInformation, IRequest, IResponse, Result, AuthenticationOAutResponse, SecurityUser, CurrentLogin, ApiServerInfo, PersonBE, logingChange, CreateUserReq, UpdateUserReq, UserAutenticacionRes, CurrentLoginEpiron, EpironApiResponse, AppInstance } from '../model/index';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, Subject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -272,6 +272,20 @@ export class AuthenticationService {
       currentLogin = JSON.parse(str);
       if (currentLogin.userData) {
         return currentLogin;
+      }
+    }
+    return null;
+
+  }
+
+
+  getAppInstance(): AppInstance {
+    var appInstance: AppInstance;
+    let str = localStorage.getItem('appInstance');
+    if (str) {
+      appInstance = JSON.parse(str);
+      if (appInstance.Token) {
+        return appInstance;
       }
     }
     return null;

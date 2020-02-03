@@ -1,5 +1,6 @@
 import { PersonBE } from './persons.model';
 import { IAPIRequest } from './common.model';
+import { DomainBE, AuthenticationTypeBE } from './epiron/epiron.security.model';
 
 
 export class SecurityUser {
@@ -139,8 +140,21 @@ export class CurrentLogin {
     public currentUser: SecurityUser;
     public userData:PersonBE;
 }
+
+
 export class CurrentLoginEpiron {
     public oAuthResult: UserAutenticacionRes;
     // public currentUser: SecurityUser;
     // public userData:PersonBE;
+}
+
+
+export class AppInstance {
+    
+    public Token: string;
+    public DomainListBE : DomainBE[]; 
+    public  AuthenticationTypes : AuthenticationTypeBE[];
+    public  ControlEntity :boolean;
+    public  ApplicationInstanceName :string;
+    public  ApplicationName :string;
 }

@@ -19,7 +19,7 @@ export class ValidateAppRequest {
 
 }
 
-export class ValidateAppResponse {
+export class ValidarAplicacionRes {
 
     public Token: string;
     public DomainListBE : DomainBE[]; 

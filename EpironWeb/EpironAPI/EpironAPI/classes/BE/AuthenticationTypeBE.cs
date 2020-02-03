@@ -16,7 +16,12 @@ namespace EpironAPI.BE
         //AuthenticationTypeModifiedByUser{ get; set; }
         //UserName{ get; set; }
         public string AuthenticationTypeTag { get; set; }
+        
     }
+
+   
+  
+   
 
     public class AuthenticationTypeUserBE
     {
