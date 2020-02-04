@@ -22,9 +22,43 @@ export class ValidateAppRequest {
 export class ValidarAplicacionRes {
 
     public Token: string;
-    public DomainListBE : DomainBE[]; 
+    public Domains : DomainBE[]; 
     public  AuthenticationTypes : AuthenticationTypeBE[];
     public  ControlEntity :boolean;
     public  ApplicationInstanceName :string;
     public  ApplicationName :string;
+}
+
+export class UserBE {
+    public  UserId: number; 
+    public  UserGUID: string; 
+    public  UserName: string; 
+    public  PersonId: number; 
+    public  UserActiveFlag: boolean; 
+    public  AllowAutomatedTagView?: boolean; 
+    //Dialer.  Discador.. esto en true hace que los casos se habran de forma automatica
+    //en orden segun distintas prioridades definidas por el sistema.
+    public  PersonAutomaticOpenCases: boolean; 
+}
+export class PersonFromWebserviceBE {
+    public  UserId: number; 
+    public  UserName: string; 
+    public  UserModifiedDate: Date; 
+    public UserModifiedByUser: number; 
+    public  UserCreated: Date; 
+    public  UserActiveFlag: boolean; 
+    public  PersonId: number; 
+    public  UserGUID: string; 
+    public  PersonGUID: string; 
+    public  UserEndDate?: Date; 
+    public  ModifiedUserName: string; 
+    public  PersonFirstName: string; 
+    public  PersonLastName: string; 
+    public  PersonDocNumber: string; 
+    public  UserPlaceGuid: string; 
+    public  UserPlaceName: string; 
+    public  UserPlaceDescript: string; 
+    public  PersonModifiedDate: Date; 
+    public  AccountPersonStartDate: Date; 
+    public  AccountPersonEndDate?: Date; 
 }

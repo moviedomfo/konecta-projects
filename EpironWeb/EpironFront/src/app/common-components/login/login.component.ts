@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
     this.epironSecurityService.validateAppService$().subscribe(
       res=>{
           console.log(JSON.stringify(res));
+          this.authenticationService.getAppInstance();
     },err => {
       //this.OnComponentError.emit(err);
       this.loading = false;

@@ -17,15 +17,15 @@ export class SecurityUser {
     public ModifiedDate?: Date;
     public ModifiedByUserId?: number;
 
-    public confirmPassword :string;
+    public confirmPassword: string;
 
     public roles: string[];
 
 
 
-  
+
     public personId: string;
-    public person:PersonBE;
+    public person: PersonBE;
     public GetRolList(): SecurityRole[] {
 
         var roles: SecurityRole[];
@@ -33,7 +33,7 @@ export class SecurityUser {
         return roles;
     }
 
-    
+
 }
 
 export class SecurityRole {
@@ -49,21 +49,21 @@ export class SecurityRole {
 }
 export class SecurityRulesCategory {
 
-    
+
     public CategoryId: string;
     public Name: string;
     public ParentCategoryId: string;
 
     public SecurityRulesInCategory: SecurityRulesInCategory[];
 }
-export class SecurityRulesInCategory{
+export class SecurityRulesInCategory {
     public CategoryId: string;
     public RuleId: string;
     public SecurityRule: SecurityRule;
-    public SecurityRulesCategory : SecurityRulesCategory;
+    public SecurityRulesCategory: SecurityRulesCategory;
 }
 
-export class SecurityRule{
+export class SecurityRule {
     public Id: string;
     public Name: string;
     public Description: string;
@@ -74,27 +74,27 @@ export class UserSession {
     public email: string;
     public password: string;
     public confirmPassword: string;
-  }
-  
-  
-  export class CreateUserReq extends  IAPIRequest{
-    
+}
+
+
+export class CreateUserReq extends IAPIRequest {
+
     public userName: string;
     public email: string;
     public password: string;
     public roles: string[];
-    public person:PersonBE;
+    public person: PersonBE;
     public personIsNew: boolean;
-   
-}  
 
-export class UpdateUserReq extends  IAPIRequest{
+}
+
+export class UpdateUserReq extends IAPIRequest {
     public update_userName: string;
     public email: string;
     public update_UserId: string;
     public roles: string[];
-    public person:PersonBE;
-   
+    public person: PersonBE;
+
 }
 
 export class AuthenticationOAutResponse {
@@ -113,32 +113,32 @@ export class UserAutenticacionRes {
     public token_type: string;
     public refresh_token: string;
 
-    public  Token :string
-        public  WsUserId: number;
-        public  UserGuid: string;
-        public  UserName: string;
-        public  PersonFirstName: string;
-        public  PersonLastName: string;
-        public  PersonDocNumber: string;
-        public  PersonGUID: string;
-        public  MenuPermisos: string;
-        public  UserPlaceGuid: string;
-        public  UserPlaceName: string;
-        public  UserPlaceDescript: string;
-        public  PersonModifiedDate: Date;
-        public  ErrorMessage : string;
+    public Token: string
+    public WsUserId: number;
+    public UserGuid: string;
+    public UserName: string;
+    public PersonFirstName: string;
+    public PersonLastName: string;
+    public PersonDocNumber: string;
+    public PersonGUID: string;
+    public MenuPermisos: string;
+    public UserPlaceGuid: string;
+    public UserPlaceName: string;
+    public UserPlaceDescript: string;
+    public PersonModifiedDate: Date;
+    public ErrorMessage: string;
 
 }
 
 
-export class logingChange{
-    public returnUrl:string;
-    public isLogued:boolean;
+export class logingChange {
+    public returnUrl: string;
+    public isLogued: boolean;
 }
 export class CurrentLogin {
     public oAuthResult: AuthenticationOAutResponse;
     public currentUser: SecurityUser;
-    public userData:PersonBE;
+    public userData: PersonBE;
 }
 
 
@@ -149,12 +149,3 @@ export class CurrentLoginEpiron {
 }
 
 
-export class AppInstance {
-    
-    public Token: string;
-    public DomainListBE : DomainBE[]; 
-    public  AuthenticationTypes : AuthenticationTypeBE[];
-    public  ControlEntity :boolean;
-    public  ApplicationInstanceName :string;
-    public  ApplicationName :string;
-}

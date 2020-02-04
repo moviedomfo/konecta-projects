@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CommonService } from './common.service';
 import { Injectable } from '@angular/core';
-import { ValidarAplicacionRes } from '../model/epiron/epiron.security.model';
+import { ValidarAplicacionRes, UserBE } from '../model/epiron/epiron.security.model';
 import { helperFunctions } from './helperFunctions';
 import { CurrentLoginEpiron, UserAutenticacionRes } from '../model';
 import { AuthenticationService } from './authentication.service';
@@ -33,7 +33,7 @@ export class EpironSecurityService {
       userKey: password,
       domainGUID: 'FDEB4B1F-229E-E311-9DD1-0022640637C2', //domain allus-ar,
       AutTypeGUID: '71C15455-D147-E311-A348-000C292448BD',
-      guidintercambio: '75CFEFE4-5A79-E411-BD73-0022640637C2',
+      
       UserKey: password,
 
       //grant_type: 'password',
@@ -112,12 +112,37 @@ export class EpironSecurityService {
           let appInstance = res.Result as ValidarAplicacionRes;
           localStorage.setItem('appInstance', JSON.stringify(appInstance));
          
-         
-
           return appInstance;
         })).pipe(catchError(helperFunctions.handleError));
 
 
   }
+
+  //GetSecurityUserByUserGuidService
+  public GetSecurityUserByUserGuidRequest$(userGuid:string ): Observable<UserBE> {
+
+   
+    let bussinesData = {
+      userGuid: AppConstants.AppInstanceGUID
+    }
+
+    let outhHeader = this.commonService.get_AuthorizedHeader();
+    let executeReq=  this.commonService.generete_post_Params("GetSecurityUserByUserGuidService", bussinesData);
+    
+    return  this.http.post<any>(`${AppConstants.AppExecuteAPI_URL}`,executeReq,{ headers: outhHeader }).pipe(
+       map(res => {
+
+        let result :Result= JSON.parse(res.Result) as Result;
+
+        if (result.Error) {
+          throw  Observable.throw(result.Error);
+        }
+
+        let list = result.BusinessData as UserBE;
+        return list;
+     })).pipe(catchError(helperFunctions.handleError));
+
+  
+}
 }
 

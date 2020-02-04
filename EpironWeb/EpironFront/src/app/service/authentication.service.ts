@@ -182,7 +182,7 @@ export class AuthenticationService {
 
   public userAutenticacion$(userName: string, password: string, domain: string, returnUrl: string): Observable<any> {
 
-    
+    let app = this.getAppInstance();
     //UserAutenticacionReq
     var bussinesData = {
       event_tag : 'USER-AUTENTIC',
@@ -193,7 +193,7 @@ export class AuthenticationService {
       userKey: password,
       domainGUID: 'FDEB4B1F-229E-E311-9DD1-0022640637C2', //domain allus-ar,
       AutTypeGUID: '71C15455-D147-E311-A348-000C292448BD',
-      guidintercambio :'75CFEFE4-5A79-E411-BD73-0022640637C2',
+      guidintercambio : app.Token,
       UserKey : password,
 
       //grant_type: 'password',
