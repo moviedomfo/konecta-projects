@@ -26,7 +26,7 @@ export class AuthenticationService {
 
   isAuth() {
 
-    var currentUser: CurrentLogin = this.getCurrenLoging();
+    var currentUser: CurrentLoginEpiron = this.getCurrenLoging();
     if (currentUser)
       return true;
     else
@@ -179,10 +179,11 @@ export class AuthenticationService {
 
 
   }
-
+  
   public userAutenticacion$(userName: string, password: string, domain: string, returnUrl: string): Observable<any> {
 
     let app = this.getAppInstance();
+    alert(app.Token);
     //UserAutenticacionReq
     var bussinesData = {
       event_tag : 'USER-AUTENTIC',
@@ -191,8 +192,8 @@ export class AuthenticationService {
       LoginIP: this.commonService.ipinfo.ip,
       userName: userName,
       userKey: password,
-      domainGUID: 'FDEB4B1F-229E-E311-9DD1-0022640637C2', //domain allus-ar,
-      AutTypeGUID: '71C15455-D147-E311-A348-000C292448BD',
+      domainGUID: '8335209c-d4ad-e311-9dd1-0022640637c2', //domain allus-ar,
+      AutTypeGUID: '0471220c-d147-e311-a348-000c292448bd',
       guidintercambio : app.Token,
       UserKey : password,
 
@@ -208,15 +209,14 @@ export class AuthenticationService {
 
           let currentLogin: CurrentLoginEpiron = new CurrentLoginEpiron();
 
-          if(res.Errors){
-              alert(JSON.stringify);
-          }
-          currentLogin.oAuthResult = new UserAutenticacionRes();
-          currentLogin.oAuthResult = res.Result as UserAutenticacionRes;
-
           if(!res.Errors){
               helperFunctions.handleEpironError(res.Errors);
           }
+
+          currentLogin.userData = new UserAutenticacionRes();
+          currentLogin.userData = res.Result as UserAutenticacionRes;
+          localStorage.setItem('currentLogin', JSON.stringify(currentLogin));
+          
           // let tokenInfo = jwt_decode(currentLogin.oAuthResult.access_token); // decode token
 
 
@@ -227,7 +227,7 @@ export class AuthenticationService {
           // currentLogin.currentUser.roles = tokenInfo.roles;
           // currentLogin.currentUser.personId = tokenInfo.personId;
       
-          localStorage.setItem('currentLogin', JSON.stringify(currentLogin));
+       
           // this.getUser_Data$(currentLogin.currentUser.personId, '').subscribe(res => {
 
           //   if (!res) {
@@ -265,8 +265,8 @@ export class AuthenticationService {
 
   //   return currentItem;
   // }
-  getCurrenLoging(): CurrentLogin {
-    var currentLogin: CurrentLogin;
+  getCurrenLoging(): CurrentLoginEpiron {
+    var currentLogin: CurrentLoginEpiron;
     let str = localStorage.getItem('currentLogin');
     if (str) {
       currentLogin = JSON.parse(str);

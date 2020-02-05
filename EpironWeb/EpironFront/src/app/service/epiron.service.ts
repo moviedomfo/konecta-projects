@@ -86,7 +86,44 @@ export class EpironService {
   }
 
 
+  /**
+ * Trae el tipo o el modo en el que se van a tomar los nuevos y pendientes. 
+ */
+public SearchCaseByUserGuidService$(): Observable<ApplicationSettingBE[]> {
+
+  let currentLogin = this.authService.getCurrenLoging();
+
+  //UserAutenticacionReq
+  var bussinesData = {
+
+    UserGuid: currentLogin.userData.UserGuid,
+    State: 1
+
+
+  }
+
+  let outhHeader = this.commonService.get_AuthorizedHeader();
+  let executeReq=  this.commonService.generete_post_Params("SearchCaseByUserGuidService", bussinesData);
   
+  return  this.http.post<any>(`${AppConstants.AppExecuteAPI_URL}`,executeReq,{ headers: outhHeader }).pipe(
+     map(res => {
+
+      let result :Result= JSON.parse(res.Result) as Result;
+
+      if (result.Error) {
+        throw  Observable.throw(result.Error);
+      }
+
+      let list = result.BusinessData as ApplicationSettingBE[];
+      return list;
+   })).pipe(catchError(helperFunctions.handleError));
+
+
+
+
+}
+
+
   
 }
 

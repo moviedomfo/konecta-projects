@@ -51,8 +51,8 @@ export class EpironSecurityService {
           if (res.Errors) {
             alert(JSON.stringify);
           }
-          currentLogin.oAuthResult = new UserAutenticacionRes();
-          currentLogin.oAuthResult = res.Result as UserAutenticacionRes;
+          currentLogin.userData = new UserAutenticacionRes();
+          currentLogin.userData = res.Result as UserAutenticacionRes;
 
           if (!res.Errors) {
             helperFunctions.handleEpironError(res.Errors);
@@ -144,5 +144,33 @@ export class EpironSecurityService {
 
   
 }
+
+
+public SearchPersonAttributesRequest$(personGUID:string ): Observable<UserBE> {
+
+   
+  let bussinesData = {
+    userGuid: AppConstants.AppInstanceGUID
+  }
+
+  let outhHeader = this.commonService.get_AuthorizedHeader();
+  let executeReq=  this.commonService.generete_post_Params("SearchPersonAttributesService", bussinesData,"EpironSecurity");
+  
+  return  this.http.post<any>(`${AppConstants.AppExecuteAPI_URL}`,executeReq,{ headers: outhHeader }).pipe(
+     map(res => {
+
+      let result :Result= JSON.parse(res.Result) as Result;
+
+      if (result.Error) {
+        throw  Observable.throw(result.Error);
+      }
+
+      let list = result.BusinessData as UserBE;
+      return list;
+   })).pipe(catchError(helperFunctions.handleError));
+
+
+}
+
 }
 

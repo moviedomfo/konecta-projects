@@ -127,6 +127,9 @@ export class UserAutenticacionRes {
     public UserPlaceDescript: string;
     public PersonModifiedDate: Date;
     public ErrorMessage: string;
+    
+    public sex: number;
+    public photo: ArrayBuffer;
 
 }
 
@@ -143,7 +146,7 @@ export class CurrentLogin {
 
 
 export class CurrentLoginEpiron {
-    public oAuthResult: UserAutenticacionRes;
+    public userData: UserAutenticacionRes;
     // public currentUser: SecurityUser;
     // public userData:PersonBE;
 }

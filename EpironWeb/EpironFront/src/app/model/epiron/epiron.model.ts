@@ -23,3 +23,8 @@ import { DomainBE, AuthenticationTypeBE } from './epiron.security.model';
         //atributos que se rellenan luego de obtener la entidad
         public AppInstanceGuid: string;
     }
+
+    export class  SearchCaseByUserGuidRequest{
+        public  UserGuid : string; 
+        public  State : number; 
+    }

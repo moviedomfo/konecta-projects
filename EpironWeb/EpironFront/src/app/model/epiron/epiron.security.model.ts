@@ -40,6 +40,8 @@ export class UserBE {
     //en orden segun distintas prioridades definidas por el sistema.
     public  PersonAutomaticOpenCases: boolean; 
 }
+
+
 export class PersonFromWebserviceBE {
     public  UserId: number; 
     public  UserName: string; 
@@ -61,4 +63,32 @@ export class PersonFromWebserviceBE {
     public  PersonModifiedDate: Date; 
     public  AccountPersonStartDate: Date; 
     public  AccountPersonEndDate?: Date; 
+}
+
+export class  AttributeBE
+{   
+    public  AttributeId? : number; 
+    public  AttributeInternalCode  : number; 
+    public  AttributeActiveFlag :boolean; 
+    public  AttributeGuid:string; 
+    public  AttributeName :string; 
+    public  AttributeModifiedDate :Date; 
+
+}
+
+export class  PersonAttributeBE
+{
+    public  PersonAttributeId? : number; 
+    public  PersonId? : number; 
+    public  PersonGuid :string; 
+    public  Attribute :AttributeBE; 
+    public  PersonAttributeValueGuid :string; 
+    public  PersonAttributeValueValue :string; 
+    public  PersonAttributeValueCreated :Date; 
+    public  PersonAttributeValueStartDate :Date; 
+    public  PersonAttributeValueModifiedDate :Date; 
+    public  PersonAttributeValueEndDate? : Date; 
+    public  PersonAttributeValueActiveFlag  :boolean; 
+    public  PersonAttributeValueId : number; 
+    public  ExisteEnWS : boolean; 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { pipe } from 'rxjs';
 import { AuthenticationService } from '../../../service';
-import { CurrentLogin,  AppConstants, UserTask, UserMessage, PersonBE } from '../../../model';
+import { CurrentLogin,  AppConstants, UserTask, UserMessage, PersonBE, CurrentLoginEpiron } from '../../../model';
 import * as moment from 'moment';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { helperFunctions } from '../../../service/helperFunctions';
@@ -72,7 +72,7 @@ export class AppheaderComponent implements OnInit {
   chk_logingFront() {
 
     
-    var currentLoging: CurrentLogin = this.authService.getCurrenLoging();
+    var currentLoging: CurrentLoginEpiron = this.authService.getCurrenLoging();
     if (currentLoging) {
 
       this.chk_profDataFront(currentLoging);
@@ -91,15 +91,15 @@ export class AppheaderComponent implements OnInit {
     //this.router.navigate(['/login']);
   }
 
-  chk_profDataFront(currentLoging: CurrentLogin) {
+  chk_profDataFront(currentLoging: CurrentLoginEpiron) {
     if (currentLoging.userData) {
 
 
       this.isLogged = true;
-      this.apellidoNombre = helperFunctions.getPersonFullName(currentLoging.userData.name, currentLoging.userData.lastName)
+      this.apellidoNombre = helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
       if (currentLoging.userData.photo !== null) {
-        this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
+        this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.sex));
       }
       else {
         this.loadDefaultPhoto(currentLoging.userData.sex);

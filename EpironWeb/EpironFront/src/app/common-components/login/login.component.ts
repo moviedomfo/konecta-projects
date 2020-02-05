@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     if (!this.currentLogin)//if user is not {} or nullr is {} or null
     {
       this.currentLogin = new CurrentLoginEpiron();
-      this.currentLogin.oAuthResult = new UserAutenticacionRes();
+      this.currentLogin.userData = new UserAutenticacionRes();
     }
 
     //this.authenticationService.checkDomains();
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
       res => {
 
         console.log(JSON.stringify(res));
-        this.currentLogin = res;
+        this.currentLogin = this.authenticationService.getCurrenLoging();
         this.loading = false;
         //let returnUrl = this.router.routerState.root.queryParams['returnUrl'];
 
@@ -113,29 +113,5 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/security']);
   }
 
-  retrivePersonData(userGuid: string) {
-
-    this.loading = true;
-    //this.currentUser.Domain = this.domains.find(p=> p.DomainId ==this.currentUser.DomainId).Domain;
-    this.personService.getPersonaByParamService$('', '', userGuid).subscribe(
-      res => {
-
-        let currentProviderData: SecurityUser = new SecurityUser;
-        //localStorage.setItem('currentProviderData', JSON.stringify(currentproviderData));
-
-        this.loading = false;
-        //this.prefesionalService.currentproviderChange_subject$.next(currentproviderData);
-
-
-
-      },
-      err => {
-
-        //this.OnComponentError.emit(err);
-        this.loading = false;
-        this.globalError = err;
-      }
-    );
-    //return svc$;
-  }
+  
 }

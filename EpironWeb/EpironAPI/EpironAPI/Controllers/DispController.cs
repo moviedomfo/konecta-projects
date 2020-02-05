@@ -131,13 +131,7 @@ namespace EpironAPI.Controllers
             return apiHelper.fromErrorString("La API funciona correctamente", HttpStatusCode.OK);
         }
 
-        [AllowAnonymous]
-        [Route("validarAplicacion")]
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage ValidarAplicacion(ValidarAplicacionReq req)
-        {
-            return apiHelper.fromErrorString("ValidarAplicacion no implementado ", HttpStatusCode.MethodNotAllowed);
-        }
+       
 
      
 

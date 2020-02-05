@@ -266,7 +266,7 @@ namespace EpironAPI.classes
             {
                 item = new AuditTrailLoginBE();
 
-                if (dtt.Rows[0]["EventResponseInternalCode"] == null){
+                if (dtt.Columns["EventResponseInternalCode"] == null){
                     
                     item.EventId = Convert.ToInt32(dtt.Rows[0]["EventId"].ToString());
                     item.AuditTrailLoginAppInstanceGUID = Guid.Parse(dtt.Rows[0]["AuditTrailLoginAppInstanceGUID"].ToString());
@@ -311,7 +311,7 @@ namespace EpironAPI.classes
                 item.AuthenticationTypeName = dtt.Rows[i]["AuthenticationTypeName"].ToString();
                 item.AuthenticationTypeTag = dtt.Rows[i]["AuthenticationTypeTag"].ToString();
                 item.AuthenticationTypeGUID = Guid.Parse(dtt.Rows[i]["AuthenticationTypeGUID"].ToString());
-                
+                list.Add(item);
             }
 
             return list;
@@ -444,7 +444,7 @@ namespace EpironAPI.classes
 
             if (dtUser.Rows.Count > 0)
             {
-                new UserBE();
+                userBE = new UserBE();
                 userBE.UserId = Convert.ToInt32(dtUser.Rows[0][0].ToString());
 
 
@@ -736,20 +736,27 @@ namespace EpironAPI.classes
         /// Anexo 22 CU004 SistemaDeSeguridad_Aplicación_CU004_LoginDeAplicaciones
         /// Obtiene los datos del tipo de autenticación seleccionado
         /// </summary>
-        /// <param name="Par_AutTypeGUID">GUID del tipo de autenticación</param>
+        /// <param name="autTypeGUID">GUID del tipo de autenticación</param>
         /// <returns></returns>
-        public static AuthenticationTypeBE AuthenticationType_s_ByGUID(Guid Par_AutTypeGUID)
+        public static AuthenticationTypeBE AuthenticationType_s_ByGUID(Guid autTypeGUID)
         {
             SqlCommand comando = MetaDatos.CrearComandoProc("Security.AuthenticationType_s_ByGUID");
-            comando.Parameters.AddWithValue("@AuthenticationTypeGUID", Par_AutTypeGUID);
+            comando.Parameters.AddWithValue("@AuthenticationTypeGUID", autTypeGUID);
 
-            var dtType = MetaDatos.EjecutarComandoSelect(comando);
-            AuthenticationTypeBE authenticationType = new AuthenticationTypeBE();
-            authenticationType.AuthenticationTypeTag = dtType.Rows[0]["AuthenticationTypeTag"].ToString();
-            authenticationType.AuthenticationTypeName = dtType.Rows[0]["AuthenticationTypeName"].ToString();
-            authenticationType.AuthenticationTypeGUID = Par_AutTypeGUID;
+            var dtt = MetaDatos.EjecutarComandoSelect(comando);
+            AuthenticationTypeBE authenticationType = null;
 
-            authenticationType.AuthenticationTypeId = Convert.ToInt32(dtType.Rows[0]["AuthenticationTypeId"]);
+            if (dtt.Rows.Count > 0)
+            {
+                authenticationType = new AuthenticationTypeBE();
+                authenticationType.AuthenticationTypeGUID = autTypeGUID;
+                authenticationType.AuthenticationTypeTag = dtt.Rows[0]["AuthenticationTypeTag"].ToString();
+                authenticationType.AuthenticationTypeName = dtt.Rows[0]["AuthenticationTypeName"].ToString();
+                
+
+                authenticationType.AuthenticationTypeId = Convert.ToInt32(dtt.Rows[0]["AuthenticationTypeId"]);
+            }
+                
             return authenticationType;
         }
 

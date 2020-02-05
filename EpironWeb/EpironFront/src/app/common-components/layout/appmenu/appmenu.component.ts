@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { pipe } from 'rxjs';
 import { AuthenticationService } from '../../../service';
-import { CurrentLogin,  AppConstants, PersonBE } from '../../../model';
+import { CurrentLogin,  AppConstants, PersonBE, CurrentLoginEpiron } from '../../../model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { helperFunctions } from 'src/app/service/helperFunctions';
 
@@ -36,7 +36,7 @@ export class AppmenuComponent implements OnInit {
 
 
   chk_logingFront() {
-    var currentLoging: CurrentLogin = this.authService.getCurrenLoging();
+    var currentLoging: CurrentLoginEpiron = this.authService.getCurrenLoging();
     
     if (currentLoging) {
 
@@ -57,13 +57,13 @@ export class AppmenuComponent implements OnInit {
   }
 
 
-  chk_profDataFront(currentLoging:CurrentLogin) {
+  chk_profDataFront(currentLoging:CurrentLoginEpiron) {
 
     if (currentLoging.userData) {
       //console.log('user logged');
       this.isLogged = true;
 
-      this.apellidoNombre =helperFunctions.getPersonFullName(currentLoging.userData.name, currentLoging.userData.lastName)
+      this.apellidoNombre =helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
       if (currentLoging.userData.photo !== null) {
         this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
