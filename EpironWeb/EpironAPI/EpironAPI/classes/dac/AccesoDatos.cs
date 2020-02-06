@@ -453,12 +453,15 @@ namespace EpironAPI.classes
                 userBE.PersonLastName = dtUser.Rows[0]["PersonLastName"].ToString();
                 userBE.PersonDocNumber = dtUser.Rows[0]["PersonDocNumber"].ToString();
 
-                userBE.UserPlaceGuid = Guid.Parse(dtUser.Rows[0]["UserPlaceGuid"].ToString());
+
+                if(dtUser.Rows[0]["UserPlaceGuid"] != DBNull.Value  )
+                    userBE.UserPlaceGuid = Guid.Parse(dtUser.Rows[0]["UserPlaceGuid"].ToString());
+
                 userBE.UserPlaceName = dtUser.Rows[0]["UserPlaceName"].ToString();
                 if (dtUser.Rows[0]["UserPlaceDescript"] != DBNull.Value)
                     userBE.UserPlaceDescript = dtUser.Rows[0]["UserPlaceDescript"].ToString();
-
-                userBE.PersonGUID = Guid.Parse(dtUser.Rows[0]["PersonGUID"].ToString());
+                if (dtUser.Rows[0]["PersonGUID"] != DBNull.Value)
+                    userBE.PersonGUID = Guid.Parse(dtUser.Rows[0]["PersonGUID"].ToString());
                 userBE.PersonModifiedDate = Convert.ToDateTime(dtUser.Rows[0]["PersonModifiedDate"].ToString());
 
 

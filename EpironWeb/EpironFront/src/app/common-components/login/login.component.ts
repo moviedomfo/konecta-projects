@@ -59,10 +59,10 @@ export class LoginComponent implements OnInit {
 
     this.epironSecurityService.validateAppService$().subscribe(
       res=>{
-          console.log(JSON.stringify(res));
+          
           this.authenticationService.getAppInstance();
     },err => {
-      //this.OnComponentError.emit(err);
+      
       this.loading = false;
       this.globalError = err;
     })
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.userAutenticacion$(this.currentUser.userName, this.currentUser.password, '',this.returnUrl).subscribe(
       res => {
 
-        console.log(JSON.stringify(res));
+        
         this.currentLogin = this.authenticationService.getCurrenLoging();
         this.loading = false;
         //let returnUrl = this.router.routerState.root.queryParams['returnUrl'];

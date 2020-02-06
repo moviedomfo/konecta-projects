@@ -10,7 +10,7 @@ import { Router } from '@angular/router'
 import { HttpHeaders, HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { helperFunctions } from './helperFunctions';
 import { headersToString } from 'selenium-webdriver/http';
-import { CurrentLogin } from '../model';
+import { CurrentLogin, CurrentLoginEpiron } from '../model';
 
 //var colors = require('colors/safe');
 @Injectable()
@@ -245,7 +245,7 @@ export class CommonService {
   createFwk_SOA_REQ(bussinesData: any): Request {
     let contextInfo: ContextInformation = new ContextInformation();
     let req: Request = new Request();
-    let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+    let currentLogin: CurrentLoginEpiron = JSON.parse(localStorage.getItem('currentLogin'));
     contextInfo.Culture = AppConstants.Culture;
     contextInfo.ProviderNameWithCultureInfo = "";
     contextInfo.HostName =  this.ipinfo.ip;
@@ -255,9 +255,9 @@ export class CommonService {
     contextInfo.ServerTime = new Date();
 
     if(currentLogin){
-      if (currentLogin.currentUser.userName) { contextInfo.userName = currentLogin.currentUser.userName; }
+      if (currentLogin.userData.UserName) { contextInfo.userName = currentLogin.userData.UserName; }
       
-      if (currentLogin.currentUser.userId)  { contextInfo.userId = currentLogin.currentUser.userId;}
+      if (currentLogin.userData.UserGuid)  { contextInfo.userId = currentLogin.userData.UserGuid;}
     }
     
     contextInfo.AppId = AppConstants.AppId;
@@ -278,14 +278,14 @@ export class CommonService {
  */
   set_Fwk_API_REQ(req:IAPIRequest) : IAPIRequest {
        
-    let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+    let currentLogin: CurrentLoginEpiron = JSON.parse(localStorage.getItem('currentLogin'));
     req.Culture = AppConstants.Culture;
     req.SecurityProviderName = AppConstants.oaut_securityProviderName;
     req.AppId = AppConstants.AppId;
     req.ClientIp = this.ipinfo.ip;
     
-    if (currentLogin.currentUser.userName) { 
-      req.UserId = currentLogin.currentUser.userId;
+    if (currentLogin.userData.UserName) { 
+      req.UserId = currentLogin.userData.UserPlaceGuid;
     }
     
 
@@ -296,9 +296,12 @@ export class CommonService {
 
   //Retorna un HttpHeaders con CORS y 'Authorization': "Bearer + TOKEN"
   public get_AuthorizedHeader(): HttpHeaders {
-    let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+    //let currentLogin: CurrentLogin = JSON.parse(localStorage.getItem('currentLogin'));
+
+    let currentLogin: CurrentLoginEpiron = JSON.parse(localStorage.getItem('currentLogin'));
     if(currentLogin){
-        let headers = new HttpHeaders({ 'Authorization': "Bearer " + currentLogin.oAuthResult.access_token }).set('securityProviderName',AppConstants.oaut_securityProviderName);
+        //let headers = new HttpHeaders({ 'Authorization': "Bearer " + currentLogin.userData.access_token }).set('securityProviderName',AppConstants.oaut_securityProviderName);
+        let headers  = new HttpHeaders();
         headers.append('Access-Control-Allow-Methods', '*');
         headers.append('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
         headers.append('Access-Control-Allow-Origin', '*');

@@ -10,7 +10,7 @@ import { ValidarAplicacionRes } from '../model/epiron/epiron.security.model';
 import { helperFunctions } from './helperFunctions';
 import { CurrentLoginEpiron, UserAutenticacionRes } from '../model';
 import { AuthenticationService } from './authentication.service';
-import { ApplicationSettingBE } from '../model/epiron/epiron.model';
+import { ApplicationSettingBE, CaseByUserGuidBE } from '../model/epiron/epiron.model';
 
 
 @Injectable()
@@ -89,7 +89,7 @@ export class EpironService {
   /**
  * Trae el tipo o el modo en el que se van a tomar los nuevos y pendientes. 
  */
-public SearchCaseByUserGuidService$(): Observable<ApplicationSettingBE[]> {
+public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
 
   let currentLogin = this.authService.getCurrenLoging();
 
@@ -114,7 +114,7 @@ public SearchCaseByUserGuidService$(): Observable<ApplicationSettingBE[]> {
         throw  Observable.throw(result.Error);
       }
 
-      let list = result.BusinessData as ApplicationSettingBE[];
+      let list = result.BusinessData as CaseByUserGuidBE[];
       return list;
    })).pipe(catchError(helperFunctions.handleError));
 

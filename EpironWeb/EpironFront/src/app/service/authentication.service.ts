@@ -182,8 +182,8 @@ export class AuthenticationService {
   
   public userAutenticacion$(userName: string, password: string, domain: string, returnUrl: string): Observable<any> {
 
-    let app = this.getAppInstance();
-    alert(app.Token);
+    //let app = this.getAppInstance();
+    let token = this.getLastToken();
     //UserAutenticacionReq
     var bussinesData = {
       event_tag : 'USER-AUTENTIC',
@@ -194,7 +194,7 @@ export class AuthenticationService {
       userKey: password,
       domainGUID: '8335209c-d4ad-e311-9dd1-0022640637c2', //domain allus-ar,
       AutTypeGUID: '0471220c-d147-e311-a348-000c292448bd',
-      guidintercambio : app.Token,
+      guidintercambio : token,
       UserKey : password,
 
       //grant_type: 'password',
@@ -202,6 +202,7 @@ export class AuthenticationService {
       //securityProviderName: AppConstants.oaut_securityProviderName,
       //client_secret: AppConstants.oaut_client_secret
     }
+ 
 
     return this.http.post<EpironApiResponse>(AppConstants.AppOAuth_URL,
       bussinesData, AppConstants.httpClientOption_contenttype_json).pipe(
@@ -209,14 +210,22 @@ export class AuthenticationService {
 
           let currentLogin: CurrentLoginEpiron = new CurrentLoginEpiron();
 
-          if(!res.Errors){
+          if(res.Errors){
               helperFunctions.handleEpironError(res.Errors);
           }
 
           currentLogin.userData = new UserAutenticacionRes();
           currentLogin.userData = res.Result as UserAutenticacionRes;
           localStorage.setItem('currentLogin', JSON.stringify(currentLogin));
-          
+
+          if(currentLogin.userData.Token)
+             localStorage.setItem('last_token', JSON.stringify(currentLogin.userData.Token));
+
+             let lcRes: logingChange = new logingChange();
+             lcRes.isLogued = true;
+             lcRes.returnUrl = returnUrl;
+             this.logingChange_subject$.next(lcRes);
+
           // let tokenInfo = jwt_decode(currentLogin.oAuthResult.access_token); // decode token
 
 
@@ -284,11 +293,19 @@ export class AuthenticationService {
     let str = localStorage.getItem('appInstance');
     if (str) {
       appInstance = JSON.parse(str);
-      if (appInstance.Token) {
+      if (appInstance.AppInstanceGuid) {
         return appInstance;
       }
     }
     return null;
+
+  }
+
+  public getLastToken(): string {
+    
+    let last_token = localStorage.getItem('last_token');
+    return JSON.parse(last_token);
+      
 
   }
 

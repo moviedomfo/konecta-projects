@@ -110,7 +110,9 @@ namespace EpironAPI.Controllers
             var jsonReq = Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(req);
             int reintentos;
             ///Guid guidSession = Guid.NewGuid();
-            if (req.AppInstanceGUID == Guid.Empty | req.LoginHost == string.Empty | req.LoginIP == string.Empty | req.guidintercambio == Guid.Empty | req.AutTypeGUID == Guid.Empty | req.UserName == string.Empty | req.UserKey == string.Empty)
+            if (req.AppInstanceGUID == Guid.Empty | req.LoginHost == string.Empty | req.LoginIP == string.Empty 
+                //req.guidintercambio == Guid.Empty
+                | req.AutTypeGUID == Guid.Empty | req.UserName == string.Empty | req.UserKey == string.Empty)
             {
                 //Error
                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
@@ -134,7 +136,8 @@ namespace EpironAPI.Controllers
                     var dtValido = AccesoDatos.AuditTrailLogin_s_ByAuditTrailLoginGUID_Valid(req.AppInstanceGUID, req.guidintercambio);
                     reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, null);
                     //si el dtvalido tiene mas de una columna es valido, si tiene solo una columna significa que me devuelve un codigo de error
-                    if (!dtValido.EventResponseInternalCode.HasValue)//No hay error
+                    //if (!dtValido.EventResponseInternalCode.HasValue )//No hay error
+                    if (dtValido!=null) ////TODO: moviedo se comenta para evitar GUID de login ya esta en uso.
                     {
 
                         if ((reintentos != 999) && (reintentos != 22))
@@ -288,20 +291,11 @@ namespace EpironAPI.Controllers
                                             {
                                                 //El usuario no posee acceso a la instancia de aplicación
                                                 //con el tipo de autenticacion seleccionado   7 (si NO ES Windows)
-                                                ///row = dtCampos.NewRow();
+                                            
                                                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(7);
                                                 errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
                                                 
-                                                ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                ////row["Guid"] = dtLog.Rows[0][0].ToString();
-
-                                                ////dtCampos.Rows.Add(row);
-                                                ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                ////UpdateResponse(dtLog, XMLResponse);
-                                                ////dsSession.Tables.Add(dtCampos);
-                                                //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
+                                             
 
                                             }
                                         }
@@ -391,36 +385,17 @@ namespace EpironAPI.Controllers
                                                             errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(8);
                                                             errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
                                                           
-                                                            ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                            ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                            ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                            ////row["Guid"] = dtLog.Rows[0][0].ToString();
-
-                                                            ////dtCampos.Rows.Add(row);
-
-                                                            ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                            ////UpdateResponse(dtLog, XMLResponse);
-                                                            ////dsSession.Tables.Add(dtCampos);
-                                                            //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
+                        
                                                         }
                                                     }
                                                     else
                                                     {
                                                         //Error 24 - EL usuario no pudo autenticarse en el controlador de active directory
-                                                        ////row = dtCampos.NewRow();
+                                                    
                                                         errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(24);
                                                         errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
                                                    
-                                                        ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                        ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                        ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                        ////row["Guid"] = dtLog.Rows[0][0].ToString();
-
-                                                        ////dtCampos.Rows.Add(row);
-                                                        ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                        ////UpdateResponse(dtLog, XMLResponse);
-                                                        ////dsSession.Tables.Add(dtCampos);
-                                                        //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
+                                               
                                                     }
 
                                                 }
@@ -430,20 +405,10 @@ namespace EpironAPI.Controllers
                                                     //en el dominio seleccionado (si es windows)
                                                     //Anexo 10 no devuelve resultados (AuthenticationTypeApplicationInstanceUser_s_Valid)
                                                     //21 (si ES Windows)
-                                                    ////row = dtCampos.NewRow();
+                                                   
                                                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(21);
                                                     errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
-                                                    
-                                                    ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                    ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                    ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                    ////row["Guid"] = dtLog.Rows[0][0].ToString();
-
-                                                    ////dtCampos.Rows.Add(row);
-                                                    ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                    ////UpdateResponse(dtLog, XMLResponse);
-                                                    ////dsSession.Tables.Add(dtCampos);
-                                                    //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
+                                                
 
                                                 }
 
@@ -455,16 +420,7 @@ namespace EpironAPI.Controllers
                                                 errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(23);
                                                 errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
                                                 
-                                                ////row["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
-                                                ////row["EventResponseText"] = dtError.Rows[0][1].ToString();
-                                                ////row["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
-                                                ////row["Guid"] = dtLog.Rows[0][0].ToString();
-
-                                                ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
-                                                ////UpdateResponse(dtLog, XMLResponse);
-                                                ////dtCampos.Rows.Add(row);
-                                                ////dsSession.Tables.Add(dtCampos);
-                                                //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
+                                        
                                             }
                                         }
                                     }
@@ -474,7 +430,7 @@ namespace EpironAPI.Controllers
                                         //No se encuentran los datos del evento
                                         errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
                                         
-                                        ///dsSession.Tables.Add(dtError);
+                                      
                                     }
                                 }
                                 else
@@ -557,12 +513,12 @@ namespace EpironAPI.Controllers
                 {
 
                     errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
-                    return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+                    return apiHelper.fromError(errorResponse);
                 }
 
                 if (errorResponse != null)
                 {
-                    return apiHelper.fromObject<UserAutenticacionRes>(null, errorResponse, HttpStatusCode.BadRequest);
+                    return apiHelper.fromError(errorResponse);
                 }
                 else
                 {

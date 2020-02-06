@@ -12,12 +12,13 @@ import { DashboardComponent } from './functionalComponents/security/dashboard/da
 import { UserComponent } from './functionalComponents/security/user/user.component';
 import { UserGridComponent } from './functionalComponents/security/user-grid/user-grid.component';
 import { UserRessetPwdComponent } from './functionalComponents/security/user-resset-pwd/user-resset-pwd.component';
+import { CasosGridComponent } from './functionalComponents/casos/casosGrid/casosGrid.component';
 
 const appRoutes: Routes = [
 
   { path: 'login', component: LoginComponent },
   { path: '', component: HomeComponent },
-  { path: 'personsGrid', component: PersonGridComponent, canActivate: [AuthGuard] },
+  { path: 'casosGrid', component: CasosGridComponent, canActivate: [AuthGuard] },
 
   {
     path: 'security',

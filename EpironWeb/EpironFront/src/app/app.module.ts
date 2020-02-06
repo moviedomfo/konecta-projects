@@ -57,6 +57,8 @@ import {  DateValueAccessorModule } from './common-components/controls/DateValue
 import { AlertBlockComponent } from './common-components/alert-block/alert-block.component';
 import { PersonGridComponent } from './functionalComponents/persons/person-grid/person-grid.component';
 import { JwtAuthInterceptor } from './service/jwtIntersept';
+import { CasosGridComponent } from './functionalComponents/casos/casosGrid/casosGrid.component';
+import { EpironService } from './service/epiron.service';
 
 
 
@@ -83,7 +85,7 @@ import { JwtAuthInterceptor } from './service/jwtIntersept';
     HomeComponent, UserMessagesComponent,UserTasksComponent, AddressListComponent, AddreesComponent, 
     OnlyNumbersDirective, 
     UserComponent, UserGridComponent, DashboardComponent
-    ,UserRessetPwdComponent, 
+    ,UserRessetPwdComponent, CasosGridComponent, 
   ],
   imports: [
     NgIdleKeepaliveModule.forRoot(),
@@ -95,7 +97,7 @@ import { JwtAuthInterceptor } from './service/jwtIntersept';
     HttpClientModule,DateValueAccessorModule 
     
   ],
-  providers: [EpironSecurityService,PersonsService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor],
+  providers: [EpironSecurityService,PersonsService,EpironService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
