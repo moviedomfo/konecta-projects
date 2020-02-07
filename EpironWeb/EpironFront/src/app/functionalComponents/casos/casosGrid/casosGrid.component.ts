@@ -64,8 +64,8 @@ export class CasosGridComponent implements OnInit {
   }
   private createColumnDefs() {
     this.columnDefs = [
-      { headerName: "Nombre", field: "name" ,width: 150,pinned: true,filter: 'text'},
-      { headerName: "Apellido", field: "lastName" ,width: 150,pinned: true,filter: 'text'},
+      { headerName: "CaseId", field: "CaseId" ,width: 150,pinned: true,filter: 'text'},
+      { headerName: "CaseCreated", field: "CaseCreated" ,width: 150,pinned: true,filter: 'text'},
       { headerName: "Documento", field: "identityCardNumber" ,width: 150,pinned: true,filter: 'text'},
       
       // { headerName: "Especialidad", field: "NombreEspecialidad" ,width: 150,pinned: true,filter: 'text'},
