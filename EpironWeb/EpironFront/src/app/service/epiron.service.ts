@@ -96,9 +96,8 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
   //UserAutenticacionReq
   var bussinesData = {
 
-    UserGuid: currentLogin.userData.UserGuid,
+    UserGuid: AppConstants.emptyGuid,//currentLogin.userData.UserGuid,
     State: 1
-
 
   }
 
@@ -108,7 +107,8 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
   return  this.http.post<any>(`${AppConstants.AppExecuteAPI_URL}`,executeReq,{ headers: outhHeader }).pipe(
      map(res => {
 
-      let result :Result= JSON.parse(res.Result) as Result;
+      
+      let result :Result= JSON.parse(res.Result.Result) as Result;
 
       if (result.Error) {
         throw  Observable.throw(result.Error);
