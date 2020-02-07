@@ -10,7 +10,7 @@ export const environment = {
   oaut_client_secret:'pletorico28',
   oaut_securityProviderName:'epironWeb',
   
-  iddleTimeout_seconds:800,//idle timeout of 10' 
+  iddleTimeout_seconds:8000,//idle timeout of 10' 
   iddle_waite_Timeout_seconds : 10 ,//period of time in seconds. after 10 seconds of inactivity, the user will be considered timed out.
   version: '1.0 beta'  ,
   culture:'es-AR',

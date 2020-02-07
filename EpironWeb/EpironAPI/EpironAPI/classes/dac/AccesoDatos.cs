@@ -14,6 +14,8 @@ namespace EpironAPI.classes
     public class AccesoDatos
     {
 
+
+
         /// <summary>
         /// Anexo 2 CU004 SistemaDeSeguridad_Aplicación_CU004_LoginDeAplicaciones
         /// Valida la instancia de la aplicación

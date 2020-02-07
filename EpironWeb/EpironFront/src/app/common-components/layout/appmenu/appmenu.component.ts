@@ -50,7 +50,7 @@ export class AppmenuComponent implements OnInit {
       this.isLogged = false;
       this.loadDefaultPhoto(0);
       this.apellidoNombre='No loging';
-      //   alert('NOT user logged')
+      
     }
 
 

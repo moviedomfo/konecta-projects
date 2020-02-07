@@ -18,7 +18,7 @@ const appRoutes: Routes = [
 
   { path: 'login', component: LoginComponent },
   { path: '', component: HomeComponent },
-  { path: 'casosGrid', component: CasosGridComponent, canActivate: [AuthGuard] },
+  { path: 'casosGrid', component: CasosGridComponent },
 
   {
     path: 'security',

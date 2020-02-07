@@ -3,9 +3,11 @@ using EpironAPI.classes;
 using EpironAPI.Model;
 using EpironAPI.Models;
 using Fwk.HelperFunctions;
+using Microsoft.Practices.EnterpriseLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -23,6 +25,9 @@ namespace EpironAPI.Controllers
         public DispController()
         {
             generateWhiteList();
+      
+            
+            
 
         }
         /// <summary>
@@ -30,6 +35,14 @@ namespace EpironAPI.Controllers
         /// </summary>
         void generateWhiteList()
         {
+            if(whiteListSVC == null || whiteListSVC.whiteList .Count==0)
+            {
+                try {
+                    DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
+                }
+                catch { } 
+                
+            }
             if (System.IO.File.Exists("whiteListSVC.json"))
             {
                 string str = System.Web.HttpContext.Current.Server.MapPath("~");

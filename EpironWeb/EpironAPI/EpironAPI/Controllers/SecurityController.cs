@@ -2,6 +2,7 @@
 using EpironAPI.classes;
 using EpironAPI.Model;
 using EpironAPI.Models;
+using Microsoft.Practices.EnterpriseLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,12 @@ namespace EpironAPI.Controllers
     [RoutePrefix("api/security")]
     public class SecurityController : ApiController
     {
+
+        public SecurityController()
+        {
+            
+        }
+
         // GET api/values
         public IEnumerable<string> Get()
         {

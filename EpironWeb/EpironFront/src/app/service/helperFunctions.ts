@@ -41,16 +41,12 @@ export class helperFunctions {
       return throwError(ex);
     }
 
-    if (httpError.error.Error) {
-      
-      return helperFunctions.handleEpironError(httpError.error.Error);
-      
-    }
+    
 
     // The backend returned an unsuccessful response code.
     // The response body may contain clues as to what went wrong,
     if (httpError instanceof HttpErrorResponse) {
-      //alert(error.error);
+      
       ex.Status = httpError.status;
       if (ex.Status === 401) {
         ex.Message = "No está autorizado para realizar esta acción. Intente iniciar sesion nuevamente, si el problema persiste, por favor comuníquese con el administrador";
@@ -66,6 +62,7 @@ export class helperFunctions {
         }
         else {
           ex.Message = httpError.error;
+          
         }
 
         if (ex.Message || ex.Message.length != 0)
@@ -80,9 +77,18 @@ export class helperFunctions {
       }
       return throwError(ex);
     }
+    if (httpError.error) {
+    if (httpError.error.Error) {
+      
+      return helperFunctions.handleEpironError(httpError.error.Error);
+    }
+  }
 
 
     ex.Message = httpError.message;
+
+    if(httpError.stack)
+      ex.Message = ex.message + ' ' +  httpError.stack;
 
     return throwError(ex);
 

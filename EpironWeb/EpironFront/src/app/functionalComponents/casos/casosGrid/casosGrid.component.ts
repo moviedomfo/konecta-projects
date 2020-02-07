@@ -44,7 +44,7 @@ export class CasosGridComponent implements OnInit {
     this.epironService.SearchCaseByUserGuidService$( ).subscribe(
       res => {
         this.caseList = res;
-    alert(this.caseList);
+    
         if(this.caseList)
         {
           this.count = this.caseList.length;
