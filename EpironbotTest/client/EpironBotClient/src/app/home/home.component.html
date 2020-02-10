@@ -1,0 +1,60 @@
+<section fxLayout="column" fxFlexAlign="stretch">
+  <div fxFlexAlign="center">
+    <p>Konecta bot modetator </p> {{version}}
+  </div>
+ 
+  <p>Aplicación demo para moderar manualmente y probar el ciclo </p>
+ 
+  <mat-tab-group (selectedTabChange)="executeSelectedChange($event)">
+    <table class="table table-condensed  table-hover">
+      <thead >
+        <tr m-0 p-0 >
+          <th style="width: 30px">CaseId</th>
+          <!-- <th style="width: 100px">Id Stock</th> -->
+          <th>CaseCommentGUID</th>
+          <th>CaseCommentTextSent</th>
+          <th>Fecha</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of current_QuotationRequestFullViewList; index as i; "
+          (click)="onClickedRow(i,item)" m-0 p-0>
+
+          <td>
+              <label>{{item.CaseId}}</label>
+          </td>
+
+          <td>
+            <label >{{item.CaseCommentGUID}}</label>
+          </td>
+          <td>
+
+            <label >{{item.ArrivedDate}}</label>
+          </td>
+
+          <td>
+
+            <input type="text" class="form-control" name="txtCaseCommentTextSent" placeholder=""    [(ngModel)]="item.CaseCommentTextSent">
+          </td>
+          <td>
+
+            <input type="text" class="form-control" name="txtCaseCommentTextSent" placeholder=""    [(ngModel)]="item.Text">
+          </td>
+          
+          <td class="text-right py-0 align-middle">
+            <div class="btn-group btn-group-sm">
+           <button name="btnView_{{item.providerId}}" class="btn btn-info"><i class="fas fa-eye"></i></button>
+                <button name="btnModerate_{{item.CaseCommentGUID}}" class="btn btn-danger"
+                  (click)="btnModerate_click(item)"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-tab label="Moderados ">
+       <p>LISTA DE ENVIADOS</p>
+      </mat-tab>
+   
+  </mat-tab-group>
+</section>
