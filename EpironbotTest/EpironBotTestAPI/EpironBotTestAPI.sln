@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpironBotTestAPI", "EpironBotTestAPI.csproj", "{D4495769-06CD-4478-8B4E-02236A1A9A74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "..\client\client.csproj", "{1E862E99-2852-44A4-A150-952726DD4093}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4495769-06CD-4478-8B4E-02236A1A9A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4495769-06CD-4478-8B4E-02236A1A9A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4495769-06CD-4478-8B4E-02236A1A9A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4495769-06CD-4478-8B4E-02236A1A9A74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E862E99-2852-44A4-A150-952726DD4093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E862E99-2852-44A4-A150-952726DD4093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E862E99-2852-44A4-A150-952726DD4093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E862E99-2852-44A4-A150-952726DD4093}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58398C74-C81D-4B68-AC07-2E6F6EEE8ABC}
+	EndGlobalSection
+EndGlobal
