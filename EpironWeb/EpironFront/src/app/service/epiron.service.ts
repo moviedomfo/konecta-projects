@@ -96,8 +96,9 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
   //UserAutenticacionReq
   var bussinesData = {
 
-    UserGuid: AppConstants.emptyGuid,//currentLogin.userData.UserGuid,
+    UserGuid: currentLogin.userData.UserGuid,//currentLogin.userData.UserGuid,
     State: 1
+
 
   }
 
@@ -109,12 +110,13 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
 
       
       let result :Result= JSON.parse(res.Result.Result) as Result;
-
+      
       if (result.Error) {
         throw  Observable.throw(result.Error);
       }
 
       let list = result.BusinessData as CaseByUserGuidBE[];
+      //alert(JSON.stringify(list));
       return list;
    })).pipe(catchError(helperFunctions.handleError));
 

@@ -27,7 +27,12 @@ export class CasosGridComponent implements OnInit {
 
   ngOnInit() {
     this.gridOptions = <GridOptions>{};
-    //this.gridOptions.dateComponentFramework = DateComponent;
+    
+    this.gridOptions.floatingFilter = true;
+    this.gridOptions.rowStyle = {background: 'black'};
+    this.createColumnDefs();
+
+    
 
    this.retriveData();
 
@@ -65,26 +70,41 @@ export class CasosGridComponent implements OnInit {
   private createColumnDefs() {
     this.columnDefs = [
       { headerName: "CaseId", field: "CaseId" ,width: 150,pinned: true,filter: 'text'},
+      { headerName: "CaseModifiedDate", field: "CaseModifiedDate" ,width: 150,pinned: true,filter: 'text'},
       { headerName: "CaseCreated", field: "CaseCreated" ,width: 150,pinned: true,filter: 'text'},
-      { headerName: "Documento", field: "identityCardNumber" ,width: 150,pinned: true,filter: 'text'},
       
-      // { headerName: "Especialidad", field: "NombreEspecialidad" ,width: 150,pinned: true,filter: 'text'},
+      { headerName: "AttentionQueueName", field: "AttentionQueueName" ,width: 150,pinned: true,filter: 'text'},
       // { headerName: "NombreProfecion", field: "NombreProfecion" ,width: 150,pinned: true,filter: 'text'},
-      { headerName: "Fecha alta", field: "entryDate",width: 200,pinned: true }
+      { headerName: "UCUserName", field: "UCUserName",width: 200,pinned: true }
     ];
   }
 
 
   onGridRowDoubleClick(event){
     
-    //console.log(event.node.data);
-    //let Idpersona = event.node.data.IdPersona;
     this.onCaseGridDoubleClick.emit(event.node.data as CaseByUserGuidBE);
-    // http://localhost:4200/patientEdit?id=4350
-    //this.router.navigate(['patientEdit'], { queryParams: { id: patienId }}); 
+    // http://localhost:4200/caseEdit?id=4350
+    //this.router.navigate(['caseEdit'], { queryParams: { id: caseId }}); 
     
-    //this.router.navigate(['/personEdit', Idpersona]); 
+    
     
 
   }
+
+  
+  onGridReady(params) {
+    params.api.sizeColumnsToFit();
+  }
+
+
+  onCellClicked(event) {
+    
+    this.currentCase = event.node.data as CaseByUserGuidBE;
+        
+  }
+
+  onGridCellDoubleClick(event) {
+    //alert(event);
+  }
+
 }
