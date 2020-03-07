@@ -73,6 +73,8 @@ export class AppheaderComponent implements OnInit {
 
     
     var currentLoging: CurrentLoginEpiron = this.authService.getCurrenLoging();
+    
+    
     if (currentLoging) {
 
       this.chk_profDataFront(currentLoging);
@@ -94,12 +96,15 @@ export class AppheaderComponent implements OnInit {
   chk_profDataFront(currentLoging: CurrentLoginEpiron) {
     if (currentLoging.userData) {
 
+      if(!currentLoging.userData.sex)
+          currentLoging.userData.sex =0;
 
       this.isLogged = true;
       this.apellidoNombre = helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
-      if (currentLoging.userData.photo !== null) {
-        this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.sex));
+      if (currentLoging.userData.photo) {
+        
+        this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
       }
       else {
         this.loadDefaultPhoto(currentLoging.userData.sex);

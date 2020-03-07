@@ -37,7 +37,8 @@ export class AppmenuComponent implements OnInit {
 
   chk_logingFront() {
     var currentLoging: CurrentLoginEpiron = this.authService.getCurrenLoging();
-    
+    if(!currentLoging.userData.sex)
+        currentLoging.userData.sex =0;
     if (currentLoging) {
 
     
@@ -65,7 +66,7 @@ export class AppmenuComponent implements OnInit {
 
       this.apellidoNombre =helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
-      if (currentLoging.userData.photo !== null) {
+      if (currentLoging.userData.photo) {
         this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
       }
       else {

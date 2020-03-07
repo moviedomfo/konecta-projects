@@ -19,7 +19,7 @@ export class DateValidators {
       return (c: AbstractControl): { [key: string]: boolean } | null => {
           const date1 = c.get(dateField1).value;
           const date2 = c.get(dateField2).value;
-          if ((date1 !== null && date2 !== null) && date1 > date2) {
+          if ((date1  && date2 ) && date1 > date2) {
               return validatorField;
           }
           return null;
@@ -38,7 +38,7 @@ export class DateValidators {
         const date1 = c.get(dateControlDateName).value;
         const dateMoreThan = c.get(dateThanControlName).value;
         //VALID
-        if ((date1 !== null && dateMoreThan !== null) && date1 > dateMoreThan) {
+        if ((date1 && dateMoreThan) && date1 > dateMoreThan) {
             return validatorField;
         }
         return null;
