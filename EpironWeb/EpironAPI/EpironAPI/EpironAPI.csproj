@@ -46,25 +46,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Epiron.Gestion.BackEnd.BE">
-      <HintPath>libreries\Epiron.Gestion.BackEnd.BE.dll</HintPath>
+      <HintPath>..\libs\Epiron.Gestion.BackEnd.BE.dll</HintPath>
     </Reference>
     <Reference Include="Epiron.Gestion.BackEnd.Common">
-      <HintPath>libreries\Epiron.Gestion.BackEnd.Common.dll</HintPath>
+      <HintPath>..\libs\Epiron.Gestion.BackEnd.Common.dll</HintPath>
     </Reference>
     <Reference Include="Epiron.Gestion.BackEnd.DAC">
-      <HintPath>libreries\Epiron.Gestion.BackEnd.DAC.dll</HintPath>
+      <HintPath>..\libs\Epiron.Gestion.BackEnd.DAC.dll</HintPath>
     </Reference>
     <Reference Include="Epiron.Gestion.BackEnd.SVC">
-      <HintPath>libreries\Epiron.Gestion.BackEnd.SVC.dll</HintPath>
+      <HintPath>..\libs\Epiron.Gestion.BackEnd.SVC.dll</HintPath>
     </Reference>
     <Reference Include="Epiron.Security.BE">
-      <HintPath>libreries\Epiron.Security.BE.dll</HintPath>
+      <HintPath>..\libs\Epiron.Security.BE.dll</HintPath>
     </Reference>
     <Reference Include="Epiron.Security.DAC">
-      <HintPath>libreries\Epiron.Security.DAC.dll</HintPath>
+      <HintPath>..\libs\Epiron.Security.DAC.dll</HintPath>
     </Reference>
     <Reference Include="Epiron.Security.SVC">
-      <HintPath>libreries\Epiron.Security.SVC.dll</HintPath>
+      <HintPath>..\libs\Epiron.Security.SVC.dll</HintPath>
     </Reference>
     <Reference Include="Fwk.Bases">
       <HintPath>..\libs\Fwk.Bases.dll</HintPath>

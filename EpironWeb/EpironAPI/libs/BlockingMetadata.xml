@@ -1,0 +1,111 @@
+
+<ServiceConfigurationCollection>
+  <ServiceConfiguration name="ClearBlockingMarksByParamsService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:26:55.9271315-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.ClearBlockingMarksByParams.ClearBlockingMarksByParamsService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.ClearBlockingMarksByParams.ClearBlockingMarksByParamsRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.ClearBlockingMarksByParams.ClearBlockingMarksByParamsResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Required</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="ClearBlockingMarksByUserNameService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:27:08.0075063-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.ClearBlockingMarksByUserName.ClearBlockingMarksByUserNameService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.ClearBlockingMarksByUserName.ClearBlockingMarksByUserNameRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.ClearBlockingMarksByUserName.ClearBlockingMarksByUserNameResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Required</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="CreateService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:27:21.8513519-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.Create.CreateService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.Create.CreateRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.Create.CreateResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="ExistsService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:27:38.3573986-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.Exists.ExistsService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.Exists.ExistsRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.Exists.ExistsResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="ExistsUserService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:27:46.5139509-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.ExistsUser.ExistsUserService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.ExistsUser.ExistsUserRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.ExistsUser.ExistsUserResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="GetByParamService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:27:56.3260064-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.GetByParam.GetByParamService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.GetByParam.GetByParamRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.GetByParam.GetByParamResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="RemoveService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-13T14:28:05.031394-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.Remove.RemoveService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.Remove.RemoveRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.Remove.RemoveResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="CreateUserMarkService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-14T09:10:48.2824595-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.CreateUserMark.CreateUserMarkService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.CreateUserMark.CreateUserMarkRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.CreateUserMark.CreateUserMarkResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+  <ServiceConfiguration name="RemoveUserMarkService">
+    <CreatedUserName>yantrossero</CreatedUserName>
+    <CreatedDateTime>2016-12-14T10:14:46.6542583-03:00</CreatedDateTime>
+    <Handler>Allus.Blocking.SVC.RemoveUserMark.RemoveUserMarkService, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Handler>
+    <Request>Allus.Blocking.SVC.RemoveUserMark.RemoveUserMarkRequest, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Request>
+    <Response>Allus.Blocking.SVC.RemoveUserMark.RemoveUserMarkResponse, Allus.Blocking.SVC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Response>
+    <Available>true</Available>
+    <Audit>false</Audit>
+    <TransactionalBehaviour>Suppres</TransactionalBehaviour>
+    <IsolationLevel>ReadUncommitted</IsolationLevel>
+    <ApplicationId />
+  </ServiceConfiguration>
+</ServiceConfigurationCollection>
