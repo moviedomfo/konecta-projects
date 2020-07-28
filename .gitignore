@@ -51,3 +51,5 @@ testem.log
 Thumbs.db
 node_modules/
 EpironbotTest/libs/Fwk.security.core.deps.json
+*.pdb
+*.user
