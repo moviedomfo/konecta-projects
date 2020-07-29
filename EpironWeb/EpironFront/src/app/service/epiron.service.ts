@@ -116,6 +116,7 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
       }
 
       let list = result.BusinessData as CaseByUserGuidBE[];
+      
       //alert(JSON.stringify(list));
       return list;
    })).pipe(catchError(helperFunctions.handleError));

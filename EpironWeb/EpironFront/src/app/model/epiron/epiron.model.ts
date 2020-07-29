@@ -66,4 +66,6 @@ import { DomainBE, AuthenticationTypeBE } from './epiron.security.model';
         public  CaseTypeInternalCode?:number;
         public ClientFirstName:string;
         public ClientLastName:string;
+
+        
     }

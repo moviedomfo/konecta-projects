@@ -53,17 +53,25 @@ export class helperFunctions {
         return throwError(ex);
       }
       if (httpError.error) {
-        ex.Type = httpError.error.ExceptionType || httpError.error.exceptionType || httpError.error.ClassName;
-        if (ex.Type) {
-          ex.Message = httpError.error.ExceptionMessage || httpError.error.exceptionMessage || httpError.error.Message;
-          if (httpError.error.InnerException) {
-            ex.Message = ex.Message + "\r\n" + httpError.error.ExceptionMessage || httpError.error.InnerException.exceptionMessage || httpError.error.InnerException.Message;
+        if(httpError.error.Error){
+            //ex.Message =httpError.error.Error.EventResponseInternalCode
+            ex.Message=  httpError.error.Error.EventResponseText;
+            
+        }
+        else{
+          ex.Type = httpError.error.ExceptionType || httpError.error.exceptionType || httpError.error.ClassName;
+          if (ex.Type) {
+            ex.Message = httpError.error.ExceptionMessage || httpError.error.exceptionMessage || httpError.error.Message;
+            if (httpError.error.InnerException) {
+              ex.Message = ex.Message + "\r\n" + httpError.error.ExceptionMessage || httpError.error.InnerException.exceptionMessage || httpError.error.InnerException.Message;
+            }
+          }
+          else {
+            ex.Message = httpError.error;
+            
           }
         }
-        else {
-          ex.Message = httpError.error;
-          
-        }
+       
 
         if (ex.Message || ex.Message.length != 0)
           return throwError(ex);

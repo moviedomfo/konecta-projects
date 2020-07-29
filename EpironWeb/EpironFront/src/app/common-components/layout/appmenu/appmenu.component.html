@@ -11,11 +11,16 @@
   <div class="sidebar">
        <!-- Sidebar user panel (optional) -->
        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
+        <!-- <div class="image">
           
           <img [src]="providerPhotoUrl" class="img-circle elevation-2" alt="User Image">
+        </div> -->
+        <div  *ngIf="!isLogged" class="info">
+          <a  class="d-block" [routerLink]="['login']"><span class="fa fa-user-circle"
+            style="color: cadetblue"></span> Login
+          </a>
         </div>
-        <div class="info">
+        <div  *ngIf="isLogged" class="info">
           <a href="#" class="d-block">  {{apellidoNombre}}</a>
         </div>
       </div>

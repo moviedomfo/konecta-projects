@@ -89,7 +89,9 @@ export class AppheaderComponent implements OnInit {
   }
 
   onLogout() {
+  
     this.authService.signOut();
+    this.chk_logingFront();
     //this.router.navigate(['/login']);
   }
 
@@ -102,13 +104,13 @@ export class AppheaderComponent implements OnInit {
       this.isLogged = true;
       this.apellidoNombre = helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
-      if (currentLoging.userData.photo) {
+      // if (currentLoging.userData.photo) {
         
-        this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
-      }
-      else {
-        this.loadDefaultPhoto(currentLoging.userData.sex);
-      }
+      //   this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
+      // }
+      // else {
+      //   this.loadDefaultPhoto(currentLoging.userData.sex);
+      // }
       //this.nombreEspecialidad = prof.NombreEspecialidad;
       //var sinceDate = moment(prof.FechaAlta).format('MMMM Do YYYY, h:mm:ss a');
       //var since = moment(currentLoging.entryDate, "YYYYMMDD").fromNow();

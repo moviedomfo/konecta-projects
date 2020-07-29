@@ -37,8 +37,8 @@ export class AppmenuComponent implements OnInit {
 
   chk_logingFront() {
     var currentLoging: CurrentLoginEpiron = this.authService.getCurrenLoging();
-    if(!currentLoging.userData.sex)
-        currentLoging.userData.sex =0;
+    // if(!currentLoging.userData.sex)
+    //     currentLoging.userData.sex =0;
     if (currentLoging) {
 
     

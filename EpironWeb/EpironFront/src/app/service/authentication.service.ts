@@ -83,7 +83,7 @@ export class AuthenticationService {
     var bussinesData = {
       userName: userName,
       password: password,
-      domainGUID: 'FDEB4B1F-229E-E311-9DD1-0022640637C2', //domain allus-ar,
+     // domainGUID: 'FDEB4B1F-229E-E311-9DD1-0022640637C2', //domain allus-ar,
       event_tag : 'USER-AUTENTIC',
       AppInstanceGUID : AppConstants.AppInstanceGUID,
       guidintercambio :'75CFEFE4-5A79-E411-BD73-0022640637C2',
@@ -192,8 +192,8 @@ export class AuthenticationService {
       LoginIP: this.commonService.ipinfo.ip,
       userName: userName,
       userKey: password,
-      domainGUID: '8335209c-d4ad-e311-9dd1-0022640637c2', //domain allus-ar,
-      AutTypeGUID: '0471220c-d147-e311-a348-000c292448bd',
+      // domainGUID: '8335209c-d4ad-e311-9dd1-0022640637c2', //domain allus-ar,
+       AutTypeGUID: '5AD5A762-D147-E311-A348-000C292448BD',
       guidintercambio : token,
       UserKey : password,
 
