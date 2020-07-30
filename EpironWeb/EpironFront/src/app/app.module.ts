@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
@@ -59,6 +59,7 @@ import { PersonGridComponent } from './functionalComponents/persons/person-grid/
 import { JwtAuthInterceptor } from './service/jwtIntersept';
 import { CasosGridComponent } from './functionalComponents/casos/casosGrid/casosGrid.component';
 import { EpironService } from './service/epiron.service';
+import { fwkSeriveHttpInterseptor } from './service/httpInterseptor';
 
 
 
@@ -97,7 +98,14 @@ import { EpironService } from './service/epiron.service';
     HttpClientModule,DateValueAccessorModule 
     
   ],
-  providers: [EpironSecurityService,PersonsService,EpironService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor],
+  providers: [EpironSecurityService,PersonsService,EpironService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor
+    //        ,       
+    // { //Sepueden agreagr tods los que querramos
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: fwkSeriveHttpInterseptor,
+    //   multi:true // para que intercepte
+    //  } 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

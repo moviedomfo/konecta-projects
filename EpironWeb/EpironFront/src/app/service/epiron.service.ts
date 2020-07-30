@@ -95,10 +95,8 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
 
   //UserAutenticacionReq
   var bussinesData = {
-
     UserGuid: currentLogin.userData.UserGuid,//currentLogin.userData.UserGuid,
     State: 1
-
 
   }
 

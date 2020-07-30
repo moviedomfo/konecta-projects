@@ -38,7 +38,7 @@ namespace EpironAPI.Controllers
             if(whiteListSVC == null || whiteListSVC.whiteList .Count==0)
             {
                 try {
-                    DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
+                   // DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
                 }
                 catch { } 
                 
