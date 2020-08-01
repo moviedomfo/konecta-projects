@@ -99,12 +99,12 @@ import { fwkSeriveHttpInterseptor } from './service/httpInterseptor';
     
   ],
   providers: [EpironSecurityService,PersonsService,EpironService,  CommonService,  AuthenticationService,AuthGuard,JwtAuthInterceptor
-    //        ,       
-    // { //Sepueden agreagr tods los que querramos
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: fwkSeriveHttpInterseptor,
-    //   multi:true // para que intercepte
-    //  } 
+           ,       
+    { //Sepueden agreagr tods los que querramos
+      provide: HTTP_INTERCEPTORS,
+      useClass: fwkSeriveHttpInterseptor,
+      multi:true // para que intercepte
+     } 
   ],
   bootstrap: [AppComponent]
 })

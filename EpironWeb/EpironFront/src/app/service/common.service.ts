@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AppConstants,  CommonParams, ParamTypeEnum } from "../model/common.constants";
-import { IAPIRequest, ContextInformation, ExecuteReq, Request, ServiceError,  IpInfo, ParamBE, UbicacionItemBE, localidadesResponse, ApiServerInfo } from '../model/common.model';
-
-// permmite cambiar la variable obsevada
 import { Observable, Subject, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-//import { element } from 'protractor';
 import { Router } from '@angular/router'
 import { HttpHeaders, HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { helperFunctions } from './helperFunctions';
-import { headersToString } from 'selenium-webdriver/http';
 import { CurrentLogin, CurrentLoginEpiron } from '../model';
+import { IAPIRequest, ContextInformation, ExecuteReq, Request, ServiceError,  IpInfo, ParamBE, UbicacionItemBE, localidadesResponse, ApiServerInfo } from '../model/common.model';
+
 
 //var colors = require('colors/safe');
 @Injectable()
@@ -44,13 +41,12 @@ export class CommonService {
     return  "Ip: " + this.ipinfo.ip + ", city: " +  this.ipinfo.city + ", region :" +  this.ipinfo.region + ", country :" + this.ipinfo.country;
   }
 
-      /**
+  /**
   * utiliza una api paara retornar informacion hacerca del host cliente
   * @param 
   * @returns json con ip,country de la clase ipinfo
   */
- 
-  get_host_ipInfo(): Observable<IpInfo> {
+   get_host_ipInfo(): Observable<IpInfo> {
 
     return this.http.get<IpInfo>('https://ipinfo.io?token=21ea63fe5267b3').pipe(
       map(function (res) {
@@ -250,7 +246,7 @@ export class CommonService {
     contextInfo.ProviderNameWithCultureInfo = "";
     contextInfo.HostName =  this.ipinfo.ip;
     contextInfo.HostIp = this.ipinfo.ip;
-    contextInfo.HostTime = new Date(),
+    contextInfo.HostTime = new Date();
     //contextInfo.ServerName = 'WebAPIDispatcherClienteWeb';
     contextInfo.ServerTime = new Date();
 
@@ -338,6 +334,7 @@ export class CommonService {
       alert("Se encontraron errores " + serviceError.Message);
     }
   }
+
   public handleError2(httpError :any) {
     let errorMessage = '';
     if (httpError.error instanceof ErrorEvent) {

@@ -95,9 +95,8 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
 
   //UserAutenticacionReq
   var bussinesData = {
-    UserGuid: currentLogin.userData.UserGuid,//currentLogin.userData.UserGuid,
+    UserGuid: currentLogin.userData.UserGuid,
     State: 1
-
   }
 
   let outhHeader = this.commonService.get_AuthorizedHeader();
