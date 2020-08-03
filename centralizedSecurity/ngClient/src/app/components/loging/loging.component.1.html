@@ -1,0 +1,96 @@
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center text-white mb-4">Bootstrap 4 Login Form</h2>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+
+                    <!-- form card login -->
+                    <div class="card rounded-0">
+                        <div class="card-header">
+                            <h3 class="mb-0">Ingresar</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="spinner-container" *ngIf="loading" >
+                                <mat-spinner  [diameter]="30" [color]="Warn"></mat-spinner> 
+          
+                             </div>
+                           <form #formLogin="ngForm"  (submit)="authenticate()"  novalidate>
+                           <div class="input-group form-group">
+                             <div class="input-group-prepend">
+                               <span class="input-group-text"><i class="fa fa-user"></i></span>
+                             </div>
+                             <input type="text" name="username" class="form-control"   [(ngModel)]='currentUser.UserName' 
+                                     [ngClass]="{ 'is-invalid': formLogin.submitted && username.invalid }" 
+                                     placeholder="usuario de windows" required  #username='ngModel' >
+                               <div  *ngIf='formLogin.submitted && username.invalid' class="invalid-feedback">
+                                   <div *ngIf="username.errors.required"> Username is required</div>
+                               </div > 
+                               
+                               
+                           </div>
+                           <div class="input-group form-group">
+                             <div class="input-group-prepend">
+                               <span class="input-group-text"><i class="fa fa-key"></i></span>
+                             </div>
+                             <input type='password' name='password' class="form-control"   
+                             [ngClass]="{ 'is-invalid': formLogin.submitted && password.invalid }" 
+                             [(ngModel)]='currentUser.Password'  placeholder="password" required  #password='ngModel' >
+                             <div  *ngIf='password.invalid' class="invalid-feedback">
+                                 <div *ngIf="password.errors.required"> Password is required</div>
+                             </div > 
+                           </div>
+                           <!-- <div class="row align-items-center remember">
+                             <input type="checkbox">Remember Me
+                           </div> -->
+                           <!-- <div class="form-group dominios">
+                                 <div class="rounded border border-warning " >
+                                     <mat-radio-group class = "tp-radio-group"  [(ngModel)] = "currentUser.DomainId" name="radioGroup" class="m-10">
+                                         <mat-radio-button class = "tp-radio-button" name="option"   *ngFor = "let dom of domains" [value] = "dom.DomainId" class = "m-l-5" >
+                                            {{dom.Domain}}
+                                         </mat-radio-button>
+                                      </mat-radio-group>
+                                 </div>
+                                   
+                               </div> -->
+                               <div class="form-group dominios">
+                                   <div class="rounded border border-warning " >
+                                   <ul class="list-group">
+                                         <li class="list-group-item"  *ngFor="let dom of domains"  >
+                                           <input type="radio" [(ngModel)]="currentUser.Domain" name="domain" value="{{dom.Domain}}" (click)='radioClick()'/> 
+                                           {{dom.Domain}}
+                                         </li>
+                                   </ul>
+                                 </div>
+                               
+                               </div>
+                                   
+                           <div class="form-group">
+                             <input type="submit" value="Login" class="btn float-right login_btn" 
+                             [disabled]='formLogin.invalid'>
+         
+                             <!-- <button type="submit" class="btn float-right login_btn" 
+                             [disabled]='!password.valid || !username.valid'><i class="fa fa-sing-in"></i> Loging</button> -->
+                           </div>
+                         </form>
+                        </div>
+                        <!--/card-body-->
+                    </div>
+                    <!-- /form card login -->
+
+                </div>
+
+
+            </div>
+            <!--/row-->
+
+        </div>
+        <!--/col-->
+    </div>
+    <!--/row-->
+    <div class="col-sm-12 col-md-12 col-lg-12" >
+        <app-error-box-container [globalError]="globalError"></app-error-box-container>
+     </div>
+</div>
+<!--/container-->

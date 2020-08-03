@@ -29,7 +29,6 @@ namespace CentralizedSecurity.webApi.Controllers
         /// </summary>
         public ActiveDirectoryController()
         {
-            
             _LDAPService =  LDAPService.CreateInstance();
         }
 
@@ -247,8 +246,8 @@ namespace CentralizedSecurity.webApi.Controllers
                var fwk_domain_name = _LDAPService.Get_correct_DomainName(req.DomainName);
 
                 ActiveDirectoryService.User_Reset_Password(req.WindowsUser, req.newPassword, fwk_domain_name);
-                
-                DAC.MeucciDAC.ReseteoWeb_Log(req.Emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId, req.ticket, Common.resetear, req.host);
+                //ActiveDirectoryService.User_MustChangePasswordNextLogon(req.WindowsUser,true, fwk_domain_name);
+                 DAC.MeucciDAC.ReseteoWeb_Log(req.Emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId, req.ticket, Common.resetear, req.host);
                 DAC.MeucciDAC.ReseteoWeb_EnviosMails(req.Emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId,  Common.resetear, req.host);
                 return apiHelper.fromObject<String>("El reseteo se realizó exitosamente. La contraseña provisoria es " + req.newPassword);
             }
@@ -265,6 +264,48 @@ namespace CentralizedSecurity.webApi.Controllers
                 if (msg.Contains("E_ACCESSDENIED"))
                 {
                     TechnicalException t = new TechnicalException("No es posible resetear " + req.WindowsUser + " en el dominio " + req.DomainName
+                        + " deberá comunicarse con CAIS ");
+                    ex = t;
+                }
+                return apiHelper.fromEx(ex);
+            }
+        }
+
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("userMustChangePasswordNextLogon")]
+        public HttpResponseMessage userMustChangePasswordNextLogon(MustChangePasswordNextLogonReq req)
+        {
+
+            try
+            {
+
+                var fwk_domain_name = _LDAPService.Get_correct_DomainName(req.domain);
+
+                
+                ActiveDirectoryService.User_MustChangePasswordNextLogon(req.userName, true, fwk_domain_name);
+                
+                return apiHelper.fromObject<String>("La operacion de solicitud de cambio de contraseña en proximo loging se realizó exitosamente.");
+            }
+            catch (Exception ex)
+            {
+
+                var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, false);
+                if (msg.ToLower().Contains("impersonali") || msg.ToLower().Contains("acceso"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domain
+                        + " deberá comunicarse  con CAIS ");
+                    ex = t;
+                }
+                if (msg.Contains("E_ACCESSDENIED"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domain
                         + " deberá comunicarse con CAIS ");
                     ex = t;
                 }
@@ -331,40 +372,207 @@ namespace CentralizedSecurity.webApi.Controllers
         }
 
 
-        //[HttpPost]
-        //[Route("userSetActivation")]
-        //public HttpResponseMessage UserSetActivation(UserSetActivationReq req)
-        //{
-        //    try
-        //    {
-        //        ActiveDirectoryService.User_SetActivation(req.userName, req.disabled, req.domain);
-        //        return apiHelper.fromObject<Boolean>(true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return apiHelper.fromEx(ex);
-        //    }
+        /// <summary>
+        /// Permite cambio de  de de clave de usuari.
+        /// </summary>
+        /// <param name="req">Parametros de entrada</param>
+        /// <returns>ok or error</returns>
+        [HttpPost]
+        [Route("userChangePassword")]
+        public HttpResponseMessage userChangePassword(userChangePasswordReq req)
+        {
 
-        //}
+            try
+            {
+                var fwk_domain_name = _LDAPService.Get_correct_DomainName(req.domainName);
 
-   
+                ActiveDirectoryService.User_Reset_Password(req.userName, req.newPassword, fwk_domain_name);
+                
+                DAC.MeucciDAC.ReseteoWeb_Log(req.emp_Id, req.userName, req.dom_id, req.userId,"" , Common.changePwd, req.host);
+                //DAC.MeucciDAC.ReseteoWeb_EnviosMails(req.emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId, Common.resetear, req.host);
+                return apiHelper.fromObject<String>("La contraseña se cambio exitosamente. ");
+            }
+            catch (Exception ex)
+            {
+
+                var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, false);
+                if (msg.ToLower().Contains("impersonali") || msg.ToLower().Contains("acceso"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domainName
+                        + " deberá comunicarse  con CAIS ");
+                    ex = t;
+                }
+                if (msg.Contains("E_ACCESSDENIED"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domainName
+                        + " deberá comunicarse con CAIS ");
+                    ex = t;
+                }
+                return apiHelper.fromEx(ex);
+            }
+        }
 
 
-        //[HttpPost]
-        //[Route("userLock")]
-        //public HttpResponseMessage User_Lock(userUnlockReq req)
-        //{
+        [HttpPost]
+        [Route("userChangePasswordSelf")]
+        [AllowAnonymous]
+        public HttpResponseMessage userChangePasswordSelf(userChangePasswordReq req)
+        {
 
-        //    try
-        //    {
-        //        ActiveDirectoryService.User_Lock(req.WindowsUser, req.DomainName);
-        //        return apiHelper.fromObject<Boolean>(true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return apiHelper.fromEx(ex);
-        //    }
-        //}
+            try
+            {
+                var intentos = MeucciDAC.ValidarteIntentos(req.userName, req.dom_id, Common.changePwdSelft);
+                if (intentos >= 2)
+                {
+                    throw new Fwk.Exceptions.FunctionalException("No es posible resetear más de dos veces el Usuario Windows el mismo día. Por favor comuníquese con el CAIS.");
+                }
+
+                var fwk_domain_name = _LDAPService.Get_correct_DomainName(req.domainName);
+
+                //ActiveDirectoryService.User_Reset_Password(req.userName, req.newPassword, fwk_domain_name);
+
+                DAC.MeucciDAC.ReseteoWeb_Log(req.emp_Id, req.userName, req.dom_id, req.userId, "", Common.changePwdSelft, req.host);
+                //DAC.MeucciDAC.ReseteoWeb_EnviosMails(req.emp_Id, req.WindowsUser, req.dom_id, req.ResetUserId, Common.resetear, req.host);
+                return apiHelper.fromObject<String>("La contraseña se cambio exitosamente. ");
+            }
+            catch (Exception ex)
+            {
+
+                var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, false);
+                if (msg.ToLower().Contains("impersonali") || msg.ToLower().Contains("acceso"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domainName
+                        + " deberá comunicarse  con CAIS ");
+                    ex = t;
+                }
+                if (msg.Contains("E_ACCESSDENIED"))
+                {
+                    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domainName
+                        + " deberá comunicarse con CAIS ");
+                    ex = t;
+                }
+                return apiHelper.fromEx(ex);
+            }
+        }
+
+
+
+        /// <summary>
+        /// API que retorna los Empleado con sus usuarios
+        /// </summary>
+        /// <param name="req">Parametros de entrada</param>
+        /// <returns>ok or error</returns>
+        [HttpPost]
+        [Route("userForgotPassword_checkDNI")]
+        [AllowAnonymous]
+        public HttpResponseMessage userForgotPassword_checkDNI(forgotPassword_requetsReq req)
+        {
+
+            try
+            {
+               
+                var empleado = ActiveDirectoryService.ForgotPassword_checkDNI(req.dni);
+                
+                return apiHelper.fromObject<EmpleadoBE>(empleado);
+            }
+            catch (Exception ex)
+            {
+                return apiHelper.fromEx(ex);
+            }
+        }
+
+
+        /// <summary>
+        /// API que envia un correo al solicitante de cambio de clave
+        /// </summary>
+        /// <param name="req">Parametros de entrada</param>
+        /// <returns>ok or error</returns>
+        [HttpPost]
+        [Route("forgotPassword_requets")]
+        [AllowAnonymous]
+        public HttpResponseMessage forgotPassword_requets(forgotPassword_requetsReq req)
+        {
+            try
+            {
+             
+                var res = ActiveDirectoryService.forgotPassword_requets(req.dni);
+
+          
+                return apiHelper.fromObject<ForgotPasswordRes>(res);
+            }
+            catch (Exception ex)
+            {
+
+                //var msg = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex, false);
+                //if (msg.ToLower().Contains("impersonali") || msg.ToLower().Contains("acceso"))
+                //{
+                //    TechnicalException t = new TechnicalException("No es posible resetear " + req.dni + " en el dominio " + req.domain
+                //        + " deberá comunicarse  con CAIS ");
+                //    ex = t;
+                //}
+                //if (msg.Contains("E_ACCESSDENIED"))
+                //{
+                //    TechnicalException t = new TechnicalException("No es posible resetear " + req.userName + " en el dominio " + req.domain
+                //        + " deberá comunicarse con CAIS ");
+                //    ex = t;
+                //}
+                return apiHelper.fromEx(ex);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("generateToken")]
+        [AllowAnonymous]
+        public HttpResponseMessage generateToken(string dni)
+        {
+            try
+            {
+
+                var res = ActiveDirectoryService.forgotPassword_requets(dni);
+
+
+                return apiHelper.fromObject<ForgotPasswordRes>(res);
+            }
+            catch (Exception ex)
+            {
+                return apiHelper.fromEx(ex);
+            }
+        }
+
+        
+
+
+
+        /// <summary>
+        /// Verifica codigo dni y si es válido retorna un Empleado y sus usuario
+        /// Se usa cuano el inicia la pagina EJ: http://localhost:4200/reset/d2a4ad74c340821b16176f2a9d602393
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns>EmpleadoBE</returns>
+        [HttpPost]
+        [Route("userForgotPasswordVerify")]
+        [AllowAnonymous]
+        public HttpResponseMessage userForgotPasswordVerify(userForgotPasswordVerifyReq req)
+        {
+            try
+            {
+                var emp = ActiveDirectoryService.forgotPassworChangePassword_Verify( req.code);
+                
+                return apiHelper.fromObject<EmpleadoBE>(emp);
+            }
+            catch (Exception ex)
+            {
+
+              
+                return apiHelper.fromEx(ex);
+            }
+        }
+
+       
+
+
+
 
 
 

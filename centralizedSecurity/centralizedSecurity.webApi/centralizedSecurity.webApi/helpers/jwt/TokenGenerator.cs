@@ -42,7 +42,7 @@ namespace CentralizedSecurity.webApi.Controllers
             claimsIdentity.AddClaim(new Claim("cuenta", empleado.Cuenta));
             claimsIdentity.AddClaim(new Claim("cargo", empleado.Cargo));
             claimsIdentity.AddClaim(new Claim("CAIS", empleado.CAIS.ToString()));
-
+            claimsIdentity.AddClaim(new Claim("isRessetUser", empleado.isRessetUser.ToString()));
 
             // create token to the user
             var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();

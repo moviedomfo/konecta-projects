@@ -270,7 +270,7 @@
         </member>
         <member name="M:Fwk.Security.ActiveDirectory.ADWrapper.#ctor(System.String,Fwk.Security.ActiveDirectory.ImpersonateLogin)">
             <summary>
-            Inicia sin tener que ir a la BD a buscar la informacion del dopminio
+             Inicia sin tener que ir a la BD a buscar la informacion del dopminio
             </summary>
             <param name="domainName"></param>
             <param name="impersonateLogin">Impersobaliza con windows context impersonation.    usando usuario y clave LDAP</param>
@@ -386,13 +386,15 @@
             <param name="userName"></param>
             <param name="mustChange"></param>
         </member>
-        <member name="M:Fwk.Security.ActiveDirectory.ADWrapper.User_ResetPwd(System.String,System.String,System.Boolean)">
+        <member name="M:Fwk.Security.ActiveDirectory.ADWrapper.User_ResetPwd(System.String,System.String,System.Boolean,System.Nullable{System.Int32})">
             <summary>
             Reset password. To execute it ensure that you was used impersonalization constructor. 
             </summary>
             <param name="userName">user name</param>
             <param name="password">new passsword</param>
             <param name="unlockAccount">Lock or unlock flag</param>
+            <param name="pwdLastSet">must be changed at the next logon = 0 
+             -1 = This value does the reverse of 0.  It makes the password not expired </param>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Fwk.Security.ActiveDirectory.ADWrapper.User_Get_ByName(System.String)" -->
         <!-- Badly formed XML comment ignored for member "M:Fwk.Security.ActiveDirectory.ADWrapper.User_Exists(System.String)" -->

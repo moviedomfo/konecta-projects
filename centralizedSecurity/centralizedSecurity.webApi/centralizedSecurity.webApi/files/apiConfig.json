@@ -1,0 +1,12 @@
+{
+
+
+
+  "api_mail_from": "celamltda@gmail.com",
+  "api_mail_user": "celamltda",
+  "api_mail_smpt": "smtp.gmail.com",
+  "api_mail_port": 587,
+  "api_mail_pwd": "celam+123",
+  "api_mail_enableSSL": true,
+  "url_reseteoBase": "http://localhost:4200/"
+}

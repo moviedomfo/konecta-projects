@@ -7,20 +7,37 @@ using Fwk.CentralizedSecurity.Contracts;
 using CentralizedSecurity.webApi.helpers;
 using CentralizedSecurity.webApi;
 using System.DirectoryServices.AccountManagement;
+using System.DirectoryServices;
+using CentralizedSecurity.webApi.Models;
+using System.Text;
+using CentralizedSecurity.webApi.DAC;
+using System.Web;
 
 namespace Fwk.CentralizedSecurity.helpers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ActiveDirectoryService
     {
         
         internal static bool performCustomWindowsContextImpersonalization = false;
-        //string DomainsUrl domainsUrl = null;
+        /// <summary>
+        /// 
+        /// </summary>
         static ActiveDirectoryService()
         {
             if (System.Configuration.ConfigurationManager.AppSettings["FwkImpersonate"] != null)
                 performCustomWindowsContextImpersonalization = Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["FwkImpersonate"]);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
         internal static LoogonUserResult User_Logon(string userName, string password, string domain)
         {
             LoogonUserResult loogonUserResult = new LoogonUserResult();
@@ -44,6 +61,14 @@ namespace Fwk.CentralizedSecurity.helpers
             
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
         internal static LoogonUserResult User_Logon2(string userName, string password, string domain)
         {
 
@@ -251,10 +276,18 @@ namespace Fwk.CentralizedSecurity.helpers
         {
             try
             {
-                ResetPassword(userName, domain, newPassword, true, false);
+                ResetPassword(userName, domain, newPassword, true,  Common.mustChangedNextLogon);
             }
             catch (Exception y)
             {
+                //userDirectoryEntry.Properties["pwdLastSet"].Value = 
+                //pwdLastSet = 0  must be changed at the next logon.
+                // -1  = This value does the reverse of 0.It makes the password not expired
+                // 
+                int flagmustChangedNextLogon = -1;
+                if (Common.mustChangedNextLogon) 
+                    flagmustChangedNextLogon = 0;
+
                 ADWrapper ad = new ADWrapper(domain, Common.CnnStringNameAD, performCustomWindowsContextImpersonalization);
                 //ADWrapper ad3 = new ADWrapper(domain,"reseteos","*R3s3t30s+");
 
@@ -262,17 +295,310 @@ namespace Fwk.CentralizedSecurity.helpers
                 {
                     using (var impersonation = new ImpersonateUser(ad.LDAPUser, ad.LDAPDomain, ad.LDAPPassword, ImpersonateUser.LOGON32_LOGON_NEW_CREDENTIALS))
                     {
-                        ad.User_ResetPwd(userName, newPassword, true);
+                        ad.User_ResetPwd(userName, newPassword, true, flagmustChangedNextLogon);
                     }
                 }
                 else
                 {
-                    ad.User_ResetPwd(userName, newPassword, true);
+                    ad.User_ResetPwd(userName, newPassword, true, flagmustChangedNextLogon);
                 }
 
                 ad.Dispose();
             }
             
+        }
+
+        /// <summary>
+        /// El usuario ya se encuentra en lapagina de Olvide Contras.. y preciona el boton chequear DNI
+        /// 
+        /// </summary>
+        /// <param name="dni">retorna Empleado con sus usuarios</param>
+        /// <returns></returns>
+        internal static EmpleadoBE ForgotPassword_checkDNI(string dni)
+        {
+            StringBuilder str = new StringBuilder("Con el DNI ingresado no podemos ayudarte. Comunícate con CAIS. ");
+            str.AppendLine("CANALES DE ATENCIÓN:");
+            str.AppendLine("Chat(Incidentes particulares): caischat.grupokonecta.com.ar");
+            str.AppendLine("Telefónico(Incidentes Masivos) 54 9 351 4266616");
+            str.AppendLine("Mail: cais_argentina@grupokonecta.com");
+            try
+            {
+
+                EmpleadoBE empleadoBE = MeucciDAC.VirifyUser_ForgotPassword(dni); 
+
+                if (empleadoBE == null)
+                {
+
+                    //throw new FunctionalException(1001,"El DNI no se encuentra registrado en nuestras Bases de Datos, verifícalo e intenta nuevamente o comunicarse con CAIS cais_argentina@grupokonecta.com y contacto 3514266616 .- ");
+                 
+                    throw new FunctionalException(1001, str.ToString());
+                }
+                if (string.IsNullOrEmpty( empleadoBE.Email))
+                {
+                    
+
+                    throw new FunctionalException(1000, str.ToString());
+                }
+                return empleadoBE;
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+
+
+
+        }
+
+        /// <summary>
+        /// Solo para propósitos de test
+        /// </summary>
+        /// <returns></returns>
+        EmpleadoBE empleado_mock()
+        {  
+            //Buscar empleado
+            EmpleadoBE empleadoBE = new EmpleadoBE();
+            empleadoBE.Email = "marcelo.oviedo@gmail.com";
+            empleadoBE.ApeNom = "MOF";
+            empleadoBE.WindosUserList = new List<WindosUserBE>();
+
+            WindosUserBE wu = new WindosUserBE();
+
+            wu.WindowsUser = "user1";
+            wu.dom_id = 1;
+            wu.Dominio = "dominio1";
+
+            empleadoBE.WindosUserList.Add(wu);
+
+            wu = new WindosUserBE();
+
+            wu.WindowsUser = "user2";
+            wu.dom_id = 2;
+            wu.Dominio = "dominio2";
+
+            empleadoBE.WindosUserList.Add(wu);
+            return empleadoBE;
+        }
+
+
+        /// <summary>
+        /// El usuario solicita reestablecer contraseña 
+        /// </summary>
+        /// <param name="dni"></param>
+        /// <returns></returns>
+        internal static ForgotPasswordRes forgotPassword_requets(string dni)
+        {
+            ForgotPasswordRes result = new ForgotPasswordRes();
+            var baseUrl = Common.GetBaseUrl();
+
+            //verificar si existe en el dominio
+            //bool userExst = true;//UserExist(userName, domainName);
+
+            //if (!userExst )
+            //{
+            //    result.Status = "Error";
+            //    result.Message = " <p>  El usuario ingresado no existe.</p>";
+
+            //    return result;
+            //}
+            EmpleadoBE empleadoBE = MeucciDAC.VirifyUser_ForgotPassword(dni);
+            empleadoBE.DNI = dni;
+            //Buscar empleado
+            //EmpleadoBE empleadoBE = new EmpleadoBE();
+            //empleadoBE.email = "marcelo.oviedo@gmail.com";
+            //empleadoBE.ApeNom ="MOF";
+            //var res = getSocioBEByUserName(userName, false, false);
+
+
+
+            if (string.IsNullOrEmpty(empleadoBE.Email))
+            {
+                result.Status = "Error";
+                result.Message = " <p>  El usuario ingresado no registra un correo.</p>";
+                  
+                return result;
+            }
+
+            Int64 ttl = Fwk.HelperFunctions.DateFunctions.DateTimeToUnixTimeStamp(System.DateTime.Now.AddMinutes(10));
+
+            //Generate token
+            string toEncrypt = string.Concat(empleadoBE.DNI,";", empleadoBE.Email.Trim(), ";", ttl.ToString());
+            string code =  Common.Encrypt(toEncrypt);
+            //string code = Common.getMd5Hash(string.Concat(empleadoBE.DNI, empleadoBE.Email.Trim()));
+
+            string file = System.Web.Hosting.HostingEnvironment.MapPath("~/files/Email_Forgot_Password.html");
+            try
+            {
+                string txt = Fwk.HelperFunctions.FileFunctions.OpenTextFile(file);
+                StringBuilder BODY = new StringBuilder(txt);
+
+                BODY.Replace("$userName$", empleadoBE.ApeNom);
+
+
+                //BODY.Replace("$url$", "https://host/selfreset/?code=" + code);
+
+
+                //string forgotPwd = String.Format("reset/{0}/{1}", code, empleadoBE.DNI);
+                string forgotPwd = String.Format("reset?code={0}", HttpUtility.UrlEncode(code));
+               
+                BODY.Replace("$url$", apiHelper.apiConfig.url_reseteoBase + forgotPwd);
+                
+                
+                Common.SendMail(string.Concat("Solicitud de cambio de contraseña"), BODY.ToString(),  empleadoBE.Email.Trim(), "");
+
+                int at = empleadoBE.Email.IndexOf('@');
+
+                var mail = "*******" + empleadoBE.Email.Substring(at  -3 , empleadoBE.Email.Length - at + 3);
+
+
+                result.Message = "Le enviaremos un email a su casilla de correo " + mail + " y " +
+                    "en el mismo encontrará un código de acceso en un enlace para que finalice el " +
+                   "proceso de cambio de contraseña";
+
+                
+                result.Status = "Success";
+            }
+            catch (Exception ex)
+            {
+                result.Status = "Error";
+                result.Message = Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex,false);
+                
+            }
+
+
+            return result;
+            // Common.SendMail("Registracion de socio al sitio web de CELAM", string.Format(txt, userName), "support_noreply@celam.com", emai.Trim(), "");
+
+            
+        }
+
+        /// <summary>
+        /// El usuario recibe un mail con el codigo de autorizacion, entra ala pagina (link ofrecido) y envia nuevo pàssword
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="code"></param>
+        /// <param name="domainName"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        //internal static ForgotPasswordRes forgotPassworChangePassword(string userName, string domainName,string code, string newPassword)
+        //{
+        //    ForgotPasswordRes result = new ForgotPasswordRes();
+            
+
+        //    //result = getSocioBEByUserName(userName);
+
+            
+        //    var isValid = Common.verifyMd5Hash(string.Concat(userName, domainName), code);
+        //    if (isValid)
+        //    {
+        //        //User_Reset_Password(userName, newPassword, domainName);
+
+        //        result.Status = "OK";
+        //        result.Message = "El reseteo se realizó exitosamente.";
+        //    }
+        //    else
+        //    {
+        //        result.Status = "Error";
+        //        result.Message = "El código de verificación enviado no es válido o no corresponde al socio en cuestión";
+        //    }
+
+        //    return result;
+        //}
+
+        /// <summary>
+        /// El usuario recibe un mail con el codigo de autorizacion, entra ala pagina (link ofrecido) y en el init se chequea validez de url
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns>EmpleadoBE</returns>
+        internal static EmpleadoBE forgotPassworChangePassword_Verify(string code)
+        {
+
+
+
+
+
+            EmpleadoBE empleadoBE = null;
+            string decriptedData = "";
+            //var isValid = Common.verifyMd5Hash(string.Concat(dni, empleadoBE.Email), code);
+            try
+            {
+                 decriptedData = Common.Dencrypt(code);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("El códido de seguridad es incorrecto-");
+            }
+            
+            bool isValid = false;
+            if (decriptedData.Split(';').Length == 3)
+            {
+                // DNI;Email;TTL;
+                string[] splited = decriptedData.Split(';');
+                string dni = splited[0].Trim();
+                //Obtengo la fecha de exp
+                Int64 epocTtl = Convert.ToInt64(splited[2].Trim());
+                Int64 epocNow = Fwk.HelperFunctions.DateFunctions.DateTimeToUnixTimeStamp(System.DateTime.Now);
+                
+                if(epocTtl < epocNow)
+                {
+                    throw new Exception("El códido de seguridad a caducado, por favor vuelva a solicitar cambio de contraseña.-");
+                }
+
+
+                empleadoBE = MeucciDAC.VirifyUser_ForgotPassword(dni);
+                
+                if(empleadoBE!=null)
+                {
+                    empleadoBE.DNI = dni;
+                    isValid = splited[1].Trim().CompareTo(empleadoBE.Email.Trim()) == 0;
+                }
+            }
+
+
+            if (isValid)
+            {
+                return empleadoBE;
+            }
+            else
+            {
+                throw new Exception("El código de verificación enviado no es válido o no corresponde al socio en cuestión");
+            }
+
+           
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="mustChange"></param>
+        /// <param name="domain"></param>
+        public static void User_MustChangePasswordNextLogon(string userName, bool mustChange,string domain)
+        {
+            if (Common.mustChangedNextLogon == false)
+                return;
+
+            ADWrapper ad = new ADWrapper(domain, Common.CnnStringNameAD, performCustomWindowsContextImpersonalization);
+            //PrincipalContext pr = new PrincipalContext(ContextType.Domain, domain, "dc=corp,dc=local", username, password);
+
+
+
+            if (performCustomWindowsContextImpersonalization)
+            {
+                using (var impersonation = new ImpersonateUser(ad.LDAPUser, ad.LDAPDomain, ad.LDAPPassword, ImpersonateUser.LOGON32_LOGON_NEW_CREDENTIALS))
+                {
+                    ad.User_MustChangePasswordNextLogon(userName, mustChange);
+
+                }
+            }
+            else
+            {
+                 ad.User_MustChangePasswordNextLogon(userName, mustChange);
+
+            }
+
         }
 
         /// <summary>
@@ -282,9 +608,9 @@ namespace Fwk.CentralizedSecurity.helpers
         /// <param name="domain"></param>
         /// <param name="newPassword"></param>
         /// <param name="UnlockAccount"></param>
-        /// <param name="NextLogon"></param>
+        /// <param name="nextlogon">Usuario debe cambiar su clave en proximo logeo</param>
         /// <returns></returns>
-        public static Boolean ResetPassword(string usernameToresset, string domain, string newPassword, Boolean UnlockAccount, Boolean NextLogon)
+        public static Boolean ResetPassword(string usernameToresset, string domain, string newPassword, Boolean UnlockAccount, bool nextLogon = false)
         {
            
             ADWrapper ad = new ADWrapper(domain, Common.CnnStringNameAD, performCustomWindowsContextImpersonalization);
@@ -296,13 +622,13 @@ namespace Fwk.CentralizedSecurity.helpers
             {
                 using (var impersonation = new ImpersonateUser(ad.LDAPUser, ad.LDAPDomain, ad.LDAPPassword, ImpersonateUser.LOGON32_LOGON_NEW_CREDENTIALS))
                 {
-                    return ResetPassword2(usernameToresset, newPassword, ad);
+                    return ResetPassword2(usernameToresset, newPassword, ad, nextLogon);
 
                 }
             }
             else
             {
-                return ResetPassword2(usernameToresset,newPassword,ad);
+                return ResetPassword2(usernameToresset,newPassword,ad, nextLogon);
 
             }
 
@@ -316,8 +642,9 @@ namespace Fwk.CentralizedSecurity.helpers
         /// <param name="usernameToresset"></param>
         /// <param name="newPassword"></param>
         /// <param name="ad"></param>
+        /// <param name="nextlogon">Usuario debe cambiar su clave en proximo logeo</param>
         /// <returns></returns>
-        public static Boolean ResetPassword2(string usernameToresset, string newPassword, ADWrapper ad)
+        public static Boolean ResetPassword2(string usernameToresset, string newPassword, ADWrapper ad,bool nextlogon = false)
         {
             var uri = new Uri(ad.LDAPPath);
             var Container = uri.Segments[1];
@@ -340,10 +667,11 @@ namespace Fwk.CentralizedSecurity.helpers
                     //    user.UnlockAccount();
                     //}
                     user.SetPassword(newPassword);
-                    //if (NextLogon)
-                    //{
-                    //    user.ExpirePasswordNow();
-                    //}
+                    if (nextlogon)
+                    {
+                        user.ExpirePasswordNow();
+                    }
+                    
                     user.Save();
                     flag = true;
                 }

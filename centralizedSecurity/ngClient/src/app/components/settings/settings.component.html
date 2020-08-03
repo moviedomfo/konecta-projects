@@ -1,0 +1,88 @@
+
+<div class="container">
+    
+
+  <!-- TODO: This is for server side, there is another version for browser defaults -->
+    <div class="row">
+      
+      <form class="form-inline">
+          <div class="form-group">
+              <div class="col-sm-4">
+              <label for="Legajo">Legajo:</label>
+                <input type="text"  class="form-control" name="Legajo" [(ngModel)]="currentLoging.currentUser.Legajo" disabled>
+              </div>
+              <!-- <label>Last Name:</label>
+                    <input class="form-control" formControlName="currentLoging.LastName"> -->
+            </div>
+         <div class="form-group">
+            <div class="col-sm-4">
+             <label for="CAIS" >CAIS</label>
+            <input type="text" class="form-control"   name="CAIS"  [(ngModel)]='currentLoging.currentUser.CAIS' disabled>
+                    </div>
+        </div> 
+        <div class="form-group" >
+        
+          <div class="col-sm-4">
+              <label for="UserName">UserName</label>
+            <input type="text" class="form-control"    name ="UserName"   [(ngModel)]="currentLoging.currentUser.UserName" disabled>
+          </div>
+        </div>
+       
+      </form>
+  
+    </div>
+    <div class="row">
+      
+      <form class="form-inline" >
+        <div class="form-group">
+          <div class="col-sm-10">
+
+              <label for="DomainId">DomainId</label>
+            <input type="text" class="form-control"  name="DomainId"  [(ngModel)]='currentLoging.currentUser.DomainId' disabled>
+          </div>
+        </div>
+        <div class="form-group" >
+        
+          <div class="col-sm-10">
+            <label for="Domain">Domain</label>
+            <input type="text" class="form-control"    name ="Domain" [(ngModel)]='currentLoging.currentUser.Domain' disabled>
+          </div>
+        </div>
+       
+      </form>
+  
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-10">
+            <form class="form col-6" >
+                <div class="form-group">
+                  <div class="">
+        
+                      <label for="HostName">Api Server name</label>
+                      <input type="text" class="form-control"    name ="HostName" [(ngModel)]='apiServerInfo.HostName' disabled>
+                  </div>
+                </div>
+                <div class="form-group" >
+                
+                  <div class="">
+                      <label for="url_api">API Server</label>
+                      <input type="text" class="form-control"  name="url_api"  [(ngModel)]='apiServerInfo.url_api' disabled>
+                    
+                  </div>
+                  <div class="">
+                      <label for="Ip">API Server IP</label>
+                      <input type="text" class="form-control"  name="Ip"  [(ngModel)]='apiServerInfo.Ip' disabled>
+                    
+                  </div>
+                </div>
+               
+              </form>
+      </div>
+     
+  
+    </div>
+  
+  </div>

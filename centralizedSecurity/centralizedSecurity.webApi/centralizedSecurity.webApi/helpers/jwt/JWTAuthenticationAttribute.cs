@@ -137,7 +137,7 @@ namespace CentralizedSecurity.webApi.helpers
                     issuerToken,
                     "https://10.200.1.239:50009",
                     "http://10.200.1.239:50009",
-                    "http://localhost:50010"
+                    "http://localhost:54900"
                 };
 
             var validationParams = new TokenValidationParameters()

@@ -1,0 +1,165 @@
+<div class="container">
+
+
+
+  <!-- <div *ngIf="empleado" class="d-flex justify-content-center h-100"> -->
+  <div  *ngIf="empleado" class="d-flex justify-content-center h-100">
+
+
+
+    <div class="card  col-sm-12 col-md-6 col-lg-6 bg_semiTransparente">
+      <div class="card-header">
+
+      </div>
+      <div class="card-body bg_semiTransparente">
+        <form>
+          <div class="form-group">
+            <!-- <label for="inputApeNom">Bienvenido</label>
+            <input type="text" class="form-control is-valid" #ApeNom name="inputApeNom" [(ngModel)]="empleado.ApeNom"
+              disabled> -->
+
+            <h6>Hola! Bienvenido Autogestión de Claves.</h6>
+          </div>
+          <div class="form-group">
+            <!-- <label for="mail_toshow">Email</label>
+            <input type="text" class="form-control is-valid" name="mail_toshow" [(ngModel)]="mail_toshow" disabled> -->
+
+            <h6>Email <strong> {{mail_toshow}}</strong></h6>
+            <div class="alert alert-secondary">
+
+              <p class="parr">Si tu cuenta de mail no es correcta, comunícate con CAIS .</p>
+              <hr class="line">
+              <p class="parr">
+                <strong>Canales de Atención:</strong></p>
+
+              <p class="parr">Chat: (Incidentes particulares): caischat.grupokonecta.com.ar </p>
+              <p class="parr">Telefónico: (Incidentes Masivos) 54 9 351 4266616</p>
+              <p class="parr">Mail: cais_argentina@grupokonecta.com</p>
+            </div>
+
+          </div>
+
+          <div *ngIf="emailNotFound === false" class="form-group">
+            <label for="inputPassword">DNI</label>
+            <input type="text" class="form-control is-valid" name="DNI" [(ngModel)]="currentUser.DNI" disabled>
+          </div>
+
+
+          <div class="spinner-container" *ngIf="loading">
+            <mat-spinner [diameter]="30" [color]="Warn"></mat-spinner>
+          </div>
+
+          <!-- <div class="form-group ">
+            <button type="button" (click)="goback()" class="btn btn-outline-secondary  mx-1 "><i
+                class="fa fa-arrow-left"></i>Volver</button>
+          </div>
+
+
+          <div class="form-group ">
+            <button type="button" (click)="forgotPassword_requets()" [disabled]="loading"
+              class="btn btn-outline-info  float-right"><i class="fa fa-share"></i>Enviar solicitud x</button>
+          </div> -->
+
+          <div class="form-group ">
+            <button type="button" (click)="forgotPassword_requets()" [disabled]='loading'
+              class="btn btn-outline-info search_btn mx-2 float-right  "><i class="fa fa-share"></i>Enviar solicitud</button>
+          </div>
+
+          <div class="form-group ">
+            <button type="button" (click)="goback()" class="btn btn-outline-secondary float-right"><i
+                class="fa fa-arrow-left"></i>Volver</button>
+
+          </div>
+
+        </form>
+
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <div *ngIf="solicitudEnviada_ok === false && !empleado" class="d-flex justify-content-center h-100">
+
+    <div class="card  col-sm-12 col-md-7 col-lg-7 bg_semiTransparente">
+      <div class="card-header">
+        <h4>Solicitud de cambio de contraseña</h4>
+        <p>
+          Puede solicitar su contraseña utilizando su DNI y luego le enviaremos un email
+          donde comprobaremos su identidad y continuaremos con el proceso de cambio
+
+        </p>
+
+      </div>
+      <div class="card-body bg_semiTransparente">
+        <div class="spinner-container" *ngIf="loading">
+          <mat-spinner [diameter]="30" [color]="Warn"></mat-spinner>
+
+        </div>
+
+
+        <form #formForgot="ngForm" (submit)="retriveWindowsUser()" novalidate>
+
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-user"></i></span>
+            </div>
+            <input type="text" name="dni" class="form-control" [(ngModel)]='currentUser.DNI' [disabled]="!captcha_true"
+              placeholder="Número de documento" required #dni='ngModel'>
+
+
+          </div>
+          <!-- aqui el captcha -->
+          <div class="input-group form-group">
+            <!-- <re-captcha (resolved)="resolved($event)" siteKey="6LeJ__wUAAAAAIK8kLmcJ47jq0Y7o5W1czIMdY3b"></re-captcha>  -->
+            <re-captcha (resolved)="resolved($event)" siteKey="{{captcha_key}}"></re-captcha>
+            <!-- <div class="g-recaptcha" data-sitekey="6LeJ__wUAAAAAIK8kLmcJ47jq0Y7o5W1czIMdY3b"></div> -->
+          </div>
+
+
+
+
+          <div class="form-group ">
+            <button type="submit" [disabled]='formForgot.invalid'
+              class="btn btn-outline-info search_btn mx-2 float-right  "><i class="fa fa-share"></i>Enviar </button>
+          </div>
+
+          <div class="form-group ">
+            <button type="button" (click)="goback()" class="btn btn-outline-secondary float-right"><i
+                class="fa fa-arrow-left"></i>Volver</button>
+
+          </div>
+
+        </form>
+      </div>
+
+
+    </div>
+
+  </div>
+
+  <div class="d-flex justify-content-center h-100 mt-2">
+
+    <div class=" col-sm-12 col-md-9 col-lg-9 ">
+      <app-error-box-container [globalError]="globalError"></app-error-box-container>
+    </div>
+
+  </div>
+
+
+  <div *ngIf="solicitudEnviada_ok" class="d-flex justify-content-center h-100">
+    <div class="card  col-sm-12 col-md-6 col-lg-6 bg_semiTransparente">
+      <div class="card-body bg_semiTransparente">
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">Solicitud enviada </h4>
+          {{messageResult}}
+          <p class="mb-0"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

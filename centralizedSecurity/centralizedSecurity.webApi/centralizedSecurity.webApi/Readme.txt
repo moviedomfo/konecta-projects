@@ -53,3 +53,6 @@ jwt validation errors:
 	The server is not operational :
 	Usually indicates that the hostname or IP address listed in the Primary Server path is not correct, or that an LDAP server is not listening on that address. However, if this authentication source has been configured to use SSL (i.e., Primary Server Path begins "ldaps://"), this error could also mean that SSL was either not configured or not configured properly on the remote server.
 
+    re-CAPTCHA
+    usa de momento marcelo.oviedo@gmail.com
+    https://support.google.com/recaptcha/?hl=en

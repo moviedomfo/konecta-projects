@@ -1,20 +1,12 @@
 ﻿{
   "providers": [
-    {
-      "name": "meucci",
-      "description": "Proveedor health wcf",
-      "audienceId": "pelsoft",
-      "issuer": "http://201.234.32.177:51000",
-      "audienceSecret": "qMCdFDQuF23RV1Y-1Gq9L3cF3VmuFwVbam4fMTdAfpo",
-      "securityModelContext": "health",
-      "expires": 60
-    },
+
     {
       "name": "epironChatBot",
       "description": "Proveedor para epiron API chat Bot comment",
       "audienceId": "http://172.22.14.46:50010",
       "issuer": "apiEpiron",
-      "audienceSecret": "pletoricoKey+1234",
+      "audienceSecret": "YjPKDC97AOFs-JLuH7eKVEQ4I7D2urz4_zZ4LM2Dkfo",
       "securityModelContext": "epiron",
       "expires": 600
     }

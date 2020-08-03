@@ -8,6 +8,8 @@ namespace CentralizedSecurity.webApi.Models
 
     public class EmpleadoReseteoBE
     {
+        public bool isRessetUser { get; set; }
+
         public int Emp_id { get; set; }
         public string ApeNom { get; set; }
        
@@ -29,6 +31,8 @@ namespace CentralizedSecurity.webApi.Models
     }
     public class EmpleadoBE
     {
+        
+
         public int Emp_id { get; set; }
         public string ApeNom { get; set;}
         //public string Apellido { get; set; }
@@ -48,10 +52,17 @@ namespace CentralizedSecurity.webApi.Models
 
 
         public List<WindosUserBE> WindosUserList{ get; set; }
-        public string Telefono { get; internal set; }
-        public string Direccion { get; internal set; }
-        public string CiudadNatal { get; internal set; }
-        public string FechaNacimiento { get; internal set; }
+        public string Telefono { get;  set; }
+        public string Direccion { get;  set; }
+        public string CiudadNatal { get;  set; }
+        public string FechaNacimiento { get;  set; }
+
+        /// <summary>
+        /// Interno o Externo
+        /// I o E
+        /// </summary>
+        public string Tipo { get;  set; }
+        public string Email { get;  set; }
     }
 
 

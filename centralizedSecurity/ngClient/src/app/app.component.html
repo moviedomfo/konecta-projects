@@ -1,0 +1,18 @@
+
+
+
+
+<app-navbar></app-navbar>
+
+    <div class="container"  style="margin-top: 70px;">
+        <router-outlet></router-outlet>
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-6 mt-2" >
+        <p><strong>{{idleState}}</strong></p>
+        <!-- <p *ngIf="lastPing"><small>Ultimo ping vivo <strong>{{lastPing }}</strong></small></p> -->
+        <!-- <button (click)="reset()" *ngIf="timedOut">Restart</button> -->
+            </div>
+        </div>
+        
+    </div>
+

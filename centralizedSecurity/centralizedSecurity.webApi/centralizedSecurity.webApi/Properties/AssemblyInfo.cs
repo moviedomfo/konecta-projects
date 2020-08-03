@@ -3,31 +3,31 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
-[assembly: AssemblyTitle("centralizedSecurity.webApi")]
+[assembly: AssemblyTitle("CentralizedSecurity.webApi")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("centralizedSecurity.webApi 5.0")]
+[assembly: AssemblyProduct("CentralizedSecurity.webApi 4.2.0.6")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible
-// to COM components.  If you need to access a type in this assembly from
-// COM, set the ComVisible attribute to true on that type.
+// Si ComVisible se establece en false, los componentes COM no verán los 
+// tipos de este ensamblado. Si necesita obtener acceso a un tipo de este ensamblado desde 
+// COM, establezca el atributo ComVisible en true en este tipo.
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a53fbae7-bd98-4c18-aaf2-f128149a1736")]
+// El siguiente GUID es para el Id. typelib cuando este proyecto esté expuesto a COM
+[assembly: Guid("268e7c34-3da2-472f-b7f1-ad4dfd2054ac")]
 
-// Version information for an assembly consists of the following four values:
+// La información de versión de un ensamblado consta de los siguientes cuatro valores:
 //
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
+//      Versión principal
+//      Versión secundaria 
+//      Número de compilación
+//      Revisión
 //
-// You can specify all the values or you can default the Revision and Build Numbers
-// by using the '*' as shown below:
-[assembly: AssemblyVersion("5.0.0.0")]
-[assembly: AssemblyFileVersion("5.0.0.0")]
+// Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión 
+// mediante el carácter '*', como se muestra a continuación:
+[assembly: AssemblyVersion("4.2.0.12")]
+[assembly: AssemblyFileVersion("4.2.0.12")]

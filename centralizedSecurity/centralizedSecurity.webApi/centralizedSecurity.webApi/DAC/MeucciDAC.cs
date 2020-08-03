@@ -10,10 +10,84 @@ using CentralizedSecurity.webApi.service;
 
 namespace CentralizedSecurity.webApi.DAC
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MeucciDAC
     {
 
-       
+
+        /// <summary>
+        /// usp_OlvidoDeClave_DatosEmpleado Retorna dos tablas
+        /// 1- Datos de Persona (1 fila)
+        /// 2 - Datos de cada usuario de la persona (muchos)
+        /// </summary>
+        /// <param name="dni"></param>
+        /// <returns></returns>
+        public static EmpleadoBE VirifyUser_ForgotPassword(string dni)
+        {
+            EmpleadoBE item = null;
+            var connectionString = Common.GetCnn(Common.CnnStringNameMeucci).ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("Meucci2a.dbo.usp_OlvidoDeClave_DatosEmpleado", cnn) { CommandType = System.Data.CommandType.StoredProcedure })
+            {
+                cnn.Open();
+                /// FACTURA_NRO
+                cmd.Parameters.AddWithValue("@Dni", dni);
+
+
+                using (IDataReader reader = cmd.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+
+                        item = new EmpleadoBE();
+
+                        //cue_nombre sar_nombre car_nombre usuariowindows dominio
+                        item.Emp_id = Convert.ToInt32(reader["Id"]);
+                        item.ApeNom = reader["Nombre"].ToString();
+
+                        if (reader["Tipo"] != DBNull.Value)
+                            item.Tipo = reader["Tipo"].ToString();
+
+                        if (reader["Email"] != DBNull.Value)
+                            item.Email = reader["Email"].ToString();
+                        
+
+
+                    }
+                    if (item != null)
+                    {
+                        if (reader.NextResult())
+                        {
+                            List<WindosUserBE> winUserList = new List<WindosUserBE>();
+                            WindosUserBE winUser = null;
+                            while (reader.Read())
+                            {
+                                winUser = new WindosUserBE();
+
+
+                                winUser.Dominio = reader["dominio"].ToString();
+
+                                winUser.WindowsUser = reader["usuariowindows"].ToString().ToLower();
+                                winUser.dom_id = Convert.ToInt32(reader["dom_id"]);
+                                
+
+                                winUserList.Add(winUser);
+                            }
+                            item.WindosUserList = winUserList;
+                        }
+                    }
+
+
+                }
+
+                return item;
+
+            }
+
+        }
 
         /// <summary>
         /// verificará que el usuario esté habilitado para resetear o desbloquear un UW y que no registre un ausentismo para ese día.
@@ -32,17 +106,37 @@ namespace CentralizedSecurity.webApi.DAC
                 cmd.Parameters.AddWithValue("@UW", userName);
                 cmd.Parameters.AddWithValue("@dom_id", domainId);
 
-                using (IDataReader reader = cmd.ExecuteReader())
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         item = new EmpleadoReseteoBE();
+                        try
+                        {
+                            //Estos no son empleados de la empresa pero no debe retornar error 
+                            
+                            if (reader["Legajo"] == DBNull.Value)
+                                return null;
+                        }
+                        catch
+                        {
+                            return null;
+                        }
                         
+
+                        item.Emp_id = Convert.ToInt32(reader["Legajo"]);
                         item.Legajo = Convert.ToInt32(reader["Legajo"]);
                         item.CAIS = Convert.ToBoolean(reader["CAIS"]);
-                        item.Cuenta = reader["Cuenta"].ToString();
-                        item.Cargo = reader["Cargo"].ToString();
-                        item.Emp_id = Convert.ToInt32(reader["Legajo"]);
+
+                        if (reader["Cuenta"] != DBNull.Value)
+                            item.Cuenta = reader["Cuenta"].ToString();
+                        else
+                            item.Cuenta = string.Empty;
+                        if (reader["Cargo"] != DBNull.Value)
+                            item.Cargo = reader["Cargo"].ToString();
+                        else
+                            item.Cargo = string.Empty;
+
                         item.DomainId = domainId;
                         item.WindowsUser = userName;
                     }
@@ -53,6 +147,7 @@ namespace CentralizedSecurity.webApi.DAC
             }
 
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -302,7 +397,11 @@ namespace CentralizedSecurity.webApi.DAC
                 
                 cmd.Parameters.AddWithValue("@ticket", ticket);
                 cmd.Parameters.AddWithValue("@user", resetUserId);
+                if (String.IsNullOrEmpty(host))
+                    host = "0";
+                
                 cmd.Parameters.AddWithValue("@host", host);
+
                 cmd.Parameters.AddWithValue("@accion", accion);
 
                 cmd.ExecuteNonQuery();

@@ -13,7 +13,23 @@ namespace CentralizedSecurity.webApi
 {
     internal class apiHelper
     {
-        
+        public static apiConfig apiConfig = null;
+        public static void InitializeConfig(string path)
+        {
+            try
+            {
+                 apiConfig = apiConfig.CreateNew(path);
+
+                //if (!System.IO.Directory.Exists(apiConfig.logsFolder))
+                //    System.IO.Directory.CreateDirectory(apiConfig.logsFolder);
+                //setProxy();
+            }
+            catch (Exception ex)
+            {
+                //Log_FileSystem(ex);
+                throw ex;
+            }
+        }
 
         public static String GetAllMessageException(Exception ex, bool includeStackTrace = true)
         {
@@ -42,13 +58,17 @@ namespace CentralizedSecurity.webApi
         internal static HttpResponseMessage fromEx(Exception ex)
         {
             Exception currentErr = null;
-
+            string errorId = "Error";
 
             if (ex.GetType() == typeof(Fwk.Exceptions.TechnicalException))
             {
                 currentErr = ex;
             }
-
+            if (ex.GetType() == typeof(Fwk.Exceptions.FunctionalException))
+            {
+                errorId = ((FunctionalException)ex).ErrorId;
+                currentErr = ex;
+            }
             if (currentErr == null && ex.InnerException != null)
                 currentErr = ex.InnerException;
 
@@ -56,12 +76,14 @@ namespace CentralizedSecurity.webApi
                 currentErr = ex;
 
 
+            
 
             var msg = GetAllMessageException(currentErr, false);
             var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError)
             {
+                
                 Content = new StringContent(msg),
-                ReasonPhrase = "Error"
+                ReasonPhrase = errorId
             };
 
             return resp;

@@ -1,0 +1,18 @@
+.nav-item{
+    padding:2px;
+    margin-left: 7px;
+}
+
+
+/* change the color of active or hovered links */
+.navbar-logeduser .nav-item.active .nav-link,
+.navbar-logeduser .nav-item:focus .nav-link,
+.navbar-logeduser .nav-item:hover .nav-link {
+    color: #c8d1ba;
+}
+
+
+.item-logeduser 
+{
+    color: #c8d1ba;
+}

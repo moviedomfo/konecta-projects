@@ -1,0 +1,15 @@
+* {
+    box-sizing: border-box;
+  }
+  input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+.button-group-prepend span{
+  width: 50px;
+  /* background-color: #FFC312; */
+   background-color: #2399fc ; 
+  color: #ffffff;
+  border:0 !important;
+  }

@@ -32,6 +32,76 @@ namespace CentralizedSecurity.webApi.Models
         public bool includeGroups { get; set; }
 
     }
+    
+
+    public class forgotPassword_requetsReq
+    {
+
+        
+        public string dni { get; set; }
+        
+        
+
+        //public string userName { get; set; }
+
+        /// <summary>
+        /// con el nombre de la PC usada
+        /// </summary>
+        public string host { get; set; }
+
+
+    }
+    public class ForgotPasswordRes
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+
+        //public string token { get; set; }
+
+        //public string email { get; internal set; }
+    }
+
+    public class userChangePasswordReq
+    {
+        
+        public string newPassword { get; set; }
+        public string domainName { get; set; }
+
+        public int dom_id { get; set; }
+        public int emp_Id { get; set; }
+
+        /// <summary>
+        /// Id del usuario logueado
+        /// </summary>
+        public int userId { get; set; }
+
+        public string userName { get; set; }
+
+        /// <summary>
+        /// con el nombre de la PC usada
+        /// </summary>
+        public string host { get; set; }
+
+
+    }
+    
+    public class userForgotPasswordChangeReq
+    {
+        public string userName { get; set; }
+        public string newPassword { get; set; }
+        public string domainName { get; set; }
+
+
+        public string host { get; set; }
+        public string code { get; set; }
+
+    }
+
+    public class userForgotPasswordVerifyReq
+    {
+        public string code { get; set; }
+        //public string dni { get; set; }
+    }
     public class userResetPasswordReq
     {
         public string WindowsUser { get; set; }
@@ -99,6 +169,13 @@ namespace CentralizedSecurity.webApi.Models
 
 
     }
-   
+    public class MustChangePasswordNextLogonReq
+    {
+        public string userName { get; set; }
+  
+        public string domain { get; set; }
 
+
+    }
+    
 }

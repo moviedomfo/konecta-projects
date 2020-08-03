@@ -9,8 +9,9 @@ using System.Web.Http;
 
 
 //this class will be fired once our server starts, notice the “assembly” attribute which states which class to fire on start-up.
-[assembly: OwinStartup(typeof(CentralizedSecurity.webApi.App_Start.Startup))]
-namespace CentralizedSecurity.webApi.App_Start
+
+[assembly: OwinStartup(typeof(CentralizedSecurity.webApi.Startup))]
+namespace CentralizedSecurity.webApi
 {
     public partial class Startup
     {
@@ -28,35 +29,37 @@ namespace CentralizedSecurity.webApi.App_Start
             //is used to configure API routes so we’ll pass this object to method “Register” in “WebApiConfig” class.
             HttpConfiguration httpConfig = new HttpConfiguration();
             ConfigureOAuthTokenGeneration(app);
-
-            Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+			//flaw que indoca si se va a hjacer log de ShowPII Personally Identifiable Information (
+            //Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
             //app.UseCors(CorsOptions.AllowAll);
 
             app.UseWebApi(httpConfig);
 
 
- //           GlobalConfiguration.Configuration.EnableSwagger(c =>
- //{
- //    var baseDirectory = AppDomain.CurrentDomain.BaseDirectory + @"\bin\";
- //    var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
- //    var commentsFile = Path.Combine(baseDirectory, commentsFileName);
+            //           GlobalConfiguration.Configuration.EnableSwagger(c =>
+            //{
+            //    var baseDirectory = AppDomain.CurrentDomain.BaseDirectory + @"\bin\";
+            //    var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+            //    var commentsFile = Path.Combine(baseDirectory, commentsFileName);
 
- //    c.SingleApiVersion("v1", "SomosTechies API")
- //      .Description("A sample API for testing")
- //      .TermsOfService("Some terms")
- //      .Contact(cc => cc
- //      .Name("Jesus Angulo")
- //      .Url("https://somostechies.com/contact")
- //      .Email("jesus.angulo@outlook.com"))
- //      .License(lc => lc
- //      .Name("Some License")
- //      .Url("https://somostechies.com/license"));
+            //    c.SingleApiVersion("v1", "SomosTechies API")
+            //      .Description("A sample API for testing")
+            //      .TermsOfService("Some terms")
+            //      .Contact(cc => cc
+            //      .Name("Jesus Angulo")
+            //      .Url("https://somostechies.com/contact")
+            //      .Email("jesus.angulo@outlook.com"))
+            //      .License(lc => lc
+            //      .Name("Some License")
+            //      .Url("https://somostechies.com/license"));
 
- //    c.IncludeXmlComments(commentsFile);
+            //    c.IncludeXmlComments(commentsFile);
 
- //})
- //  .EnableSwaggerUi();
+            //})
+            //  .EnableSwaggerUi();
 
+            string path = System.Web.HttpContext.Current.Server.MapPath(@"~\files\apiConfig.json");
+            apiHelper.InitializeConfig(path);
         }
 
 
