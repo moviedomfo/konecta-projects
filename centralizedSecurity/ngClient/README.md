@@ -11,6 +11,7 @@ errores
 2 ) Si tira Error :  in The Angular Compiler requires TypeScript >=3.4.0 and <3.5.0 but 3.5.2 was found instead.
     Solucion:
     npm install typescript@">=3.4.0 <3.5.0"
+     npm install typescript@">=3.6 <3.9"
 
 **Directivas 
 

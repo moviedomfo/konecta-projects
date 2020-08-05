@@ -20,10 +20,10 @@ export class UserResetComponent implements AfterViewInit  {
   public req :retriveEmpleadosReseteosReq;
   public nroTicket:string;
   
-  @ViewChild('inputNroTicket',{ static: false }) inputNroTicket: ElementRef;
-  @ViewChild('btnReset',{ static: false }) btnReset: ElementRef;
-  @ViewChild('btnCloseResset',{ static: false }) btnCloseResset : ElementRef 
-  @ViewChild('btnCloseUnlock',{ static: false }) btnCloseUnlock : ElementRef 
+  @ViewChild('inputNroTicket') inputNroTicket: ElementRef;
+  @ViewChild('btnReset') btnReset: ElementRef;
+  @ViewChild('btnCloseResset') btnCloseResset : ElementRef 
+  @ViewChild('btnCloseUnlock') btnCloseUnlock : ElementRef 
   
   public afterRessetOrUnlock:boolean = false;
   public showSpinner:boolean=false;

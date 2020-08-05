@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/angularClient",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -34,13 +35,11 @@
               "./node_modules/popper.js/dist/umd/popper.js",
               "./node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
-            
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
@@ -59,13 +58,16 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
-            },   
-             "local": {
+            },
+            "local": {
               "fileReplacements": [
                 {
-                  
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.local.ts"
                 }
@@ -84,13 +86,16 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             },
             "pre": {
               "fileReplacements": [
                 {
-                  
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.pre.ts"
                 }
@@ -109,6 +114,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -198,5 +207,8 @@
       }
     }
   },
-  "defaultProject": "angularClient"
+  "defaultProject": "angularClient",
+  "cli": {
+    "analytics": "cfac4859-0299-44f8-a979-ad48ffc93bc5"
+  }
 }

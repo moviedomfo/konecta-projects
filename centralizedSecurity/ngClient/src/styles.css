@@ -90,3 +90,5 @@ html, body { height: 100%; }
 .navbar-custom .nav-item:hover .nav-link {
   color: #ffffff;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
