@@ -1,0 +1,109 @@
+<div class="container">
+  <div class="d-flex justify-content-center h-100">
+
+    <div class="card  col-sm-12 col-md-6 col-lg-6 bg_semiTransparente">
+      <div class="card-header">
+        <h3 class="text-">Cambio de contraseña Konecta</h3>
+        <!-- <div class="d-flex justify-content-end social_icon">
+                  <span><i class="fa fa-facebook-square"></i></span>
+                  <span><i class="fa fa-google-plus-square"></i></span>
+                  <span><i class="fa fa-twitter-square"></i></span>
+                </div> -->
+      </div>
+      <div class="card-body bg_semiTransparente">
+        <div class="spinner-container" *ngIf="showSpinner">
+          <mat-spinner [diameter]="30" [color]="Warn"></mat-spinner>
+
+        </div>
+
+        <form name="form" (ngSubmit)="onSubmit()" #f="ngForm"  novalidate autocomplete="off">
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-user"></i></span>
+            </div>
+            <input [disabled]="true"  type="text" name="username" class="form-control" autocomplete="off"
+              [(ngModel)]='currentLogin.currentUser.UserName' >
+
+          </div>
+
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-home"></i></span>
+            </div>
+            <input [disabled]="true" type='text' id="domain" name='domain' class="form-control" [(ngModel)]='currentLogin.currentUser.Domain'>
+          </div>
+
+
+         
+         
+          <div class="input-group form-group">
+          
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-key"></i></span>
+            </div>
+            <input type='password' #password name='password' #password="ngModel" min="8" r class="form-control" autocomplete="none"
+              [ngClass]="{ 'is-invalid': f.submitted && (pwd_error_required || pwd_error_not_valid || pwd_error_min)}" [(ngModel)]='pwd'
+              placeholder="Nueva contraseña"  required>
+            <div *ngIf='f.submitted && pwd_error_required' class="invalid-feedback">
+               Requerido
+            </div>
+
+            <div *ngIf="f.submitted &&  pwd_error_not_valid" class="invalid-feedback">
+              Contraseña no válida:
+                  <p>  estar compuesta por letras, números y símbolos </p> 
+            </div>
+
+            <div *ngIf="f.submitted &&  pwd_error_min" class="invalid-feedback">
+              La contraseña debe tener una longitud mínima de 8 caracteres
+            </div> 
+          </div> 
+          <div class="input-group form-group">
+          
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="password" #confirmPassword name="confirmPassword" class="form-control" [(ngModel)]="confirmPwd" #confirmPassword="ngModel" 
+            [ngClass]="{ 'is-invalid': f.submitted && (confirmPwd_error_required === true || error_mustMatch === true)}" 
+             placeholder="Confirmación de contraseña" autocomplete="none" min="8" required>
+
+             <div *ngIf="confirmPwd_error_required" class="invalid-feedback">
+              <div>Requerido</div>
+            </div>
+            <div *ngIf="error_mustMatch" class="invalid-feedback">
+              <div>Contraseñas y su confirmacion deben coincidir</div> 
+            </div>
+            
+
+          </div>
+         
+      
+          <div class="form-group">
+            <input type="submit" value="Cambiar contraseña" class="btn btn-outline-info float-right login_btn">
+
+    
+          </div>
+        </form>
+      </div>
+   
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="row  justify-content-center">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-x mt-2">
+      <app-error-box-container [globalError]="globalError"></app-error-box-container>
+    </div>
+  </div>
+
+  <!-- <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-12 mt-2" >
+           <app-error-box-container [globalError]="globalError"></app-error-box-container>
+        </div>
+    </div> -->
+
+
+</div>
