@@ -1,3 +1,18 @@
+requiere 
+FontAwesomeModule 
+
+ npm install ngx-spinner
+ npm install --save @ng-idle/core @ng-idle/keepalive angular2-moment
+ npm i ng-recaptcha --save
+ ng add @ng-bootstrap/ng-bootstrap
+
+https://ng-bootstrap.github.io/#/getting-started
+
+
+angular-fontawesome https://github.com/FortAwesome/angular-fontawesome
+    ng add @fortawesome/angular-fontawesome
+     to use: Free Solid Iconsse
+
 Renderer2 proporciona una API para acceder de forma segura a elementos nativos, incluso cuando no están soportados por la plataforma (web workers, server-side rendering, etc).
 
 Migrar a 8

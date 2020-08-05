@@ -28,6 +28,7 @@ import { UserRessetComponent } from './components/user-resset/user-resset.compon
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     NgxSpinnerModule,
     AppRoutingModule,
-    RecaptchaModule,HttpClientModule, NgbModule
+    RecaptchaModule,HttpClientModule, NgbModule, FontAwesomeModule
   ],
   providers: [CommonService, SerurityService,AuthGuard],
   bootstrap: [AppComponent]
