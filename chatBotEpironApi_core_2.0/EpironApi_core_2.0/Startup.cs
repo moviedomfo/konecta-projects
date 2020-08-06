@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace epironApi.webApi
@@ -100,7 +101,7 @@ namespace epironApi.webApi
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "API bot comment",
                     Version = "v1"
@@ -117,14 +118,14 @@ namespace epironApi.webApi
                     {"Bearer", new string[] { }},
                 };
 
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "Please enter into field the word 'Bearer' following by space and JWT (using the Bearer scheme). Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey",
+                //c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                //{
+                //    Description = "Please enter into field the word 'Bearer' following by space and JWT (using the Bearer scheme). Example: \"Authorization: Bearer {token}\"",
+                //    Name = "Authorization",
+                //    In = "header",
+                //    Type = "apiKey",
 
-                });
+                //});
 
                 //c.AddSecurityDefinition("Bearer", new OAuth2Scheme()
                 //{
@@ -137,7 +138,7 @@ namespace epironApi.webApi
                 //}
                 //});
                 //c.OperationFilter<AuthorizeCheckOperationFilter>(); // Required to use access token
-                c.AddSecurityRequirement(security);
+                //c.AddSecurityRequirement(security);
             });
 
             #endregion
@@ -175,7 +176,7 @@ namespace epironApi.webApi
             });
             #endregion
 
-            app.UseMvc();
+            //app.UseMvc();
 
             //app.Run( async(context))=>{
 
