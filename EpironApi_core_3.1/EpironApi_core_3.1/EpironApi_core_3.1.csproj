@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\projects\SatelliteApps2\EpironChatBotApi\trunk\EpironApi_core_2.0\EpironApi_core_2.0.xml</DocumentationFile>
+    <DocumentationFile>E:\projects\pelsoft-git\konecta\konecta-projects\EpironApi_core_3.1\EpironApi_core_3.1\EpironApi_core_3.1.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

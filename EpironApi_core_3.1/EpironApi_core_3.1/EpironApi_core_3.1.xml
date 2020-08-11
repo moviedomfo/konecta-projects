@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>EpironApi_core_2.0</name>
+        <name>EpironApi_core_3.1</name>
     </assembly>
     <members>
         <member name="M:epironApi.webApi.common.Common.Expired_ttl">
@@ -11,14 +11,16 @@
         </member>
         <member name="M:epironApi.webApi.common.EpironService.Bot_update_sendStatus(epironApi.webApi.models.EnqueueCommentBotReq)">
             <summary>
-            
+            1 - actualiza la BD BotCreatedDateObtained
+            2 - Envia al moderardor
+            3 - update_delivery
             </summary>
             <param name="req"></param>
             <returns></returns>
         </member>
-        <member name="M:epironApi.webApi.common.EpironService.Bot_webhook_update_recivedStatus(epironApi.webApi.models.SendResponseBotCommentReq)">
+        <member name="M:epironApi.webApi.common.EpironService.Bot_webhook_update_recivedStatus(epironApi.webApi.models.BotCommentModeratedReq)">
             <summary>
-            
+            Se actualiza el registro con la respuesta enviada desde la APi Bot
             </summary>
             <param name="req"></param>
         </member>
@@ -79,9 +81,10 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:epironApi.webApi.Controllers.BotController.resesponseBotComment(epironApi.webApi.models.SendResponseBotCommentReq)">
+        <member name="M:epironApi.webApi.Controllers.BotController.responseBotComment(epironApi.webApi.models.BotCommentModeratedReq)">
             <summary>
             web hook de bot api
+            Se actualiza el registro con la respuesta enviada desde la APi Bot
             </summary>
             <param name="req"></param>
             <returns></returns>
@@ -110,6 +113,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:epironApi.webApi.Controllers.EpironController.pingPost">
+            <summary>
+            Metodo solo para test.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:epironApi.webApi.Controllers.EpironController.GetServerInfo">
             <summary>
             Retorna informacion del servidor de konecta bot web-api
@@ -129,13 +138,18 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:epironApi.webApi.DAC.EpironDAC.Bot_update_response(System.Guid,System.String,System.String)">
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Bot_update_delivery(System.Guid,System.Int32)">
             <summary>
             
             </summary>
             <param name="caseCommentGUID"></param>
-            <param name="action"></param>
-            <param name="caseCommentTextReceived"></param>
+            <param name="caseId"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.MessageBot_u_BotCreatedDateObtained(epironApi.webApi.models.EnqueueCommentBotReq)">
+            <summary>
+            
+            </summary>
+            <param name="req"></param>
         </member>
         <member name="M:epironApi.webApi.DAC.EpironDAC.RetriveDatosUserAPi(System.String,System.Int32,System.String)">
             <summary>
@@ -144,6 +158,75 @@
             <param name="userName"></param>
             <param name="domainId"></param>
             <param name="DNI"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Bot_update_response(System.Guid,System.Int32,System.Int32,System.String)">
+            <summary>
+            Se actualiza el registro con la respuesta enviada desde la APi Bot
+            </summary>
+            <param name="caseCommentGUID"></param>
+            <param name="caseId"></param>
+            <param name="action"></param>
+            <param name="caseCommentTextReceived"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.ElementTypeOutput(System.Guid,System.Int32)">
+            <summary>
+            Obtener tipo de elemento de salida:
+            </summary>
+            <param name="caseCommentGUID"> identificador del comentario entrante. </param>
+            <param name="caseId">identificador del caso.  </param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.CaseComment(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="caseCommentGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Insert_CaseComment(EpironApi.webApi.BE.CaseCommentCreationBE)">
+            <summary>
+            
+            </summary>
+            <param name="caseComment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Insert_DetailCaseComment(EpironApi.webApi.BE.DetailCaseCommentBE)">
+            <summary>
+            solo  PChannelType=315
+            </summary>
+            <param name="detailCaseCommentBE"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Insert_Publication(EpironApi.webApi.BE.PublicationBE)">
+            <summary>
+            solo  PChannelType=315
+            </summary>
+            <param name="publication"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Insert_PublicationDetail(EpironApi.webApi.BE.PublicationDetailBE)">
+            <summary>
+            calls Publication_i
+            </summary>
+            <param name="publicationDetail"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Realease_CaseComment(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="caseId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.Close_CaseComment(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="caseId"></param>
+        </member>
+        <member name="M:epironApi.webApi.DAC.EpironDAC.ApplicationSettings(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+            <param name="settingId"></param>
+            <param name="accountId"></param>
+            <returns></returns>
         </member>
         <member name="M:epironApi.webApi.helpers.apiHelper.ToEpoch(System.DateTime)">
             <summary>
@@ -262,22 +345,27 @@
             guid de la unidad de negocio.
             </summary>
         </member>
-        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.CaseId">
+        <member name="T:epironApi.webApi.models.BotCommentModeratedReq">
+            <summary>
+            Respuesta del API Bot 
+            </summary>
+        </member>
+        <member name="P:epironApi.webApi.models.BotCommentModeratedReq.CaseId">
             <summary>
             Identificador del caso.
             </summary>
         </member>
-        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.CaseCommentGUID">
+        <member name="P:epironApi.webApi.models.BotCommentModeratedReq.CaseCommentGUID">
             <summary>
              guid del comentario
             </summary>
         </member>
-        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.Action">
+        <member name="P:epironApi.webApi.models.BotCommentModeratedReq.Action">
             <summary>
             acción que se debe realizar una vez obtenida la respuesta del ApiBot. (Respoder, Liberar, Cerrar) 
             </summary>
         </member>
-        <member name="P:epironApi.webApi.models.SendResponseBotCommentReq.Text">
+        <member name="P:epironApi.webApi.models.BotCommentModeratedReq.Text">
             <summary>
             
             </summary>
@@ -345,6 +433,70 @@
         <member name="P:epironApi.webApi.models.BotBE.ProcessDate">
             <summary>
             fecha y hora en que se concluyó el procesamiento de insertar en  la mc.casecomment, mc.Publication
+            </summary>
+        </member>
+        <member name="M:EpironApi.webApi.BC.Update_recivedStatusBC.Proc(epironApi.webApi.models.BotCommentModeratedReq)">
+            <summary>
+            
+            </summary>
+            <param name="req"></param>
+        </member>
+        <member name="P:EpironApi.webApi.BE.CaseCommentCreationBE.ProcessDetailsId">
+            <summary>
+            @ProcessDetailsId INT = NULL, 
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.DetailCaseCommentBE.DCCPermlinkRoot">
+            <summary>
+            Url que indica la ubicación en la redsocial del posteo raíz (root) del cual proviene el comentario. (para los cometarios salientes este campo se guarda como NULL)
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.DetailCaseCommentBE.DCCDescription">
+            <summary>
+            descripción relacionada a un comentario. (para los cometarios salientes este campo se guarda como NULL
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.PublicationId">
+            <summary>
+            Parámetro de salida OUTPUT
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.PComment">
+             <summary>
+            @PComment NVARCHAR(max),
+             </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.PublicationTo">
+            <summary>
+            @PublicationTo varchar(256),
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.CaseCommentGUID">
+            <summary>
+             CaseCommentGUID uniqueidentifier
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.AccountDetailUnique">
+            <summary>
+            AccountDetailUnique UNIQUEIDENTIFIER,
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.PAwaitingUserConfirmation">
+             <summary>
+            @PAwaitingUserConfirmation BIT,
+             </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationBE.PRetriesQuantity">
+            @PRetriesQuantity INT
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationDetailBE.PublicationId">
+            <summary>
+            Parámetro de salida.
+            </summary>
+        </member>
+        <member name="P:EpironApi.webApi.BE.PublicationDetailBE.PDCommentAux1">
+            <summary>
+            asunto para el canal mail. (PChannelType=315). Valor del campo Subject obtenido de [Api].[ApplicationSettings_s_BySettingId]
             </summary>
         </member>
     </members>
