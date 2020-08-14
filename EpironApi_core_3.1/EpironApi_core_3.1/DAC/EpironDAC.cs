@@ -405,7 +405,10 @@ namespace epironApi.webApi.DAC
                 param = new SqlParameter("@CaseCommentGUID", SqlDbType.UniqueIdentifier);
                 param.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(param);
-
+                
+                //compos que agrega flor por chat 11/08/2020 12:16
+                cmd.Parameters.AddWithValue("@CaseCommentAutomatic", 1);
+                cmd.Parameters.AddWithValue("@ActionTypeCode", "A0000105");
 
                 cmd.Parameters.AddWithValue("@CaseId", caseComment.CaseId);
                 cmd.Parameters.AddWithValue("@CaseCommentText", caseComment.CaseCommentText);

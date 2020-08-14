@@ -53,3 +53,5 @@ node_modules/
 EpironbotTest/libs/Fwk.security.core.deps.json
 *.pdb
 *.user
+EpironApi_core_3.1/EpironApi_core_3.1/common/Update_recivedStatusBC.cs.bak
+EpironApi_core_3.1/EpironApi_core_3.1/DAC/EpironDAC.cs.bak

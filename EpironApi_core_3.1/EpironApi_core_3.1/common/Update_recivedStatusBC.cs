@@ -93,7 +93,7 @@ namespace EpironApi.webApi.BC
                     }
 
                     if (selectedAccountOutputChannelType.PChannelType == (int)PChannelTypeEnum.Twitter)
-                        caseComment_to_create.CaseCommentText = "@" + caseComment.UCUserName + req.Text;
+                        caseComment_to_create.CaseCommentText = "@" + caseComment.UCUserName + " " + req.Text;
 
                     else
                     {
@@ -102,7 +102,8 @@ namespace EpironApi.webApi.BC
                     //Identificador del usuario al cual se envía el mensaje. Valor del campo UserChannelId 
                     caseComment_to_create.AccountDetailId = caseComment.AccountDetailIdOutput;
                     caseComment_to_create.UserChannelId = caseComment.UserChannelId;
-                    caseComment_to_create.ElementTypeId = caseComment.ElementTypeId.Value;
+                    //@ElementTypeId: Tipo de elemento de salida. Valor del campo ElementTypeOutputId obtenido 
+                    caseComment_to_create.ElementTypeId = selectedAccountOutputChannelType.ElementTypeOutputId;
                     //identificador utilizado para publicar en respuesta a un comentario el 
                     //cual contendrá valor si el canal es público (OutputPublic = 1). 
                     if (selectedAccountOutputChannelType.OutputPublic)

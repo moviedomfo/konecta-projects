@@ -66,7 +66,7 @@ namespace epironApi.webApi.common
                     //TODO: desserializar y leer el resultado
                     //Podria venir internamente un error
                     var content = res.Content.ReadAsStringAsync().Result;
-                    //EpironDAC.Bot_update_delivery(req.CaseCommentGUID,req.CaseId);
+                    EpironDAC.Bot_update_delivery(req.CaseCommentGUID,req.CaseId);
                 }
                 else
                 {
