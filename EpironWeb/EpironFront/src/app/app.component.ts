@@ -42,20 +42,20 @@ export class AppComponent {
             }
 
         });
-        //Escribe el titulo en e l header prinsipal del dasboard
+
+        //Escribe el titulo en el header prinsipal del dasboard
         this.commonService.get_mainComponentTitle$().subscribe(tittle => {
             if (tittle) {
                 this.mainComponentTitle = tittle;
             }
         });
-        // sets an idle timeout of 5 seconds, for testing purposes.
+        // sets an idle 
+        
         idle.setIdle(AppConstants.iddleTimeout_seconds);
-        // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
         idle.setTimeout(AppConstants.iddle_waite_Timeout_seconds);
-        // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
         idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-        //enent -> Ya no está inactivo
+
         idle.onIdleEnd.subscribe(() => this.idleState = 'NoLongerIdle');
 
         idle.onTimeout.subscribe(() => {
@@ -75,6 +75,7 @@ export class AppComponent {
                 this.idleState = 'Inactivo'
                 this.idleStateMessage = '';
             });
+            
         //Estera estando inactivo 
         idle.onTimeoutWarning.subscribe((countdown) =>
             this.idleStateMessage = 'Su sessión expirará por inactividad  en ' + countdown + ' segundos!'

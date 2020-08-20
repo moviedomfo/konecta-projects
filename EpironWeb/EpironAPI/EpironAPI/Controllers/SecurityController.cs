@@ -15,6 +15,14 @@ using System.Web.Security;
 
 namespace EpironAPI.Controllers
 {
+
+    /// <summary>
+    /// Este controller es un 80% de copìa con mejoras en lo posible sobre el actual 
+    /// desarrollo del Web Service de seguridad: 
+    /// El actual utiliza Datarrows Datasets y demaciados anidamientos en sus metodos que fueron eliminados 
+    /// en lo posible. Todavia el codigo puede ser optimizado y clarificado un 90% mas
+    /// Por razones de presentar un demo rapido solo se copio--> quito datasets y reutilizo
+    /// </summary>
     [RoutePrefix("api/security")]
     public class SecurityController : ApiController
     {

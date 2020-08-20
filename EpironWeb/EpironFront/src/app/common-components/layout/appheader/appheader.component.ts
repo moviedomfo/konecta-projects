@@ -71,9 +71,7 @@ export class AppheaderComponent implements OnInit {
 
   chk_logingFront() {
 
-    
     var currentLoging: CurrentLoginEpiron = this.authService.getCurrenLoging();
-    
     
     if (currentLoging) {
 
@@ -82,17 +80,15 @@ export class AppheaderComponent implements OnInit {
     } else {
 
       this.isLogged = false;
-      this.onLogout();
-    }
 
+    }
 
   }
 
   onLogout() {
   
     this.authService.signOut();
-    this.chk_logingFront();
-    //this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
 
   chk_profDataFront(currentLoging: CurrentLoginEpiron) {
@@ -102,6 +98,8 @@ export class AppheaderComponent implements OnInit {
           currentLoging.userData.sex =0;
 
       this.isLogged = true;
+
+      //Codogo de otro desarrollo . 
       this.apellidoNombre = helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
       // if (currentLoging.userData.photo) {

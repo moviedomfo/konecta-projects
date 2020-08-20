@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { pipe } from 'rxjs';
 import { AuthenticationService } from '../../../service';
-import { CurrentLogin,  AppConstants, PersonBE, CurrentLoginEpiron } from '../../../model';
+import { AppConstants,  CurrentLoginEpiron } from '../../../model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { helperFunctions } from 'src/app/service/helperFunctions';
 
@@ -66,12 +66,6 @@ export class AppmenuComponent implements OnInit {
 
       this.apellidoNombre =helperFunctions.getPersonFullName(currentLoging.userData.PersonFirstName, currentLoging.userData.PersonLastName)
 
-      if (currentLoging.userData.photo) {
-        this.providerPhotoUrl = this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + (currentLoging.userData.photo));
-      }
-      else {
-        this.loadDefaultPhoto(currentLoging.userData.sex);
-      }
     }
   }
 

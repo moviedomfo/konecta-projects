@@ -99,7 +99,10 @@ public SearchCaseByUserGuidService$(): Observable<CaseByUserGuidBE[]> {
     State: 1
   }
 
+  //Esto sera tarea del interseptor en futuro
   let outhHeader = this.commonService.get_AuthorizedHeader();
+
+  //Generamos el REQ basado en la arquitectura FWK SOA
   let executeReq=  this.commonService.generete_post_Params("SearchCaseByUserGuidService", bussinesData);
   
   return  this.http.post<any>(`${AppConstants.AppExecuteAPI_URL}`,executeReq,{ headers: outhHeader }).pipe(

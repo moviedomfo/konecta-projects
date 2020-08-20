@@ -203,7 +203,7 @@ export class AuthenticationService {
       //client_secret: AppConstants.oaut_client_secret
     }
  
-
+    //se adapta a login de Epiron 
     return this.http.post<EpironApiResponse>(AppConstants.AppOAuth_URL,
       bussinesData, AppConstants.httpClientOption_contenttype_json).pipe(
         map(res => {
@@ -226,6 +226,8 @@ export class AuthenticationService {
              lcRes.returnUrl = returnUrl;
              this.logingChange_subject$.next(lcRes);
 
+
+          //Comentamos este codigo para adaptar a login de Epiron 
           // let tokenInfo = jwt_decode(currentLogin.oAuthResult.access_token); // decode token
 
 
