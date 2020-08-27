@@ -71,7 +71,11 @@ namespace epironApi.webApi.models
         /// 
         /// </summary>
         public string Text { get; set; }
-        
+
+        public string[] options { get; set; }
+        public Dictionary<string,string> options2 { get; set; }
+
+
     }
 
 
