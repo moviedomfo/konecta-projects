@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#" style="cursor:default">{{app_name}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" *ngIf="isLogged && isRessetUser">
+          <a class="nav-link" [routerLink]="['userReset']">Reseteos</a>
+        </li>
+        <li class="nav-item" *ngIf="isLogged">
+          <a class="nav-link" [routerLink]="['changePwd']">Cambio de contraseña</a>
+        </li>
+        <!-- <li class="nav-item" *ngIf="isLogged">
+          <a class="nav-link" [routerLink]="['reports']">Reportes</a>
+        </li>
+        <li class="nav-item" *ngIf="isLogged">
+          <a class="nav-link" [routerLink]="['reports']"> <i class="fa fa-fw fa-edit"></i>Reportes</a>
+  
+        </li> -->
+      </ul>
+      <ul class="navbar-nav ml-auto">
+  
+        <li class="nav-item" *ngIf="!isLogged">
+          <a class="nav-link" [routerLink]="['login']"><span class="fa fa-sign-in"></span> Login
+          </a>
+        </li>
+        <li class="nav-item item-logeduser " *ngIf="isLogged">
+          <a *ngIf="!prod" class="nav-link item-logeduser " [routerLink]="['./settings']"><span class="fa fa-user-circle"
+              style="color: burlywood"></span> {{userName}}
+          </a>
+          <a *ngIf="prod" class="nav-link item-logeduser "><span class="fa fa-user-circle"
+            style="color: burlywood"></span> {{userName}}
+        </a>
+        </li>
+        <li class="nav-item" *ngIf="isLogged">
+          <a href="#" class="nav-link" (click)="onLogout()"><span class="fa fa-sign-out"></span>Sing out
+          </a>
+        </li>
+      
+      </ul>
+    </div>
+  </nav>

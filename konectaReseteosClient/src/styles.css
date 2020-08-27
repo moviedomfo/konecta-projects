@@ -1,0 +1,94 @@
+/* You can add global styles to this file, and also import other style files 
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";*/
+
+
+
+body { 
+ 
+  margin: 0;
+  font-family: "Roboto",sans-serif;
+  color: #2b2b2b;
+  
+   background:url(assets/img/bg.jpg) no-repeat center center fixed; 
+}
+
+.h3{
+  color: #2b2b2b;
+}
+html, body { height: 100%; }
+.basic-container {
+  padding: 30px;
+  
+}
+
+.version-info {
+  font-size: 8pt;
+  float: right;
+}
+
+
+.btn-outline-info, .btn-outline-info:hover, .btn-outline-info:active, .btn-outline-info:visited {
+  background-color: #ffffff !important;
+  color: #2399fc !important;
+}
+
+.btn-outline-info:hover {
+  color: #ffffff !important;
+  background-color: #2399fc !important;
+}
+
+
+ 
+.btn-info, .btn-info:hover, .btn-info:active, .btn-info:visited {
+  background-color: #2399fc !important;
+  color: #ffffff !important;
+  
+}
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #2399fc !important;
+}
+
+.selector-for-some-widget {
+  box-sizing: content-box;
+}
+
+.bg {
+  /* The image used */
+  /* background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(11).jpg"); */
+
+  /* Half height */
+  /* height: 50%; */
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bg_semiTransparente{
+  background: transparent !important;
+}
+
+/* change the background color */
+.bg-dark {
+  /* background-color: #032556; */
+  background: linear-gradient(to right, #2399fc 8%, #3a48e7 51%, #590dca 100%)
+}
+/* change the brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+  color: rgba(255,255,255,.8);
+}
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+  color: rgba(255,255,255,.5);
+}
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:focus .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+  color: #ffffff;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
