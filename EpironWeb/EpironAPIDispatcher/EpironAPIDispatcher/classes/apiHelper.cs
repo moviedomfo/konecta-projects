@@ -197,6 +197,11 @@ namespace EpironAPI
 
     public class EpironApiResponse
     {
+        public EpironApiResponse()
+        {
+
+        }
+
         public EpironApiResponse(object result)
         {
             Result = result;

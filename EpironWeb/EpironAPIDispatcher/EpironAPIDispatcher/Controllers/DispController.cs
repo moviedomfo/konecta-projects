@@ -25,9 +25,12 @@ namespace EpironAPI.Controllers
         public DispController()
         {
             generateWhiteList();
-      
-            
-            
+            DbProviderFactory factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
+            //create a command of the proper type.
+            DbConnection conn = factory.CreateConnection();
+
+
+
 
         }
         /// <summary>
@@ -67,6 +70,9 @@ namespace EpironAPI.Controllers
         {
             try
             {
+                DbProviderFactory factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
+                //create a command of the proper type.
+                DbConnection conn = factory.CreateConnection();
                 #region virify required
                 if (string.IsNullOrEmpty(req.serviceProviderName))
                     return apiHelper.fromErrorString("serviceProviderName es requerido", HttpStatusCode.NoContent);

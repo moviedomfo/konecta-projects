@@ -15,7 +15,8 @@ namespace EpironAPI.Models
 
         public string toJson()
         {
-            return Fwk.HelperFunctions.SerializationFunctions.SerializeObjectToJson_Newtonsoft(this);
+
+            return "OK";
         }
     }
 }
