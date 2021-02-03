@@ -49,4 +49,22 @@ namespace EpironAPI.Models
         /// </summary>
         public Guid guidintercambio { get; set; }
     }
+
+    public class TiposAutenticacionReq
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Event_Tag { get; set; }
+        public Guid AppInstanceGUID { get; set; }
+        public string LoginHost { get; set; }
+        public string LoginIP { get; set; }
+
+        public Guid AutTypeGUID { get; set; }
+
+        /// <summary>
+        /// token
+        /// </summary>
+        public Guid guidintercambio { get; set; }
+    }
 }

@@ -3,6 +3,7 @@ using EpironAPI.classes;
 using EpironAPI.Model;
 using EpironAPI.Models;
 using Microsoft.Practices.EnterpriseLibrary.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -548,7 +549,138 @@ namespace EpironAPI.Controllers
             }
         }
 
-       
+
+        [AllowAnonymous]
+        [Route("authenticate")]
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage TiposAutenticacion(TiposAutenticacionReq req)
+        {
+            Error errorResponse = null;
+            UserAutenticacionRes loginResponseBE = new UserAutenticacionRes();
+            string jsonReq = JsonConvert.SerializeObject(req, Formatting.None);
+
+            int reintentos;
+
+            if (req.AppInstanceGUID == Guid.Empty | req.LoginHost == string.Empty | req.LoginIP == string.Empty
+
+                | req.AutTypeGUID == Guid.Empty)
+            {
+                //Error
+                errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(2);
+
+                errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+                return apiHelper.fromError(errorResponse);
+
+            }
+            try
+            {
+
+
+                var dtTag = AccesoDatos.Event_s_ByTag(req.Event_Tag);
+                int eventIDUserAutenticacion = dtTag.EventId; //<--- EventId para USER-AUTENTIC
+                DateTime auditTrailLoginEndDateUserAuthentic = DateTime.Now.AddSeconds(dtTag.EventDurationTime);
+
+                //Pregunto si existen los datos del evento
+                if (dtTag != null)
+                {
+
+                    //Consulto si el guid de negociacion es valido
+                    var dtValido = AccesoDatos.AuditTrailLogin_s_ByAuditTrailLoginGUID_Valid(req.AppInstanceGUID, req.guidintercambio);
+                    reintentos = CalcularReintentos(req.Event_Tag, req.AppInstanceGUID, req.guidintercambio, null);
+                    //si el dtvalido tiene mas de una columna es valido, si tiene solo una columna significa que me devuelve un codigo de error
+                    //if (!dtValido.EventResponseInternalCode.HasValue )//No hay error
+                    if (dtValido != null) ////TODO: moviedo se comenta para evitar GUID de login ya esta en uso.
+                    {
+
+                        if ((reintentos != 999) && (reintentos != 22))
+                        {
+                            //Verificar que el usuario sea valido
+                            var dtTiposAut = AccesoDatos.AuthenticationType_s_ByApplicationInstanceGUID(req.AppInstanceGUID);
+                            //Si existen 
+                            if (dtTiposAut != null)
+                            {
+
+                                Guid guidintercambio = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+
+
+                                return apiHelper.fromObject<UserAutenticacionRes>(loginResponseBE, null, HttpStatusCode.OK);
+
+                            }
+                            else
+                            {
+                                //DataRow drow;
+                                ///drow = dtCampos.NewRow();
+                                //El usuario no es válido
+                                errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(3);
+                                errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+
+                                ////drow["EventResponseId"] = Convert.ToInt32(dtError.Rows[0][0].ToString());
+                                ////drow["EventResponseText"] = dtError.Rows[0][1].ToString();
+                                ////drow["EventResponseInternalCode"] = Convert.ToInt32(dtError.Rows[0][2].ToString());
+                                ////drow["Guid"] = dtLog.Rows[0][0].ToString();
+
+                                ///dtCampos.Rows.Add(drow);
+
+                                //Actualizo el campo Response de AuditTrailLogin
+                                ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                                ////UpdateResponse(dtLog, XMLResponse);
+
+                                ////dsSession.Tables.Add(dtCampos);
+                                //GuidIntercambio = new Guid(dtLog.Rows[0][0].ToString());
+                            }
+                        }
+                        if (reintentos == 999)
+                        {
+                            //Supero la cantidad de reintentos, loguear..
+                            //El sistema detecta que se alcanzó el tope de reintentos
+                            errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(18);
+                            errorResponse.Guid = Log(req.guidintercambio, req.AppInstanceGUID, req.Event_Tag, req.LoginHost, req.LoginIP, jsonReq);
+
+                            ////dsSession.Tables.Add(dtError);
+                            ////XMLResponse = ResponseErrorXML(dtError.Rows[0][1].ToString(), Guid.Parse(dtLog.Rows[0][0].ToString()), "AuditTrailLoguinGUID");
+                            ////UpdateResponse(dtLog, XMLResponse);
+
+                        }
+                        if (reintentos == 22)
+                        {
+                            //No se encuentran los datos del evento
+                            errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
+
+                            ////dsSession.Tables.Add(dtError);
+                        }
+
+                    }
+                    else
+                    {
+                        errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(dtValido.EventResponseInternalCode.Value);
+                        return apiHelper.fromError(errorResponse);
+                    }
+
+
+                }
+                else //Error
+                {
+
+                    errorResponse = AccesoDatos.EventResponse_s_ByInternalCode(22);
+                    return apiHelper.fromError(errorResponse);
+                }
+
+                if (errorResponse != null)
+                {
+                    return apiHelper.fromError(errorResponse);
+                }
+                else
+                {
+                    return apiHelper.fromObject<UserAutenticacionRes>(loginResponseBE, null, HttpStatusCode.OK);
+                    //return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(loginResponseBE));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return apiHelper.fromEx(ex);
+            }
+        }
 
         public int CalcularReintentos(string Event_Tag, Guid AppInstanceGUID, Guid RequestLoginGUID, DataTable dtValido)
         {

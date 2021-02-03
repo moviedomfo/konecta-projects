@@ -129,7 +129,7 @@ namespace EpironAPI.Controllers
 
 
 
-                var resToJson = base.simpleFacade.ExecuteServiceJson_newtonjs(req.serviceProviderName, req.serviceName, req.jsonRequest.ToString(), base.hostContext);
+                var resToJson = base.simpleFacade.ExecuteServiceJsonBase(req.serviceProviderName, req.serviceName, req.jsonRequest.ToString(), base.hostContext);
 
                 return apiHelper.fromObject<ApiOkResponse>(new ApiOkResponse(resToJson));
             }
